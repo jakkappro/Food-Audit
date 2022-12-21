@@ -32,7 +32,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.google_mlkit_example"
+        applicationId "com.kubinodev.foodaudit"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
@@ -54,7 +54,7 @@ android {
 
 dependencies {
     // Add language package you need to use
-    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0-beta5'
+    //implementation 'com.google.mlkit:text-recognition-chinese:16.0.0-beta5'
     // implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0-beta5'
     // implementation 'com.google.mlkit:text-recognition-japanese:16.0.0-beta5'
     // implementation 'com.google.mlkit:text-recognition-korean:16.0.0-beta5'
@@ -63,3 +63,5 @@ dependencies {
 flutter {
     source '../..'
 }
+
+apply plugin: 'com.google.gms.google-services'

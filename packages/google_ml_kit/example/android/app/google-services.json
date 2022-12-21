@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "724897650011",
+    "project_id": "food-audit-ab3b3",
+    "storage_bucket": "food-audit-ab3b3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:724897650011:android:98c38858aca1428b3ab67e",
+        "android_client_info": {
+          "package_name": "com.kubinodev.foodaudit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "724897650011-f7944drkhih43l56kodrk271oo0ece3b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEj_6aVwP_CjDN5q_NtQWHT2vqd3F-U6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "724897650011-f7944drkhih43l56kodrk271oo0ece3b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
