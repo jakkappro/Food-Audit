@@ -8,14 +8,6 @@ ThemeData darkTheme = ThemeData(
   hintColor: AppColor.textColor,
   primaryColorLight: AppColor.buttonBgColorDark,
   textTheme: TextTheme(
-    headline1: TextStyle(
-      color: Colors.white,
-      fontSize: 40,
-      fontWeight: FontWeight.bold
-    )
-  ),
-  buttonTheme: ButtonThemeData(
-    textTheme: ButtonTextTheme.primary,
-    buttonColor: Colors.white
-  )
+      headline1: TextStyle(
+          color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
 );

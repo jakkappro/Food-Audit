@@ -21,8 +21,6 @@ Future<void> main() async {
     debugShowCheckedModeBanner: false,
   ));
 }
-
-
 class CustomCard extends StatelessWidget {
   final String _label;
   final Widget _viewPage;

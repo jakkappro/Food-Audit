@@ -19,6 +19,7 @@ dependencies:
   path_provider: ^2.0.11
   cloud_firestore: ^4.2.0
   firebase_auth: ^4.2.1
+
   #  google_ml_kit:
   #    path: ../
   google_mlkit_commons:
@@ -33,8 +34,6 @@ dependencies:
     path: ../../google_mlkit_image_labeling
   google_mlkit_object_detection:
     path: ../../google_mlkit_object_detection
-  google_mlkit_pose_detection:
-    path: ../../google_mlkit_pose_detection
   google_mlkit_selfie_segmentation:
     path: ../../google_mlkit_selfie_segmentation
   google_mlkit_text_recognition:
