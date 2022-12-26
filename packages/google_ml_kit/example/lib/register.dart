@@ -178,11 +178,10 @@ class _RegisterPageState extends State<RegisterPage>
       return;
     }
 
-    log(123);
-
     try {
       final result = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
+      result.user!.updateDisplayName('$firstName $lastName');
       Navigator.of(context).pushReplacementNamed('/verify-email');
     } on FirebaseAuthException catch (e) {
       // Get the error code

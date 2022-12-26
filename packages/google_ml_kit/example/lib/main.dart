@@ -26,10 +26,11 @@ Future<void> main() async {
       '/login': (context) => LoginPage(),
       '/register': (context) => RegisterPage(),
       '/verify-email': (context) => VerifyEmailPage(),
-      '/home': (context) => HomePage(),
+      '/home': (context) => HomeScreen(),
     },
   ));
 }
+
 class CustomCard extends StatelessWidget {
   final String _label;
   final Widget _viewPage;
