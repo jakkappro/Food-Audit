@@ -2,8 +2,11 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'home.dart';
 import 'login.dart';
+import 'register.dart';
 import 'themes/app_theme.dart';
+import 'verify_email.dart';
 import 'vision_detector_views/text_detector_view.dart';
 
 List<CameraDescription> cameras = [];
@@ -19,6 +22,12 @@ Future<void> main() async {
     darkTheme: AppTheme.dark,
     themeMode: ThemeMode.dark,
     debugShowCheckedModeBanner: false,
+    routes: {
+      '/login': (context) => LoginPage(),
+      '/register': (context) => RegisterPage(),
+      '/verify-email': (context) => VerifyEmailPage(),
+      '/home': (context) => HomePage(),
+    },
   ));
 }
 class CustomCard extends StatelessWidget {
