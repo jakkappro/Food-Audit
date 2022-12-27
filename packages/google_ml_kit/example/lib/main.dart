@@ -1,13 +1,13 @@
 import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 
 import 'home.dart';
 import 'login.dart';
 import 'register.dart';
 import 'themes/app_theme.dart';
 import 'verify_email.dart';
-import 'vision_detector_views/text_detector_view.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -15,9 +15,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   cameras = await availableCameras();
-
+  final user = FirebaseAuth.instance.currentUser;
+  final userExists = user != null && user.emailVerified;
+  
   runApp(MaterialApp(
-    home: LoginPage(),
+    home: !userExists ? LoginPage() : HomeScreen(),
     theme: AppTheme.light,
     darkTheme: AppTheme.dark,
     themeMode: ThemeMode.dark,

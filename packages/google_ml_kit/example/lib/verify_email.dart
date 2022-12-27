@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -9,24 +11,41 @@ class VerifyEmailPage extends StatefulWidget {
 }
 
 class _VerifyEmailPageState extends State<VerifyEmailPage> {
+  late Timer _timer;
+
   @override
   void initState() {
     super.initState();
-    _checkVerificationEmail();
+    _sendAnotherEmail();
+    _timer = Timer.periodic(Duration(milliseconds: 500), (timer) async {
+      await _checkVerificationEmail();
+    });
   }
 
   Future<void> _checkVerificationEmail() async {
     final user = auth.currentUser;
     if (user != null && !user.emailVerified) {
-      await user.sendEmailVerification();
-      auth.authStateChanges().listen((event) {
-        if (event != null && event.emailVerified) {
-          Navigator.of(context).pushReplacementNamed('/home');
-        }
-      });
+      await user.reload();
+      if (user.emailVerified) {
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
     } else if (user != null && user.emailVerified) {
+      _timer.cancel();
       Navigator.of(context).pushReplacementNamed('/home');
     }
+  }
+
+  Future<void> _sendAnotherEmail() async {
+    final user = auth.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -35,7 +54,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
         body: Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text('Please verify your email', style: TextStyle(fontSize: 40)),
+      Text('Please verify your email', style: TextStyle(fontSize: 30)),
       SizedBox(height: 25),
       Icon(Icons.email_rounded, size: 100),
     ])));
