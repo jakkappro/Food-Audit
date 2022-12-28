@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 import 'login.dart';
 import 'register.dart';
+import 'settings_pages/food_preferences.dart';
+import 'settings_pages/profile.dart';
+import 'settings_pages/secuirty.dart';
 import 'themes/app_theme.dart';
 import 'verify_email.dart';
 
@@ -17,7 +20,7 @@ Future<void> main() async {
   cameras = await availableCameras();
   final user = FirebaseAuth.instance.currentUser;
   final userExists = user != null && user.emailVerified;
-  
+
   runApp(MaterialApp(
     home: !userExists ? LoginPage() : HomeScreen(),
     theme: AppTheme.light,
@@ -29,6 +32,9 @@ Future<void> main() async {
       '/register': (context) => RegisterPage(),
       '/verify-email': (context) => VerifyEmailPage(),
       '/home': (context) => HomeScreen(),
+      '/profile': (context) => ProfilePage(),
+      '/security': (context) => SecurityPage(),
+      '/foodPreferences': (context) => FoodPreferencesPage(),
     },
   ));
 }

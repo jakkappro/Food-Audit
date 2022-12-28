@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: _children,
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromRGBO(56, 45, 62, 0.8),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Camera',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
+            icon: Icon(Icons.settings),
             label: 'Settings',
           ),
         ],
