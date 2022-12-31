@@ -29,6 +29,13 @@
             {
               "client_id": "724897650011-f7944drkhih43l56kodrk271oo0ece3b.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "724897650011-h0rd8u5n0h84ands5bbsq086a52582cu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kubinoDev.foodAudit"
+              }
             }
           ]
         }

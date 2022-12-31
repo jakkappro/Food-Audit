@@ -24,10 +24,7 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -51,6 +48,14 @@ class DefaultFirebaseOptions {
         );
     }
   }
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyDEj_6aVwP_CjDN5q_NtQWHT2vqd3F-U6o',
+    appId: '1:724897650011:android:98c38858aca1428b3ab67e',
+    messagingSenderId: '724897650011',
+    projectId: 'food-audit-ab3b3',
+    storageBucket: 'food-audit-ab3b3.appspot.com',
+  );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDkK10NGesWcr16PcnDMagSaxt3dthGYgc',

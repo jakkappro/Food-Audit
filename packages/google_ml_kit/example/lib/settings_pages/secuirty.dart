@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SecurityPage extends StatefulWidget {
@@ -8,6 +9,7 @@ class SecurityPage extends StatefulWidget {
 class _SecurityPageState extends State<SecurityPage> {
   final _passwordController = TextEditingController();
   bool _isSwitched = false;
+  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,45 @@ class _SecurityPageState extends State<SecurityPage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 25.0),
                     child: Text(
+                      'Email: ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: TextField(
+                        onSubmitted: (value) async => await _changeEmail(value),
+                        decoration: InputDecoration(
+                          hintText: _auth.currentUser!.email,
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              height: 60,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Color.fromRGBO(66, 58, 76, 1),
+              ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25.0),
+                    child: Text(
                       'Password: ',
                       style: TextStyle(
                         fontSize: 20,
@@ -56,7 +97,7 @@ class _SecurityPageState extends State<SecurityPage> {
                       padding: const EdgeInsets.only(right: 20.0),
                       child: TextField(
                         obscureText: true,
-                        controller: _passwordController,
+                        onSubmitted: (value) async => _updatePassword(value),
                       ),
                     ),
                   ),
@@ -116,7 +157,10 @@ class _SecurityPageState extends State<SecurityPage> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      await _auth.currentUser!.reload();
+                      Navigator.pop(context);
+                    },
                     child: Text(
                       'Save',
                       style: TextStyle(fontSize: 20, color: Colors.black),
@@ -129,5 +173,23 @@ class _SecurityPageState extends State<SecurityPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _changeEmail(String value) async {
+    try {
+      await _auth.currentUser!.updateEmail(value.trim());
+      await _auth.signOut();
+      Navigator.of(context).pushReplacementNamed('/login');
+    } catch (e) {
+      print('fuk $e');
+    }
+  }
+
+  Future<void> _updatePassword(String value) async {
+    try {
+      _auth.currentUser!.updatePassword(value);
+    } catch (e) {
+      print('ehm $e');
+    }
   }
 }

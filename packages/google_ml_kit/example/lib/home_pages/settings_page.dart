@@ -11,13 +11,26 @@ class _SettingsPageState extends State<SettingsPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final PanelController _panelController = PanelController();
 
+  final _passwordController = TextEditingController();
+
   void singOut() async {
     await _auth.signOut();
     Navigator.of(context).pushReplacementNamed('/login');
   }
 
-  void security() {
-    Navigator.of(context).pushNamed('/security');
+  Future<void> security() async {
+    final credential = EmailAuthProvider.credential(
+        email: _auth.currentUser!.email!,
+        password: _passwordController.text.trim());
+
+    try {
+      final result =
+          await _auth.currentUser!.reauthenticateWithCredential(credential);
+      if (result.user != null) {
+        _panelController.close();
+        Navigator.of(context).pushNamed('/security');
+      }
+    } on FirebaseAuthException catch (e) {}
   }
 
   void profile() {
@@ -122,6 +135,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: TextField(
+                  controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
