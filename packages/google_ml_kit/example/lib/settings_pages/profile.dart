@@ -45,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       });
     } catch (e) {
-      print('\n\n\n\n\n\n\nError: $e');
+      print('/n/n/n/n/n/n/nError: $e');
     }
   }
 
