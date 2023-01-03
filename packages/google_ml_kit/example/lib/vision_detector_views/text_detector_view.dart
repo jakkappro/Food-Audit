@@ -11,7 +11,7 @@ class TextRecognizerView extends StatefulWidget {
 
 class _TextRecognizerViewState extends State<TextRecognizerView> {
   final TextRecognizer _textRecognizer =
-      TextRecognizer(script: TextRecognitionScript.chinese);
+      TextRecognizer(script: TextRecognitionScript.latin);
   bool _canProcess = true;
   bool _isBusy = false;
   CustomPaint? _customPaint;
@@ -53,9 +53,10 @@ class _TextRecognizerViewState extends State<TextRecognizerView> {
       _customPaint = CustomPaint(painter: painter);
     } else {
       _text = 'Recognized text:\n\n${recognizedText.text}';
-      // TODO: set _customPaint to draw boundingRect on top of image
       _customPaint = null;
     }
+
+    await Future.delayed(Duration(milliseconds: 100));
     _isBusy = false;
     if (mounted) {
       setState(() {});
