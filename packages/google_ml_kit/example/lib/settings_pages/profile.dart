@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../models/settings_model.dart';
 import '../verify_email.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -19,8 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late User user;
   late String _firstName;
   late String _lastName;
-  late String _height;
-  late String _weight;
+  SettingsModel settings = SettingsModel.instance;
 
   @override
   void initState() {
@@ -28,25 +28,6 @@ class _ProfilePageState extends State<ProfilePage> {
     user = FirebaseAuth.instance.currentUser!;
     _firstName = user.displayName!.split(' ')[0];
     _lastName = user.displayName!.split(' ')[1];
-    _height = '0';
-    _weight = '0';
-
-    try {
-      FirebaseFirestore.instance
-          .collection('userData')
-          .doc(user.uid)
-          .get()
-          .then((value) {
-        _height = value.data()!['height'].toString();
-        _weight = value.data()!['weight'].toString();
-        setState(() {
-          _height = _height;
-          _weight = _weight;
-        });
-      });
-    } catch (e) {
-      print('/n/n/n/n/n/n/nError: $e');
-    }
   }
 
   @override
@@ -217,7 +198,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           keyboardType: TextInputType.number,
                           onSubmitted: (value) async => _updateHeight(value),
                           decoration: InputDecoration(
-                            hintText: _height,
+                            hintText: settings.height.toString(),
                             hintStyle: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -257,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           keyboardType: TextInputType.number,
                           onSubmitted: (value) async => _updateWeight(value),
                           decoration: InputDecoration(
-                            hintText: _weight,
+                            hintText: settings.weight.toString(),
                             hintStyle: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -285,7 +266,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       onPressed: () async {
+                        await settings.saveToFirebase();
                         await auth.currentUser!.reload();
+                        Navigator.pop(context);
                       },
                       child: Text(
                         'Save',
@@ -308,20 +291,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   _updateHeight(String value) async {
-    final doc = FirebaseFirestore.instance.collection('userData').doc(user.uid);
-    try {
-      await doc.update({'height': double.parse(value)});
-    } catch (e) {
-      doc.set({'height': double.parse(value), 'weight': 0.0});
-    }
+    settings.height = double.parse(value);
   }
 
   _updateWeight(String value) async {
-    final doc = FirebaseFirestore.instance.collection('userData').doc(user.uid);
-    try {
-      await doc.update({'weight': double.parse(value)});
-    } catch (e) {
-      doc.set({'height': 0.0, 'weight': double.parse(value)});
-    }
+    settings.weight = double.parse(value);
   }
 }

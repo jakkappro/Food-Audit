@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../models/alergens_model.dart';
+import '../models/settings_model.dart';
 
 class FoodPreferencesPage extends StatefulWidget {
   @override
@@ -10,72 +10,39 @@ class FoodPreferencesPage extends StatefulWidget {
 }
 
 class _FoodPreferencesState extends State<FoodPreferencesPage> {
-  late AlergensModel _allAlergens;
-  late AlergensModel _userAlergens;
-  final User _user = FirebaseAuth.instance.currentUser!;
+  SettingsModel settings = SettingsModel.instance;
   List<String> sugestedAlergens = [];
-
+  final List<String> _allAlergens = [];
+  
   Future<void> _removeAlergen(String alergen) async {
-    await FirebaseFirestore.instance
-        .collection('userAlergens')
-        .doc(_user.uid)
-        .set({
-      'Milk': FieldValue.arrayRemove([alergen])
-    });
-
     setState(() {
-      _userAlergens.alergens.remove(alergen);
-      _allAlergens.alergens.add(alergen);
+      settings.allergens.remove(alergen);
+      _allAlergens.add(alergen);
     });
   }
 
   Future<void> _addAlergen(String alergen) async {
-    _userAlergens.alergens.add(alergen);
-    await FirebaseFirestore.instance
-        .collection('userAlergens')
-        .doc(_user.uid)
-        .set({'Milk': _userAlergens.alergens});
+    settings.allergens.add(alergen);
 
     setState(() {
-      _allAlergens.alergens.remove(alergen);
+      _allAlergens.remove(alergen);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _userAlergens = AlergensModel(alergens: []);
     FirebaseFirestore.instance
         .collection('alergens')
         .doc('8gMj50c1wiaDIU0zf1IB')
         .get()
-        .then((value) => _getAlergens(value
-            .data()!
-            .map((key, value) => MapEntry(key, List<String>.from(value)))));
-    FirebaseFirestore.instance
-        .collection('userAlergens')
-        .doc(_user.uid)
-        .get()
         .then((value) {
-      if (value.data() != null) {
-        _getUserAlergens(value
-            .data()!
-            .map((key, value) => MapEntry(key, List<String>.from(value))));
-      } else {
-        _userAlergens = AlergensModel(alergens: []);
+      Map<String, List<String>> data = value
+          .data()!
+          .map((key, value) => MapEntry(key, List<String>.from(value)));
+      for (final key in data.keys) {
+        _allAlergens.add(key);
       }
-    });
-  }
-
-  void _getAlergens(Map<String, List<String>> data) {
-    setState(() {
-      _allAlergens = AlergensModel.fromJson(data['Milk']!);
-    });
-  }
-
-  void _getUserAlergens(Map<String, List<String>> data) {
-    setState(() {
-      _userAlergens = AlergensModel.fromJson(data['Milk']!);
     });
   }
 
@@ -117,9 +84,9 @@ class _FoodPreferencesState extends State<FoodPreferencesPage> {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: _userAlergens.alergens.length * 50.0,
+                    height: settings.allergens.length * 50.0,
                     child: ListView.builder(
-                      itemCount: _userAlergens.alergens.length,
+                      itemCount: settings.allergens.length,
                       itemBuilder: (context, index) {
                         return Container(
                           decoration: const BoxDecoration(
@@ -129,12 +96,12 @@ class _FoodPreferencesState extends State<FoodPreferencesPage> {
                           width: double.infinity,
                           height: 50,
                           child: ListTile(
-                            title: Text(_userAlergens.alergens[index]),
+                            title: Text(settings.allergens[index]),
                             leading: const Icon(Icons.local_drink),
                             trailing: IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () {
-                                _removeAlergen(_userAlergens.alergens[index]);
+                                _removeAlergen(settings.allergens[index]);
                               },
                             ),
                           ),
@@ -207,8 +174,8 @@ class _FoodPreferencesState extends State<FoodPreferencesPage> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {
-                      FirebaseAuth.instance.currentUser!.reload();
+                    onPressed: () async {
+                      await settings.saveToFirebase();
                       Navigator.pop(context);
                     },
                     child: const Text(
@@ -227,7 +194,7 @@ class _FoodPreferencesState extends State<FoodPreferencesPage> {
 
   void _getReconemdedAlergens(String value) {
     setState(() {
-      sugestedAlergens = _allAlergens.alergens
+      sugestedAlergens = _allAlergens
           .where(
               (element) => element.toLowerCase().contains(value.toLowerCase()))
           .toList();

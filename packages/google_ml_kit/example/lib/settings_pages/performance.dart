@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../models/settings_model.dart';
+
 enum ImageQuality {
   low,
   medium,
@@ -15,27 +17,15 @@ class PerformancePage extends StatefulWidget {
 
 class _PerformancePageState extends State<PerformancePage> {
   final _auth = FirebaseAuth.instance;
-  ImageQuality _imageQuality = ImageQuality.medium;
+  ImageQuality _imageQuality = ImageQuality.low;
+  SettingsModel settings = SettingsModel.instance;
 
   @override
   void initState() {
     super.initState();
-    FirebaseFirestore.instance
-        .collection('userPerformanceSettings')
-        .doc(_auth.currentUser!.uid)
-        .get()
-        .then((value) {
-      if (value.data() == null) {
-        FirebaseFirestore.instance
-            .collection('userPerformanceSettings')
-            .doc(_auth.currentUser!.uid)
-            .set({'ImageQuality': 'medium', 'ImageProcessingFramerate': 30});
-      } else {
-        setState(() {
-          _imageQuality = ImageQuality.values[value.data()!['imageQuality']];
-        });
-      }
-    });
+    _imageQuality = ImageQuality.values.firstWhere(
+        (e) => e.toString() == settings.imageProcessingQuality,
+        orElse: () => ImageQuality.low);
   }
 
   @override
@@ -157,7 +147,7 @@ class _PerformancePageState extends State<PerformancePage> {
                       ),
                     ),
                     onPressed: () async {
-                      await _auth.currentUser!.reload();
+                      await settings.saveToFirebase();
                       Navigator.pop(context);
                     },
                     child: const Text(
@@ -175,25 +165,11 @@ class _PerformancePageState extends State<PerformancePage> {
   }
 
   Future<void> _changeFps(String value) async {
-    try {
-      FirebaseFirestore.instance
-          .collection('userPerformanceSettings')
-          .doc(_auth.currentUser!.uid)
-          .update({'ImageProcessingFramerate': int.parse(value)});
-    } catch (e) {
-      print('fuk $e');
-    }
+    settings.imageProcessingFramerate = int.parse(value);
   }
 
   Future<void> _changeImageQuality(String value) async {
-    try {
-      FirebaseFirestore.instance
-          .collection('userPerformanceSettings')
-          .doc(_auth.currentUser!.uid)
-          .update({'ImageQuality': value});
-    } catch (e) {
-      print('fuk $e');
-    }
+    settings.imageProcessingQuality = value.split('.').last;
   }
 
   String capitalize(String str) {

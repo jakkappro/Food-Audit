@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
-import '../models/alergens_model.dart';
+import '../models/settings_model.dart';
 import 'camera_view.dart';
 import 'painters/text_detector_painter.dart';
 
@@ -19,7 +19,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView> {
   bool _isBusy = false;
   CustomPaint? _customPaint;
   String? _text;
-  AlergensModel? _alergensModel;
+  SettingsModel settings = SettingsModel.instance;
 
   @override
   void dispose() async {
@@ -31,16 +31,6 @@ class _TextRecognizerViewState extends State<TextRecognizerView> {
   @override
   void initState() {
     super.initState();
-    FirebaseFirestore.instance
-        .collection('userAlergens')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      if (value.data() != null) {
-        _alergensModel =
-            AlergensModel(alergens: List<String>.from(value.data()!['Milk']));
-      }
-    });
   }
 
   @override
@@ -68,11 +58,9 @@ class _TextRecognizerViewState extends State<TextRecognizerView> {
       bool found = false;
       for (final block in recognizedText.blocks) {
         if (block.text.toLowerCase().contains('zloženie')) {
-          if (_alergensModel != null) {
-            for (final alergen in _alergensModel!.alergens) {
-              if (block.text.toLowerCase().contains(alergen.toLowerCase())) {
-                print('Found alergen: $alergen');
-              }
+          for (final alergen in settings.allergens) {
+            if (block.text.toLowerCase().contains(alergen.toLowerCase())) {
+              print('Found alergen: $alergen');
             }
           }
 

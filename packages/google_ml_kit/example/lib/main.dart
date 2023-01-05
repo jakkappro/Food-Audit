@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'home.dart';
 import 'login.dart';
+import 'models/settings_model.dart';
 import 'register.dart';
 import 'settings_pages/food_preferences.dart';
 import 'settings_pages/performance.dart';
@@ -22,6 +23,10 @@ Future<void> main() async {
   final user = FirebaseAuth.instance.currentUser;
   final userExists = user != null && user.emailVerified;
 
+  if (userExists) {
+    await SettingsModel.instance.loadFromFirebase();
+  }
+
   runApp(MaterialApp(
     home: !userExists ? LoginPage() : HomeScreen(),
     theme: AppTheme.light,
@@ -36,7 +41,7 @@ Future<void> main() async {
       '/profile': (context) => const ProfilePage(),
       '/security': (context) => SecurityPage(),
       '/foodPreferences': (context) => FoodPreferencesPage(),
-      '/performance':(context) => PerformancePage(),
+      '/performance': (context) => PerformancePage(),
     },
   ));
 }
