@@ -12,38 +12,22 @@ class FoodPreferencesPage extends StatefulWidget {
 class _FoodPreferencesState extends State<FoodPreferencesPage> {
   SettingsModel settings = SettingsModel.instance;
   List<String> sugestedAlergens = [];
-  final List<String> _allAlergens = [];
   
   Future<void> _removeAlergen(String alergen) async {
     setState(() {
       settings.allergens.remove(alergen);
-      _allAlergens.add(alergen);
     });
   }
 
   Future<void> _addAlergen(String alergen) async {
     settings.allergens.add(alergen);
-
     setState(() {
-      _allAlergens.remove(alergen);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    FirebaseFirestore.instance
-        .collection('alergens')
-        .doc('8gMj50c1wiaDIU0zf1IB')
-        .get()
-        .then((value) {
-      Map<String, List<String>> data = value
-          .data()!
-          .map((key, value) => MapEntry(key, List<String>.from(value)));
-      for (final key in data.keys) {
-        _allAlergens.add(key);
-      }
-    });
   }
 
   @override
@@ -194,7 +178,7 @@ class _FoodPreferencesState extends State<FoodPreferencesPage> {
 
   void _getReconemdedAlergens(String value) {
     setState(() {
-      sugestedAlergens = _allAlergens
+      sugestedAlergens = settings.allAlergens.keys
           .where(
               (element) => element.toLowerCase().contains(value.toLowerCase()))
           .toList();

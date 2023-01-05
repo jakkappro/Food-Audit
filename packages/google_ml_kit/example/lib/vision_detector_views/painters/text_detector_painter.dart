@@ -32,7 +32,7 @@ class TextRecognizerPainter extends CustomPainter {
       );
       builder.pushStyle(
           ui.TextStyle(color: Colors.lightGreenAccent, background: background));
-      builder.addText('Zlozenie');
+      builder.addText('Zloženie');
       builder.pop();
 
       final left = translateX(

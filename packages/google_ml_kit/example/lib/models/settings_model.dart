@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsModel {
   static SettingsModel? _currentInstance;
-
+  Map<String, List<String>> allAlergens = {};
   List<String> allergens = [];
   num height = 0;
   num weight = 0;
@@ -42,5 +42,15 @@ class SettingsModel {
       imageProcessingFramerate = doc['ImageProcessingFramerate'];
       imageProcessingQuality = doc['ImageQuality'];
     }
+
+    FirebaseFirestore.instance
+        .collection('alergens')
+        .doc('8gMj50c1wiaDIU0zf1IB')
+        .get()
+        .then((value) {
+      allAlergens = value
+          .data()!
+          .map((key, value) => MapEntry(key, List<String>.from(value)));
+    });
   }
 }

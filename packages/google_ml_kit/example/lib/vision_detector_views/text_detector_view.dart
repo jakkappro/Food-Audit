@@ -58,13 +58,17 @@ class _TextRecognizerViewState extends State<TextRecognizerView> {
       bool found = false;
       for (final block in recognizedText.blocks) {
         if (block.text.toLowerCase().contains('zloženie')) {
-          for (final alergen in settings.allergens) {
-            if (block.text.toLowerCase().contains(alergen.toLowerCase())) {
-              print('Found alergen: $alergen');
+          for (final alergen in settings.allAlergens.entries) {
+            if (settings.allergens.contains(alergen.key)) {
+              for (final a in alergen.value) {
+                if (block.text.toLowerCase().contains(a.toLowerCase())) {
+                  print('Found alergen: $alergen');
+                }
+              }
             }
           }
 
-          final text = RecognizedText(text: 'zlozenie', blocks: [block]);
+          final text = RecognizedText(text: 'Zloženie', blocks: [block]);
           final painter = TextRecognizerPainter(
               text,
               inputImage.inputImageData!.size,
