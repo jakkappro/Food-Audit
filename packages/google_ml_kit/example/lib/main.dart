@@ -7,6 +7,7 @@ import 'home.dart';
 import 'login.dart';
 import 'register.dart';
 import 'settings_pages/food_preferences.dart';
+import 'settings_pages/performance.dart';
 import 'settings_pages/profile.dart';
 import 'settings_pages/secuirty.dart';
 import 'themes/app_theme.dart';
@@ -32,9 +33,10 @@ Future<void> main() async {
       '/register': (context) => RegisterPage(),
       '/verify-email': (context) => VerifyEmailPage(),
       '/home': (context) => HomeScreen(),
-      '/profile': (context) => ProfilePage(),
+      '/profile': (context) => const ProfilePage(),
       '/security': (context) => SecurityPage(),
       '/foodPreferences': (context) => FoodPreferencesPage(),
+      '/performance':(context) => PerformancePage(),
     },
   ));
 }

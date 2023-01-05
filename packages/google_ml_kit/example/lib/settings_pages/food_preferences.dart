@@ -67,8 +67,6 @@ class _FoodPreferencesState extends State<FoodPreferencesPage> {
         _userAlergens = AlergensModel(alergens: []);
       }
     });
-    _allAlergens.alergens
-        .removeWhere((element) => _userAlergens.alergens.contains(element));
   }
 
   void _getAlergens(Map<String, List<String>> data) {

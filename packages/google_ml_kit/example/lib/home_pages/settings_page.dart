@@ -33,6 +33,10 @@ class _SettingsPageState extends State<SettingsPage> {
     } on FirebaseAuthException catch (e) {}
   }
 
+  void performance() {
+    Navigator.of(context).pushNamed('/performance');
+  }
+
   void profile() {
     Navigator.of(context).pushNamed('/profile');
   }
@@ -45,16 +49,16 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color.fromRGBO(56, 45, 62, 1),
+        backgroundColor: const Color.fromRGBO(56, 45, 62, 1),
         body: SlidingUpPanel(
           body: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 25, left: 20),
+                padding: const EdgeInsets.only(top: 25, left: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Settings',
                       style: TextStyle(
                         fontSize: 35,
@@ -64,19 +68,22 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Expanded(
                 child: ListView(
                   children: [
-                    _buildButton('Profile', profile, Icon(Icons.person)),
-                    SizedBox(height: 20),
-                    _buildButton(
-                        'Security', _panelController.open, Icon(Icons.lock)),
-                    SizedBox(height: 20),
+                    _buildButton('Profile', profile, const Icon(Icons.person)),
+                    const SizedBox(height: 20),
+                    _buildButton('Performance', performance,
+                        const Icon(Icons.trending_up)),
+                    const SizedBox(height: 20),
+                    _buildButton('Security', _panelController.open,
+                        const Icon(Icons.lock)),
+                    const SizedBox(height: 20),
                     _buildButton('Food Preferences', foodPreferences,
-                        Icon(Icons.fastfood)),
-                    SizedBox(height: 20),
-                    _buildButton('Log Out', singOut, Icon(Icons.logout),
+                        const Icon(Icons.fastfood)),
+                    const SizedBox(height: 20),
+                    _buildButton('Log Out', singOut, const Icon(Icons.logout),
                         color: Colors.red),
                   ],
                 ),
@@ -84,12 +91,12 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           isDraggable: false,
-          panel: _buildNonAuthenticated(),
+          panel: _buildSlidingUp(),
           minHeight: 0,
           maxHeight: 290,
           controller: _panelController,
-          color: Color.fromRGBO(66, 58, 76, 1),
-          borderRadius: BorderRadius.only(
+          color: const Color.fromRGBO(66, 58, 76, 1),
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
           ),
@@ -98,20 +105,20 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildNonAuthenticated() {
+  Widget _buildSlidingUp() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Center(
+        const Center(
           child: Text('Verify your password',
               style: TextStyle(
                 fontSize: 17,
                 color: Colors.white,
               )),
         ),
-        SizedBox(height: 15),
-        Padding(
-          padding: const EdgeInsets.only(left: 30, right: 30),
+        const SizedBox(height: 15),
+        const Padding(
+          padding: EdgeInsets.only(left: 30, right: 30),
           child: Text(
             'Re-enter your password to access this settings page and to make changes',
             style: TextStyle(
@@ -121,14 +128,14 @@ class _SettingsPageState extends State<SettingsPage> {
             textAlign: TextAlign.center,
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 20.0),
           child: Container(
             width: double.infinity,
             height: 50,
             decoration: BoxDecoration(
-              color: Color.fromRGBO(56, 45, 62, 1),
+              color: const Color.fromRGBO(56, 45, 62, 1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Center(
@@ -137,10 +144,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: TextField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                   ),
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -150,18 +157,18 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
         ),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Padding(
-          padding: EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20),
           child: ElevatedButton(
             onPressed: security,
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                minimumSize: Size(double.infinity, 40),
+                minimumSize: const Size(double.infinity, 40),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
                 )),
-            child: Center(
+            child: const Center(
               child: Text(
                 'Continue',
                 style: TextStyle(
@@ -172,18 +179,18 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, bottom: 15),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
           child: ElevatedButton(
             onPressed: _panelController.close,
             style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromRGBO(56, 45, 62, 1),
-                minimumSize: Size(double.infinity, 40),
+                backgroundColor: const Color.fromRGBO(56, 45, 62, 1),
+                minimumSize: const Size(double.infinity, 40),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
                 )),
-            child: Center(
+            child: const Center(
               child: Text(
                 'Cancel',
                 style: TextStyle(
@@ -201,13 +208,13 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildButton(String label, void Function() onPressed, Icon icon,
       {Color color = Colors.white}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 25),
+      margin: const EdgeInsets.symmetric(horizontal: 25),
       child: ElevatedButtonTheme(
         data: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromRGBO(66, 58, 78, 1),
+            backgroundColor: const Color.fromRGBO(66, 58, 78, 1),
             elevation: 0,
-            minimumSize: Size(double.infinity, 60),
+            minimumSize: const Size(double.infinity, 60),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -221,7 +228,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 icon.icon,
                 color: color,
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(
                 label,
                 style: TextStyle(
@@ -229,7 +236,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   fontSize: 20,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               Icon(
                 Icons.arrow_forward_ios,
                 color: color,
