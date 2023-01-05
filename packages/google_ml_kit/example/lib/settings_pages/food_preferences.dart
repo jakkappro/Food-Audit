@@ -20,7 +20,7 @@ class _FoodPreferencesState extends State<FoodPreferencesPage> {
         .collection('userAlergens')
         .doc(_user.uid)
         .set({
-      alergen: FieldValue.arrayRemove([alergen])
+      'Milk': FieldValue.arrayRemove([alergen])
     });
 
     setState(() {
@@ -30,16 +30,14 @@ class _FoodPreferencesState extends State<FoodPreferencesPage> {
   }
 
   Future<void> _addAlergen(String alergen) async {
+    _userAlergens.alergens.add(alergen);
     await FirebaseFirestore.instance
         .collection('userAlergens')
         .doc(_user.uid)
-        .set({
-      alergen: FieldValue.arrayUnion([alergen])
-    });
+        .set({'Milk': _userAlergens.alergens});
 
     setState(() {
       _allAlergens.alergens.remove(alergen);
-      _userAlergens.alergens.add(alergen);
     });
   }
 
@@ -60,7 +58,7 @@ class _FoodPreferencesState extends State<FoodPreferencesPage> {
         .get()
         .then((value) {
       if (value.data() != null) {
-        _getAlergens(value
+        _getUserAlergens(value
             .data()!
             .map((key, value) => MapEntry(key, List<String>.from(value))));
       } else {
@@ -72,6 +70,12 @@ class _FoodPreferencesState extends State<FoodPreferencesPage> {
   void _getAlergens(Map<String, List<String>> data) {
     setState(() {
       _allAlergens = AlergensModel.fromJson(data['Milk']!);
+    });
+  }
+
+  void _getUserAlergens(Map<String, List<String>> data) {
+    setState(() {
+      _userAlergens = AlergensModel.fromJson(data['Milk']!);
     });
   }
 
