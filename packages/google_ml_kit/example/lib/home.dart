@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'home_pages/bmi_page.dart';
 import 'home_pages/camera_page.dart';
-import 'home_pages/profile_page.dart';
+import 'home_pages/goals_page.dart';
+import 'home_pages/home_page.dart';
 import 'home_pages/settings_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,9 +15,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   final List<Widget> _children = [
-    ProfilePage(),
-    CameraPage(),
+    HomePage(),
+    BmiPage(),
+    DailyGoalsPage(),
     SettingsPage(),
+    CameraPage(),
   ];
 
   void _onPageChanged(int index) {
@@ -34,33 +38,75 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: PageView(
         onPageChanged: _onPageChanged,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         controller: _pageController,
         children: _children,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromRGBO(56, 45, 62, 0.8),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: width * 0.05,
+            right: width * 0.05,
+            bottom: 20,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera_alt),
-            label: 'Camera',
+          child: Row(
+            children: [
+              Container(
+                  width: width * 0.9,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                    color: Colors.black,
+                  ),
+                  child: NavigationBar(
+                    height: 55,
+                    onDestinationSelected: (int index) {
+                      setState(() {
+                        _pageController.animateToPage(index,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut);
+                        _currentPage = index;
+                      });
+                    },
+                    labelBehavior:
+                        NavigationDestinationLabelBehavior.alwaysHide,
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    selectedIndex: _currentPage,
+                    destinations: const <Widget>[
+                      NavigationDestination(
+                        icon: Icon(Icons.home_outlined),
+                        selectedIcon: Icon(Icons.home),
+                        label: 'Home',
+                      ),
+                      NavigationDestination(
+                          icon: Icon(Icons.insert_chart_outlined),
+                          selectedIcon: Icon(Icons.insert_chart),
+                          label: 'BMI'),
+                      NavigationDestination(
+                        icon: Icon(Icons.check_circle_outline),
+                        selectedIcon: Icon(Icons.check_circle),
+                        label: 'Daily goals',
+                      ),
+                      NavigationDestination(
+                        icon: Icon(Icons.settings_outlined),
+                        selectedIcon: Icon(Icons.settings),
+                        label: 'Settings',
+                      ),
+                      NavigationDestination(
+                        icon: Icon(Icons.document_scanner_outlined),
+                        selectedIcon: Icon(Icons.document_scanner),
+                        label: 'Camera',
+                      ),
+                    ],
+                  )),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: _currentPage,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.white,
+        ),
       ),
     );
   }

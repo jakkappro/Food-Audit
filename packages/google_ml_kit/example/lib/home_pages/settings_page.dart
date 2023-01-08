@@ -49,7 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromRGBO(56, 45, 62, 1),
+        backgroundColor: Colors.white,
         body: SlidingUpPanel(
           body: Column(
             children: [
@@ -61,9 +61,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     const Text(
                       'Settings',
                       style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                      ),
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                   ],
                 ),
@@ -212,7 +212,7 @@ class _SettingsPageState extends State<SettingsPage> {
       child: ElevatedButtonTheme(
         data: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromRGBO(66, 58, 78, 1),
+            backgroundColor: Colors.black,
             elevation: 0,
             minimumSize: const Size(double.infinity, 60),
             shape: RoundedRectangleBorder(

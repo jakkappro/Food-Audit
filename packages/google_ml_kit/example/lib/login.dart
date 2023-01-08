@@ -55,8 +55,8 @@ class _LoginPageState extends State<LoginPage>
         isDraggable: false,
         minHeight: 0,
         maxHeight: 250,
-        color: Color.fromRGBO(66, 58, 76, 1),
-        borderRadius: BorderRadius.only(
+        color: const Color.fromRGBO(66, 58, 76, 1),
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(40),
           topRight: Radius.circular(40),
         ),
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage>
             width: width,
             height: height,
             padding: EdgeInsets.only(
-                left: 20, right: 20, bottom: height * 0.12, top: height * 0.1),
+                left: 20, right: 20, bottom: height * 0.111, top: height * 0.1),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,36 +85,37 @@ class _LoginPageState extends State<LoginPage>
                         TextButton(
                             onPressed: () => {},
                             style: TextButton.styleFrom(
-                              padding: EdgeInsets.all(0.0),
+                              padding: const EdgeInsets.all(0.0),
                             ),
-                            child: Image(
+                            child: const Image(
                                 width: 30,
                                 image: AssetImage('assets/icons/google.png'))),
-                        SizedBox(width: 25),
+                        const SizedBox(width: 25),
                         TextButton(
                           onPressed: () => {},
-                          child: Image(
+                          child: const Image(
                               width: 30,
                               image: AssetImage('assets/icons/facebook.png')),
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 55,
                     ),
                     createInputField('Email', false, _emailController,
                         shouldShake, animationController, shakeTween),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     createInputField('Password', true, _passwordController,
                         shouldShake, animationController, shakeTween),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     TextButton(
                       onPressed: _panelController.open,
-                      style: TextButton.styleFrom(padding: EdgeInsets.all(0)),
+                      style: TextButton.styleFrom(
+                          padding: const EdgeInsets.all(0)),
                       child: Text(
                         'Forgot Password?',
                         style: Theme.of(context).textTheme.bodyText1,
@@ -128,12 +129,12 @@ class _LoginPageState extends State<LoginPage>
                       onPressed: _logIn,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        padding: EdgeInsets.all(18),
+                        padding: const EdgeInsets.all(18),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         backgroundColor: Colors.white,
                       ),
-                      child: Center(
+                      child: const Center(
                           child: Text(
                         'Login',
                         style: TextStyle(
@@ -150,10 +151,25 @@ class _LoginPageState extends State<LoginPage>
                                   context, '/register'),
                             },
                         style: TextButton.styleFrom(
-                            padding: EdgeInsets.only(top: 0, bottom: 0),
-                            fixedSize: Size(320, 48)),
+                            padding: const EdgeInsets.only(top: 0, bottom: 0),
+                            fixedSize: const Size(320, 48)),
                         child: Text('Create account',
                             style: Theme.of(context).textTheme.bodyText1)),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextButton(
+                        onPressed: () async {
+                          await FirebaseAuth.instance.signInAnonymously();
+                          Navigator.pushReplacementNamed(context, '/home');
+                        },
+                        style: TextButton.styleFrom(
+                            padding: const EdgeInsets.only(top: 0, bottom: 0),
+                            fixedSize: const Size(320, 48)),
+                        child: Text(
+                          'Continue as guest',
+                          style: Theme.of(context).textTheme.bodyText2,
+                        )),
                   ],
                 )
               ],
@@ -168,21 +184,21 @@ class _LoginPageState extends State<LoginPage>
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Center(
+        const Center(
           child: Text("You'r email",
               style: TextStyle(
                 fontSize: 17,
                 color: Colors.white,
               )),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 20.0),
           child: Container(
             width: double.infinity,
             height: 50,
             decoration: BoxDecoration(
-              color: Color.fromRGBO(56, 45, 62, 1),
+              color: const Color.fromRGBO(56, 45, 62, 1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Center(
@@ -190,10 +206,10 @@ class _LoginPageState extends State<LoginPage>
                 padding: const EdgeInsets.only(left: 15.0),
                 child: TextField(
                   controller: _forgotPasswordController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                   ),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                   ),
                 ),
@@ -201,18 +217,18 @@ class _LoginPageState extends State<LoginPage>
             ),
           ),
         ),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Padding(
-          padding: EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20),
           child: ElevatedButton(
             onPressed: _forgotPassword,
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                minimumSize: Size(double.infinity, 40),
+                minimumSize: const Size(double.infinity, 40),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
                 )),
-            child: Center(
+            child: const Center(
               child: Text(
                 'Send',
                 style: TextStyle(
@@ -223,18 +239,18 @@ class _LoginPageState extends State<LoginPage>
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, bottom: 15),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
           child: ElevatedButton(
             onPressed: _panelController.close,
             style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromRGBO(56, 45, 62, 1),
-                minimumSize: Size(double.infinity, 40),
+                backgroundColor: const Color.fromRGBO(56, 45, 62, 1),
+                minimumSize: const Size(double.infinity, 40),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
                 )),
-            child: Center(
+            child: const Center(
               child: Text(
                 'Cancel',
                 style: TextStyle(

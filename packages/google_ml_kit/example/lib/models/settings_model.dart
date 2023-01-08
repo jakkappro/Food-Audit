@@ -9,15 +9,24 @@ class SettingsModel {
   num weight = 0;
   num imageProcessingFramerate = 0;
   String imageProcessingQuality = '';
+  bool _isAnonymous = false;
 
   static SettingsModel get instance {
     _currentInstance ??= SettingsModel._internal();
     return _currentInstance!;
   }
 
+  static set isAnonymous(bool value) {
+    _currentInstance!._isAnonymous = value;
+  }
+
   SettingsModel._internal();
 
   Future<void> saveToFirebase() async {
+    if (_isAnonymous) {
+      return;
+    }
+
     await FirebaseFirestore.instance
         .collection('userSettings')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -43,6 +52,14 @@ class SettingsModel {
       imageProcessingQuality = doc['ImageQuality'];
     }
 
+    _getAllAlergensFromFirebase();
+  }
+
+  void loadFromFirebaseAnonym() {
+    _getAllAlergensFromFirebase();
+  }
+
+  void _getAllAlergensFromFirebase() {
     FirebaseFirestore.instance
         .collection('alergens')
         .doc('8gMj50c1wiaDIU0zf1IB')
