@@ -31,6 +31,9 @@ dependencies:
     path: ../../google_mlkit_image_labeling
   google_mlkit_text_recognition:
     path: ../../google_mlkit_text_recognition
+  cached_network_image: ^3.2.3
+  html: ^0.15.1
+  url_launcher: ^6.1.0
 
 dev_dependencies:
   flutter_lints: ^2.0.1

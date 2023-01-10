@@ -51,25 +51,25 @@ class BarChartt extends StatelessWidget {
     String text;
     switch (value.toInt()) {
       case 0:
-        text = 'Mn';
+        text = 'Po';
         break;
       case 1:
-        text = 'Te';
+        text = 'Ut';
         break;
       case 2:
-        text = 'Wd';
-        break;
-      case 3:
-        text = 'Tu';
-        break;
-      case 4:
-        text = 'Fr';
-        break;
-      case 5:
         text = 'St';
         break;
+      case 3:
+        text = 'Št';
+        break;
+      case 4:
+        text = 'Pia';
+        break;
+      case 5:
+        text = 'So';
+        break;
       case 6:
-        text = 'Sn';
+        text = 'Ne';
         break;
       default:
         text = '';
@@ -116,81 +116,34 @@ class BarChartt extends StatelessWidget {
       );
 
   List<BarChartGroupData> get barGroups => [
-        BarChartGroupData(
-          x: 0,
-          barRods: [
-            BarChartRodData(
-              toY: 8,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 1,
-          barRods: [
-            BarChartRodData(
-              toY: 10,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 2,
-          barRods: [
-            BarChartRodData(
-              toY: 14,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 3,
-          barRods: [
-            BarChartRodData(
-              toY: 15,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 4,
-          barRods: [
-            BarChartRodData(
-              toY: 13,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 5,
-          barRods: [
-            BarChartRodData(
-              toY: 10,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 6,
-          barRods: [
-            BarChartRodData(
-              toY: 16,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
+        _buildGroupData(0, 15, false),
+        _buildGroupData(1, 12, false),
+        _buildGroupData(2, 15, false),
+        _buildGroupData(3, 15, false),
+        _buildGroupData(4, 21, false),
+        _buildGroupData(5, 4, false),
+        _buildGroupData(6, 8, true),
       ];
 }
 
-class BarChartSample3 extends StatefulWidget {
+BarChartGroupData _buildGroupData(int x, double y, bool currentDay) {
+  return BarChartGroupData(
+    x: x,
+    barRods: [
+      BarChartRodData(
+        width: 25,
+        borderRadius: BorderRadius.zero,
+        toY: y,
+        color: currentDay
+            ? Color.fromRGBO(125, 160, 119, 1)
+            : Color.fromRGBO(242, 242, 242, 1),
+      )
+    ],
+    showingTooltipIndicators: [0],
+  );
+}
 
+class BarChartSample3 extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => BarChartSample3State();
 }

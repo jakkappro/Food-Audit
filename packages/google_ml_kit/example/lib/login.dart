@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage>
             width: width,
             height: height,
             padding: EdgeInsets.only(
-                left: 20, right: 20, bottom: height * 0.111, top: height * 0.1),
+                left: 20, right: 20, bottom: height * 0.09, top: height * 0.1),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
