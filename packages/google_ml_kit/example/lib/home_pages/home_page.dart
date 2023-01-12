@@ -38,79 +38,210 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 60),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-              child: SizedBox(
-                height: 230,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 15,
-                      child: Container(
-                        height: 180,
-                        width: width * 0.86,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 3,
-                                blurRadius: 7,
-                                offset: const Offset(5, 5),
-                              )
-                            ]),
-                        child: Column(children: [
-                          const SizedBox(height: 5),
-                          Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 15.0, left: 22.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: const [
-                                      Text(
-                                        'Denné výzvy',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: const [
-                                      Text(
-                                        'Plňaj výzvy a získavaj body',
-                                        style: TextStyle(
-                                            color: Color.fromRGBO(
-                                                213, 213, 213, 1),
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 15),
-                                  _buildChallengeText(
-                                      false, "Testicko a testovanie"),
-                                  const SizedBox(height: 5),
-                                  _buildChallengeText(
-                                      true, "Testicko a testovanie"),
-                                  const SizedBox(height: 5),
-                                  _buildChallengeText(
-                                      true, "Testicko a testovanie"),
-                                ],
-                              )),
-                        ]),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                child: SizedBox(
+                  height: 230,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: 15,
+                        child: Container(
+                          height: 180,
+                          width: width * 0.86,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 3,
+                                  blurRadius: 7,
+                                  offset: const Offset(5, 5),
+                                )
+                              ]),
+                          child: Column(children: [
+                            const SizedBox(height: 5),
+                            Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 15.0, left: 22.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: const [
+                                        Text(
+                                          'Denné výzvy',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: const [
+                                        Text(
+                                          'Plňaj výzvy a získavaj body',
+                                          style: TextStyle(
+                                              color: Color.fromRGBO(
+                                                  213, 213, 213, 1),
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 15),
+                                    _buildChallengeText(
+                                        false, "Testicko a testovanie"),
+                                    const SizedBox(height: 5),
+                                    _buildChallengeText(
+                                        true, "Testicko a testovanie"),
+                                    const SizedBox(height: 5),
+                                    _buildChallengeText(
+                                        true, "Testicko a testovanie"),
+                                  ],
+                                )),
+                          ]),
+                        ),
                       ),
-                    ),
-                    Positioned(
+                      Positioned(
+                          top: 0,
+                          right: 0,
+                          height: 50,
+                          width: 60,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(0, 0, 0, 1),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 3,
+                                  blurRadius: 7,
+                                ),
+                              ],
+                            ),
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 0,
+                                    backgroundColor: Colors.transparent),
+                                onPressed: () {},
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                  size: 20,
+                                )),
+                          ))
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                child: SizedBox(
+                  height: 350,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: 15,
+                        left: 17,
+                        child: Container(
+                          height: 280,
+                          width: width * 0.82,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 3,
+                                  blurRadius: 7,
+                                  offset: const Offset(5, 5),
+                                )
+                              ]),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      user.displayName!,
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 21,
+                                          fontWeight: FontWeight.w800),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // graph
+                              const SizedBox(height: 35),
+                              const SizedBox(
+                                height: 100,
+                                width: double.infinity,
+                                child: BarChartt(),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: Row(
+                                  children: const [
+                                    Text(
+                                      'Tvoje skóre je ',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      '225 bodov.',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(141, 171, 136, 1),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // here goes friends
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        child: Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(_getImageUrl()),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
                         top: 0,
                         right: 0,
                         height: 50,
@@ -129,422 +260,299 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                           child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  backgroundColor: Colors.transparent),
-                              onPressed: () {},
-                              child: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.white,
-                                size: 20,
-                              )),
-                        ))
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 40),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-              child: SizedBox(
-                height: 350,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 15,
-                      left: 25,
-                      child: Container(
-                        height: 280,
-                        width: width * 0.78,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 3,
-                                blurRadius: 7,
-                                offset: const Offset(5, 5),
-                              )
-                            ]),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 15.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    user.displayName!,
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 21,
-                                        fontWeight: FontWeight.w800),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
+                            style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: Colors.transparent),
+                            onPressed: () {},
+                            child: const Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.white,
+                              size: 20,
                             ),
-                            // graph
-                            const SizedBox(height: 35),
-                            const SizedBox(
-                              height: 100,
-                              width: double.infinity,
-                              child: BarChartt(),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: Row(
-                                children: const [
-                                  Text(
-                                    'Tvoje skóre je ',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    '225 bodov.',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(141, 171, 136, 1),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // here goes friends
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      child: Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(_getImageUrl()),
                           ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      height: 50,
-                      width: 60,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 3,
-                              blurRadius: 7,
-                            ),
-                          ],
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              backgroundColor: Colors.transparent),
-                          onPressed: () {},
-                          child: const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Row(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(left: 22),
-                  child: Text(
-                    'Blog',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
+              Row(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(left: 22),
+                    child: Text(
+                      'Blog',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                    textAlign: TextAlign.start,
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(left: 22),
-                  child: Text(
-                    'Aktuálne trendy v stravovaní',
-                    style: TextStyle(
-                      color: Color.fromRGBO(218, 218, 218, 1),
-                      fontWeight: FontWeight.normal,
-                      fontSize: 12,
+                ],
+              ),
+              Row(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(left: 22),
+                    child: Text(
+                      'Aktuálne trendy v stravovaní',
+                      style: TextStyle(
+                        color: Color.fromRGBO(218, 218, 218, 1),
+                        fontWeight: FontWeight.normal,
+                        fontSize: 12,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
-                    textAlign: TextAlign.start,
                   ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 22.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 300,
-                child: DefaultTabController(
-                  length: 3,
-                  child: Scaffold(
-                    appBar: AppBar(
-                      toolbarHeight: 0,
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      primary: false,
-                      bottom: TabBar(
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorColor: Colors.transparent,
-                        isScrollable: false,
-                        padding: const EdgeInsets.only(top: 0, bottom: 0),
-                        tabs: [
-                          _createTab('Výživa'),
-                          _createTab('Cvičenie'),
-                          _createTab('Mýtusy'),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 22.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 300,
+                  child: DefaultTabController(
+                    length: 3,
+                    child: Scaffold(
+                      appBar: AppBar(
+                        toolbarHeight: 0,
+                        elevation: 0,
+                        backgroundColor: Colors.white,
+                        primary: false,
+                        bottom: TabBar(
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicatorColor: Colors.transparent,
+                          isScrollable: false,
+                          padding: const EdgeInsets.only(top: 0, bottom: 0),
+                          tabs: [
+                            _createTab('Výživa'),
+                            _createTab('Cvičenie'),
+                            _createTab('Mýtusy'),
+                          ],
+                        ),
+                      ),
+                      body: TabBarView(
+                        children: [
+                          Container(
+                            color: Colors.white,
+                            child: ListView.builder(
+                              itemCount: 3,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 60,
+                                          height: 65,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(15)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  receipes[index]['image']),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              receipes[index]['title'].length >
+                                                      30
+                                                  ? receipes[index]['title']
+                                                          .substring(0, 30) +
+                                                      '...'
+                                                  : receipes[index]['title'],
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: () async {
+                                                await launchUrlString(
+                                                    receipes[index]['url']);
+                                              },
+                                              child: const Text(
+                                                'Čítaj ďalej',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 8,
+                                                ),
+                                                textAlign: TextAlign.start,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                          Container(
+                            color: Colors.white,
+                            child: ListView.builder(
+                              itemCount: 3,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 60,
+                                          height: 65,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(15)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  fitness[index]['image']),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              fitness[index]['title'].length >
+                                                      30
+                                                  ? fitness[index]['title']
+                                                          .substring(0, 30) +
+                                                      '...'
+                                                  : fitness[index]['title'],
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: () async {
+                                                await launchUrlString(
+                                                    fitness[index]['url']);
+                                              },
+                                              child: const Text(
+                                                'Čítaj ďalej',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 8,
+                                                ),
+                                                textAlign: TextAlign.start,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                          Container(
+                            color: Colors.white,
+                            child: ListView.builder(
+                              itemCount: 3,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 60,
+                                          height: 65,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(15)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  receipes[index]['image']),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              receipes[index]['title'].length >
+                                                      30
+                                                  ? receipes[index]['title']
+                                                          .substring(0, 30) +
+                                                      '...'
+                                                  : receipes[index]['title'],
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: () async {
+                                                await launchUrlString(
+                                                    receipes[index]['url']);
+                                              },
+                                              child: const Text(
+                                                'Čítaj ďalej',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 8,
+                                                ),
+                                                textAlign: TextAlign.start,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    body: TabBarView(
-                      children: [
-                        Container(
-                          color: Colors.white,
-                          child: ListView.builder(
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 60,
-                                        height: 65,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(15)),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                receipes[index]['image']),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            receipes[index]['title'].length > 30
-                                                ? receipes[index]['title']
-                                                        .substring(0, 30) +
-                                                    '...'
-                                                : receipes[index]['title'],
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () async {
-                                              await launchUrlString(
-                                                  receipes[index]['url']);
-                                            },
-                                            child: const Text(
-                                              'Čítaj ďalej',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 8,
-                                              ),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: ListView.builder(
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 60,
-                                        height: 65,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(15)),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                fitness[index]['image']),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            fitness[index]['title'].length > 30
-                                                ? fitness[index]['title']
-                                                        .substring(0, 30) +
-                                                    '...'
-                                                : fitness[index]['title'],
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () async {
-                                              await launchUrlString(
-                                                  fitness[index]['url']);
-                                            },
-                                            child: const Text(
-                                              'Čítaj ďalej',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 8,
-                                              ),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: ListView.builder(
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 60,
-                                        height: 65,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(15)),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                receipes[index]['image']),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            receipes[index]['title'].length > 30
-                                                ? receipes[index]['title']
-                                                        .substring(0, 30) +
-                                                    '...'
-                                                : receipes[index]['title'],
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () async {
-                                              await launchUrlString(
-                                                  receipes[index]['url']);
-                                            },
-                                            child: const Text(
-                                              'Čítaj ďalej',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 8,
-                                              ),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
+              const SizedBox(
+                height: 40,
+              ),
+            ],
+          ),
         ),
       ),
     );

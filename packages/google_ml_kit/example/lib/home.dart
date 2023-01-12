@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'home_pages/bmi_page.dart';
 import 'home_pages/camera_page.dart';
-import 'home_pages/goals_page.dart';
 import 'home_pages/home_page.dart';
 import 'home_pages/settings_page.dart';
 
@@ -17,7 +16,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _children = [
     HomePage(),
     BmiPage(),
-    DailyGoalsPage(),
     SettingsPage(),
     CameraPage(),
   ];
@@ -84,14 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         label: 'Home',
                       ),
                       NavigationDestination(
-                          icon: Icon(Icons.insert_chart_outlined),
-                          selectedIcon: Icon(Icons.insert_chart),
+                          icon: Icon(Icons.local_hospital_outlined),
+                          selectedIcon: Icon(Icons.local_hospital),
                           label: 'BMI'),
-                      NavigationDestination(
-                        icon: Icon(Icons.check_circle_outline),
-                        selectedIcon: Icon(Icons.check_circle),
-                        label: 'Daily goals',
-                      ),
                       NavigationDestination(
                         icon: Icon(Icons.settings_outlined),
                         selectedIcon: Icon(Icons.settings),

@@ -10,6 +10,8 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
-    return TextRecognizerView();
+    return SafeArea(
+      child: TextRecognizerView(),
+    );
   }
 }

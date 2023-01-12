@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'home.dart';
 import 'home_pages/bmi_page.dart';
-import 'home_pages/goals_page.dart';
 import 'login.dart';
 import 'models/settings_model.dart';
 import 'register.dart';
@@ -49,7 +48,6 @@ Future<void> main() async {
       '/foodPreferences': (context) => FoodPreferencesPage(),
       '/performance': (context) => PerformancePage(),
       '/bmi': (context) => BmiPage(),
-      '/dailygoals': (context) => DailyGoalsPage(),
     },
   ));
 }
