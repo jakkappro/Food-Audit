@@ -32,13 +32,22 @@ class _PerformancePageState extends State<PerformancePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromRGBO(56, 45, 62, 1),
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text('Performance', style: TextStyle(fontSize: 30)),
-          backgroundColor: const Color.fromRGBO(56, 45, 62, 1),
+          title: const Text(
+            'Performance',
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.black,
+            ),
+          ),
+          backgroundColor: Colors.white,
           centerTitle: true,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
             iconSize: 25,
             onPressed: () {
               Navigator.pop(context);
@@ -55,7 +64,7 @@ class _PerformancePageState extends State<PerformancePage> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Color.fromRGBO(66, 58, 76, 1),
+                color: Colors.black,
               ),
               child: Row(
                 children: [
@@ -95,7 +104,7 @@ class _PerformancePageState extends State<PerformancePage> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Color.fromRGBO(66, 58, 76, 1),
+                color: Colors.black,
               ),
               child: Row(
                 children: [

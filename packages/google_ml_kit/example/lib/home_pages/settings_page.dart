@@ -57,8 +57,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 padding: const EdgeInsets.only(top: 25, left: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text(
+                  children: const [
+                     Text(
                       'Settings',
                       style: TextStyle(
                           fontSize: 35,

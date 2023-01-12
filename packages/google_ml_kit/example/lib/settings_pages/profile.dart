@@ -34,13 +34,19 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color.fromRGBO(56, 45, 62, 1),
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Profile', style: TextStyle(fontSize: 30)),
-          backgroundColor: Color.fromRGBO(56, 45, 62, 1),
+          title: const Text(
+            'Profile',
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.black,
+            ),
+          ),
+          backgroundColor: Colors.white,
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
             iconSize: 25,
             onPressed: () async {
               auth.currentUser!.reload();
@@ -86,18 +92,18 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 height: 60,
                 width: double.infinity,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color.fromRGBO(66, 58, 76, 1),
+                  color: Colors.black,
                 ),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25.0),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 25.0),
                       child: Text(
                         'First Name: ',
                         style: TextStyle(
@@ -106,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20.0),
@@ -117,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                           decoration: InputDecoration(
                             hintText: _firstName,
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -128,18 +134,18 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 height: 60,
                 width: double.infinity,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color.fromRGBO(66, 58, 76, 1),
+                  color: Colors.black,
                 ),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25.0),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 25.0),
                       child: Text(
                         'Last Name: ',
                         style: TextStyle(
@@ -148,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20.0),
@@ -159,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                           decoration: InputDecoration(
                             hintText: _lastName,
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -170,18 +176,18 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 height: 60,
                 width: double.infinity,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color.fromRGBO(66, 58, 76, 1),
+                  color: Colors.black,
                 ),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25.0),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 25.0),
                       child: Text(
                         'Heigth: ',
                         style: TextStyle(
@@ -190,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20.0),
@@ -199,7 +205,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onSubmitted: (value) async => _updateHeight(value),
                           decoration: InputDecoration(
                             hintText: settings.height.toString(),
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -210,18 +216,18 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 height: 60,
                 width: double.infinity,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color.fromRGBO(66, 58, 76, 1),
+                  color: Colors.black,
                 ),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25.0),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 25.0),
                       child: Text(
                         'Weight: ',
                         style: TextStyle(
@@ -230,7 +236,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20.0),
@@ -239,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onSubmitted: (value) async => _updateWeight(value),
                           decoration: InputDecoration(
                             hintText: settings.weight.toString(),
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -259,8 +265,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        minimumSize: Size(double.infinity, 40),
+                        backgroundColor: Colors.black,
+                        minimumSize: const Size(double.infinity, 40),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -270,9 +276,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         await auth.currentUser!.reload();
                         Navigator.pop(context);
                       },
-                      child: Text(
+                      child: const Text(
                         'Save',
-                        style: TextStyle(fontSize: 20, color: Colors.black),
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     ),
                   ),
