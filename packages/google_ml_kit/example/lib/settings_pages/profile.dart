@@ -21,6 +21,9 @@ class _ProfilePageState extends State<ProfilePage> {
   late String _firstName;
   late String _lastName;
   SettingsModel settings = SettingsModel.instance;
+  double _bmi = 0;
+  double _bmr = 0;
+  Color _weightColor = Colors.green;
 
   @override
   void initState() {
@@ -32,6 +35,33 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    // calculate bmr
+    if (settings.isMale) {
+      _bmr = 66.47 +
+          13.75 * settings.weight +
+          5.003 * settings.height -
+          6.755 * settings.age;
+    } else {
+      _bmr = 655.1 +
+          9.563 * settings.weight +
+          1.85 * settings.height -
+          4.676 * settings.age;
+    }
+
+    // calculate bmi
+    _bmi = settings.weight / (settings.height / 100 * settings.height / 100);
+
+    // set weight color
+    if (_bmi > 30) {
+      _weightColor = Colors.red;
+    } else if (_bmi > 25) {
+      _weightColor = Colors.orange;
+    } else if (_bmi > 18.5) {
+      _weightColor = Colors.green;
+    } else {
+      _weightColor = Colors.blue;
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -58,233 +88,392 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         body: Padding(
           padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
-          child: Column(
-            children: [
-              InkWell(
-                onTap: () async {
-                  final newImage = await ImagePicker().pickImage(
-                      source: ImageSource.gallery,
-                      imageQuality: 50,
-                      maxWidth: 521,
-                      maxHeight: 521);
+          child: SingleChildScrollView(
+            child: SizedBox(
+              width: double.infinity,
+              height: 780,
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      final newImage = await ImagePicker().pickImage(
+                          source: ImageSource.gallery,
+                          imageQuality: 50,
+                          maxWidth: 521,
+                          maxHeight: 521);
 
-                  if (newImage == null) {
-                    return;
-                  }
+                      if (newImage == null) {
+                        return;
+                      }
 
-                  final ref = FirebaseStorage.instance
-                      .ref()
-                      .child('avatar/${user.uid}');
+                      final ref = FirebaseStorage.instance
+                          .ref()
+                          .child('avatar/${user.uid}');
 
-                  await ref.putFile(File(newImage.path));
+                      await ref.putFile(File(newImage.path));
 
-                  await user.updatePhotoURL(await ref.getDownloadURL());
-                },
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(_getImageUrl()),
+                      await user.updatePhotoURL(await ref.getDownloadURL());
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(_getImageUrl()),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                height: 60,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.black,
-                ),
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 25.0),
-                      child: Text(
-                        'First Name: ',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: TextField(
-                          onSubmitted: (value) async => {
-                            await user.updateDisplayName('$value $_lastName'),
-                            setState(() {})
-                          },
-                          decoration: InputDecoration(
-                            hintText: _firstName,
-                            hintStyle: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                height: 60,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.black,
-                ),
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 25.0),
-                      child: Text(
-                        'Last Name: ',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: TextField(
-                          onSubmitted: (value) async => {
-                            await user.updateDisplayName('$_firstName $value'),
-                            setState(() {})
-                          },
-                          decoration: InputDecoration(
-                            hintText: _lastName,
-                            hintStyle: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                height: 60,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.black,
-                ),
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 25.0),
-                      child: Text(
-                        'Heigth: ',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          onSubmitted: (value) async => _updateHeight(value),
-                          decoration: InputDecoration(
-                            hintText: settings.height.toString(),
-                            hintStyle: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                height: 60,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.black,
-                ),
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 25.0),
-                      child: Text(
-                        'Weight: ',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          onSubmitted: (value) async => _updateWeight(value),
-                          decoration: InputDecoration(
-                            hintText: settings.weight.toString(),
-                            hintStyle: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 10.0, left: 10, right: 10),
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
+                  const SizedBox(height: 30),
+                  SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        minimumSize: const Size(double.infinity, 40),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Transform.rotate(
+                              angle: -1.5708,
+                              child: SizedBox(
+                                width: 100,
+                                height: 50,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: LinearProgressIndicator(
+                                    backgroundColor: Colors.grey[200],
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        _weightColor),
+                                    value: _bmi > 0 ? _bmi / 40 : 0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            Text(
+                              'BMI: ${_bmi.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      onPressed: () async {
-                        await settings.saveToFirebase();
-                        await auth.currentUser!.reload();
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Save',
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        SizedBox(width: 25),
+                        Column(
+                          children: [
+                            Transform.rotate(
+                              angle: -1.5708,
+                              child: SizedBox(
+                                width: 100,
+                                height: 50,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: LinearProgressIndicator(
+                                    backgroundColor: Colors.grey[200],
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        _weightColor),
+                                    value: _bmr > 0 ? _bmr / 4000 : 0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            Text(
+                              'BMR: ${_bmr.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 60,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.black,
+                    ),
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 25.0),
+                          child: Text(
+                            'First Name: ',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: TextField(
+                              onSubmitted: (value) async => {
+                                await user
+                                    .updateDisplayName('$value $_lastName'),
+                                setState(() {})
+                              },
+                              decoration: InputDecoration(
+                                hintText: _firstName,
+                                hintStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 60,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.black,
+                    ),
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 25.0),
+                          child: Text(
+                            'Last Name: ',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: TextField(
+                              onSubmitted: (value) async => {
+                                await user
+                                    .updateDisplayName('$_firstName $value'),
+                                setState(() {})
+                              },
+                              decoration: InputDecoration(
+                                hintText: _lastName,
+                                hintStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 60,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.black,
+                    ),
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 25.0),
+                          child: Text(
+                            'Heigth: ',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              onSubmitted: (value) async =>
+                                  _updateHeight(value),
+                              decoration: InputDecoration(
+                                hintText: settings.height.toString(),
+                                hintStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 60,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.black,
+                    ),
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 25.0),
+                          child: Text(
+                            'Weight: ',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              onSubmitted: (value) async =>
+                                  _updateWeight(value),
+                              decoration: InputDecoration(
+                                hintText: settings.weight.toString(),
+                                hintStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 60,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.black,
+                    ),
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 25.0),
+                          child: Text(
+                            'Age: ',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              onSubmitted: (value) async => _updateAge(value),
+                              decoration: InputDecoration(
+                                hintText: settings.age.toString(),
+                                hintStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 60,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.black,
+                    ),
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 25.0),
+                          child: Text(
+                            'Gender: ',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: TextField(
+                              onSubmitted: (value) async =>
+                                  _updateGender(value),
+                              decoration: InputDecoration(
+                                hintText: settings.isMale.toString(),
+                                hintStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 10.0, left: 10, right: 10),
+                      child: Container(
+                        alignment: Alignment.bottomCenter,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            minimumSize: const Size(double.infinity, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          onPressed: () async {
+                            await settings.saveToFirebase();
+                            await auth.currentUser!.reload();
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Save',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -302,5 +491,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _updateWeight(String value) async {
     settings.weight = double.parse(value);
+  }
+
+  _updateAge(String value) async {
+    settings.age = int.parse(value);
+  }
+
+  _updateGender(String value) async {
+    settings.isMale = value == 'Male';
   }
 }

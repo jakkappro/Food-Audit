@@ -7,9 +7,11 @@ class SettingsModel {
   List<String> allergens = [];
   num height = 0;
   num weight = 0;
+  num age = 0;
   num imageProcessingFramerate = 0;
   String imageProcessingQuality = '';
   bool _isAnonymous = false;
+  bool isMale = true;
 
   static SettingsModel get instance {
     _currentInstance ??= SettingsModel._internal();
@@ -48,6 +50,8 @@ class SettingsModel {
       allergens = List<String>.from(doc['Alergens']);
       height = doc['Height'];
       weight = doc['Weight'];
+      age = doc['Age'];
+      isMale = doc['IsMale'];
       imageProcessingFramerate = doc['ImageProcessingFramerate'];
       imageProcessingQuality = doc['ImageQuality'];
     }
