@@ -5,6 +5,7 @@ class SettingsModel {
   static SettingsModel? _currentInstance;
   Map<String, List<String>> allAlergens = {};
   List<String> allergens = [];
+  DateTime birthDate = DateTime.parse('1990-02-27');
   num height = 0;
   num weight = 0;
   num age = 0;
@@ -38,6 +39,9 @@ class SettingsModel {
       'Weight': weight,
       'ImageProcessingFramerate': imageProcessingFramerate,
       'ImageQuality': imageProcessingQuality,
+      'BirthDate': birthDate,
+      'Age': age,
+      'IsMale': isMale,
     });
   }
 
@@ -50,6 +54,7 @@ class SettingsModel {
       allergens = List<String>.from(doc['Alergens']);
       height = doc['Height'];
       weight = doc['Weight'];
+      birthDate = doc['BirthDate'].toDate();
       age = doc['Age'];
       isMale = doc['IsMale'];
       imageProcessingFramerate = doc['ImageProcessingFramerate'];

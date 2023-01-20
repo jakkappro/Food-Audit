@@ -302,21 +302,29 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         const SizedBox(width: 20),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              onSubmitted: (value) async =>
-                                  _updateHeight(value),
-                              decoration: InputDecoration(
-                                hintText: settings.height.toString(),
-                                hintStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            showValueIndicator: ShowValueIndicator.always,
+                            valueIndicatorColor: Colors.white,
+                            valueIndicatorTextStyle: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
+                          ),
+                          child: Slider(
+                            label: settings.height.toString(),
+                            value: settings.height.toDouble() < 50
+                                ? 50
+                                : settings.height.toDouble() > 250
+                                    ? 250
+                                    : settings.height.toDouble(),
+                            min: 50,
+                            max: 250,
+                            divisions: 200,
+                            onChanged: (value) {
+                              _updateHeight(value.ceil().toString());
+                              setState(() {});
+                            },
                           ),
                         ),
                       ],
@@ -343,21 +351,29 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         const SizedBox(width: 20),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              onSubmitted: (value) async =>
-                                  _updateWeight(value),
-                              decoration: InputDecoration(
-                                hintText: settings.weight.toString(),
-                                hintStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            showValueIndicator: ShowValueIndicator.always,
+                            valueIndicatorColor: Colors.white,
+                            valueIndicatorTextStyle: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
+                          ),
+                          child: Slider(
+                            label: settings.weight.toString(),
+                            value: settings.weight.toDouble() < 30
+                                ? 30
+                                : settings.weight.toDouble() > 200
+                                    ? 200
+                                    : settings.weight.toDouble(),
+                            min: 30,
+                            max: 200,
+                            divisions: 170,
+                            onChanged: (value) {
+                              _updateWeight(value.ceil().toString());
+                              setState(() {});
+                            },
                           ),
                         ),
                       ],
@@ -376,7 +392,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         const Padding(
                           padding: EdgeInsets.only(left: 25.0),
                           child: Text(
-                            'Age: ',
+                            'Date of birdth: ',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -386,19 +402,33 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(width: 20),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              onSubmitted: (value) async => _updateAge(value),
-                              decoration: InputDecoration(
-                                hintText: settings.age.toString(),
-                                hintStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
                                 ),
-                              ),
-                            ),
-                          ),
+                                child: Text(
+                                  "Select date of birth",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                onPressed: () async {
+                                  final dateOfBirth = await showDatePicker(
+                                    context: context,
+                                    initialDate: settings.birthDate,
+                                    firstDate: DateTime(1950),
+                                    lastDate: DateTime.now(),
+                                  );
+                                  if (dateOfBirth != null) {
+                                    setState(() {
+                                      settings.birthDate = dateOfBirth;
+                                      settings.age = DateTime.now()
+                                              .difference(settings.birthDate)
+                                              .inDays /
+                                          365;
+                                    });
+                                  }
+                                },
+                              )),
                         ),
                       ],
                     ),
@@ -491,10 +521,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _updateWeight(String value) async {
     settings.weight = double.parse(value);
-  }
-
-  _updateAge(String value) async {
-    settings.age = int.parse(value);
   }
 
   _updateGender(String value) async {
