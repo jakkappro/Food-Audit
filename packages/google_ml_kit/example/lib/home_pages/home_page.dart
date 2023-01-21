@@ -686,7 +686,7 @@ class _HomePageState extends State<HomePage> {
     if (data!['blog'] != today) {
       await challengeRef.set({
         'blog': today,
-        now.day.toString(): data[now.weekday.toString()] + 15
+        now.weekday.toString(): data[now.weekday.toString()] + 15
       }, SetOptions(merge: true));
       setState(() {
         _isBlogFinished = true;
