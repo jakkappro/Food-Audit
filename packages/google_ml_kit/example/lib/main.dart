@@ -8,7 +8,6 @@ import 'home.dart';
 import 'login.dart';
 import 'models/settings_model.dart';
 import 'register.dart';
-import 'settings_pages/food_preferences.dart';
 import 'settings_pages/performance.dart';
 import 'settings_pages/profile.dart';
 import 'settings_pages/secuirty.dart';
@@ -45,7 +44,6 @@ Future<void> main() async {
       '/home': (context) => HomeScreen(),
       '/profile': (context) => const ProfilePage(),
       '/security': (context) => SecurityPage(),
-      '/foodPreferences': (context) => FoodPreferencesPage(),
       '/performance': (context) => PerformancePage(),
     },
   ));

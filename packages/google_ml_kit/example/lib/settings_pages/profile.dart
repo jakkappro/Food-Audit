@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../models/settings_model.dart';
-import '../verify_email.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -24,6 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   double _bmi = 0;
   double _bmr = 0;
   Color _weightColor = Colors.green;
+  String? _selectedGender;
 
   @override
   void initState() {
@@ -35,6 +34,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_selectedGender == null) {
+      _selectedGender = 'Male';
+    }
     // calculate bmr
     if (settings.isMale) {
       _bmr = 66.47 +
@@ -62,440 +64,147 @@ class _ProfilePageState extends State<ProfilePage> {
       _weightColor = Colors.blue;
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text(
-            'Profile',
-            style: TextStyle(
-              fontSize: 30,
-              color: Colors.black,
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: SizedBox(
+        width: double.infinity,
+        height: 780,
+        child: Column(
+          children: [
+            InkWell(
+              onTap: () async {
+                final newImage = await ImagePicker().pickImage(
+                    source: ImageSource.gallery,
+                    imageQuality: 50,
+                    maxWidth: 521,
+                    maxHeight: 521);
+
+                if (newImage == null) {
+                  return;
+                }
+
+                final ref =
+                    FirebaseStorage.instance.ref().child('avatar/${user.uid}');
+
+                await ref.putFile(File(newImage.path));
+
+                await user.updatePhotoURL(await ref.getDownloadURL());
+              },
+              child: Container(
+                width: 120,
+                height: 110,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(_getImageUrl()),
+                  ),
+                ),
+              ),
             ),
-          ),
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-            iconSize: 25,
-            onPressed: () async {
-              auth.currentUser!.reload();
-              Navigator.pop(context);
-            },
-            color: Colors.white,
-          ),
-          elevation: 0,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
-          child: SingleChildScrollView(
-            child: SizedBox(
+            const SizedBox(height: 30),
+            SizedBox(
               width: double.infinity,
-              height: 780,
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTap: () async {
-                      final newImage = await ImagePicker().pickImage(
-                          source: ImageSource.gallery,
-                          imageQuality: 50,
-                          maxWidth: 521,
-                          maxHeight: 521);
-
-                      if (newImage == null) {
-                        return;
-                      }
-
-                      final ref = FirebaseStorage.instance
-                          .ref()
-                          .child('avatar/${user.uid}');
-
-                      await ref.putFile(File(newImage.path));
-
-                      await user.updatePhotoURL(await ref.getDownloadURL());
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(_getImageUrl()),
+                  Column(
+                    children: [
+                      Transform.rotate(
+                        angle: -1.5708,
+                        child: SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.grey[200],
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(_weightColor),
+                              value: _bmi > 0 ? _bmi / 40 : 0,
+                            ),
+                          ),
                         ),
+                      ),
+                      const SizedBox(height: 30),
+                      Text(
+                        'BMI: ${_bmi.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 25),
+                  Column(
+                    children: [
+                      Transform.rotate(
+                        angle: -1.5708,
+                        child: SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.grey[200],
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(_weightColor),
+                              value: _bmr > 0 ? _bmr / 4000 : 0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Text(
+                        'BMR: ${_bmr.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              height: 60,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.black,
+              ),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'First Name: ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            Transform.rotate(
-                              angle: -1.5708,
-                              child: SizedBox(
-                                width: 100,
-                                height: 50,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: LinearProgressIndicator(
-                                    backgroundColor: Colors.grey[200],
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        _weightColor),
-                                    value: _bmi > 0 ? _bmi / 40 : 0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 30),
-                            Text(
-                              'BMI: ${_bmi.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 25),
-                        Column(
-                          children: [
-                            Transform.rotate(
-                              angle: -1.5708,
-                              child: SizedBox(
-                                width: 100,
-                                height: 50,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: LinearProgressIndicator(
-                                    backgroundColor: Colors.grey[200],
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        _weightColor),
-                                    value: _bmr > 0 ? _bmr / 4000 : 0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 30),
-                            Text(
-                              'BMR: ${_bmr.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 60,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: Colors.black,
-                    ),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 25.0),
-                          child: Text(
-                            'First Name: ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: TextField(
-                              onSubmitted: (value) async => {
-                                await user
-                                    .updateDisplayName('$value $_lastName'),
-                                setState(() {})
-                              },
-                              decoration: InputDecoration(
-                                hintText: _firstName,
-                                hintStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 60,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: Colors.black,
-                    ),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 25.0),
-                          child: Text(
-                            'Last Name: ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: TextField(
-                              onSubmitted: (value) async => {
-                                await user
-                                    .updateDisplayName('$_firstName $value'),
-                                setState(() {})
-                              },
-                              decoration: InputDecoration(
-                                hintText: _lastName,
-                                hintStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 60,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: Colors.black,
-                    ),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 25.0),
-                          child: Text(
-                            'Heigth: ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        SliderTheme(
-                          data: SliderTheme.of(context).copyWith(
-                            showValueIndicator: ShowValueIndicator.always,
-                            valueIndicatorColor: Colors.white,
-                            valueIndicatorTextStyle: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          child: Slider(
-                            label: settings.height.toString(),
-                            value: settings.height.toDouble() < 50
-                                ? 50
-                                : settings.height.toDouble() > 250
-                                    ? 250
-                                    : settings.height.toDouble(),
-                            min: 50,
-                            max: 250,
-                            divisions: 200,
-                            onChanged: (value) {
-                              _updateHeight(value.ceil().toString());
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 60,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: Colors.black,
-                    ),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 25.0),
-                          child: Text(
-                            'Weight: ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        SliderTheme(
-                          data: SliderTheme.of(context).copyWith(
-                            showValueIndicator: ShowValueIndicator.always,
-                            valueIndicatorColor: Colors.white,
-                            valueIndicatorTextStyle: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          child: Slider(
-                            label: settings.weight.toString(),
-                            value: settings.weight.toDouble() < 30
-                                ? 30
-                                : settings.weight.toDouble() > 200
-                                    ? 200
-                                    : settings.weight.toDouble(),
-                            min: 30,
-                            max: 200,
-                            divisions: 170,
-                            onChanged: (value) {
-                              _updateWeight(value.ceil().toString());
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 60,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: Colors.black,
-                    ),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 25.0),
-                          child: Text(
-                            'Date of birdth: ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                ),
-                                child: Text(
-                                  "Select date of birth",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                onPressed: () async {
-                                  final dateOfBirth = await showDatePicker(
-                                    context: context,
-                                    initialDate: settings.birthDate,
-                                    firstDate: DateTime(1950),
-                                    lastDate: DateTime.now(),
-                                  );
-                                  if (dateOfBirth != null) {
-                                    setState(() {
-                                      settings.birthDate = dateOfBirth;
-                                      settings.age = DateTime.now()
-                                              .difference(settings.birthDate)
-                                              .inDays /
-                                          365;
-                                    });
-                                  }
-                                },
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 60,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: Colors.black,
-                    ),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 25.0),
-                          child: Text(
-                            'Gender: ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: TextField(
-                              onSubmitted: (value) async =>
-                                  _updateGender(value),
-                              decoration: InputDecoration(
-                                hintText: settings.isMale.toString(),
-                                hintStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  const SizedBox(width: 20),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 10.0, left: 10, right: 10),
-                      child: Container(
-                        alignment: Alignment.bottomCenter,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            minimumSize: const Size(double.infinity, 40),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          onPressed: () async {
-                            await settings.saveToFirebase();
-                            await auth.currentUser!.reload();
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            'Save',
-                            style: TextStyle(fontSize: 20, color: Colors.white),
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: TextField(
+                        onSubmitted: (value) async => {
+                          await user.updateDisplayName('$value $_lastName'),
+                          setState(() {})
+                        },
+                        decoration: InputDecoration(
+                          hintText: _firstName,
+                          hintStyle: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -504,7 +213,251 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-          ),
+            const SizedBox(height: 20),
+            Container(
+              height: 60,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.black,
+              ),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'Last Name: ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: TextField(
+                        onSubmitted: (value) async => {
+                          await user.updateDisplayName('$_firstName $value'),
+                          setState(() {})
+                        },
+                        decoration: InputDecoration(
+                          hintText: _lastName,
+                          hintStyle: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              height: 60,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.black,
+              ),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'Heigth: ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      showValueIndicator: ShowValueIndicator.always,
+                      valueIndicatorColor: Colors.white,
+                      valueIndicatorTextStyle: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: Slider(
+                      label: settings.height.toString(),
+                      value: settings.height.toDouble() < 50
+                          ? 50
+                          : settings.height.toDouble() > 250
+                              ? 250
+                              : settings.height.toDouble(),
+                      min: 50,
+                      max: 250,
+                      divisions: 200,
+                      onChanged: (value) {
+                        _updateHeight(value.ceil().toString());
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              height: 60,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.black,
+              ),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'Weight: ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      showValueIndicator: ShowValueIndicator.always,
+                      valueIndicatorColor: Colors.white,
+                      valueIndicatorTextStyle: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: Slider(
+                      label: settings.weight.toString(),
+                      value: settings.weight.toDouble() < 30
+                          ? 30
+                          : settings.weight.toDouble() > 200
+                              ? 200
+                              : settings.weight.toDouble(),
+                      min: 30,
+                      max: 200,
+                      divisions: 170,
+                      onChanged: (value) {
+                        _updateWeight(value.ceil().toString());
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              height: 60,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.black,
+              ),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'Date of birdth: ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                          ),
+                          child: Text(
+                            "Select date of birth",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: () async {
+                            final dateOfBirth = await showDatePicker(
+                              context: context,
+                              initialDate: settings.birthDate,
+                              firstDate: DateTime(1950),
+                              lastDate: DateTime.now(),
+                            );
+                            if (dateOfBirth != null) {
+                              setState(() {
+                                settings.birthDate = dateOfBirth;
+                                settings.age = DateTime.now()
+                                        .difference(settings.birthDate)
+                                        .inDays /
+                                    365;
+                                settings.saveToFirebase();
+                              });
+                            }
+                          },
+                        )),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              height: 60,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.black,
+              ),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'Gender: ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: DropdownButton<String>(
+                        value: _selectedGender,
+                        items: ['Male', 'Female']
+                            .map((gender) => DropdownMenuItem<String>(
+                                  value: gender,
+                                  child: Text(gender[0].toUpperCase() +
+                                      gender.substring(1).toLowerCase()),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              _selectedGender = value ?? _selectedGender;
+                              settings.isMale =
+                                  _selectedGender!.toLowerCase() == 'male';
+                              settings.saveToFirebase();
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -517,13 +470,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _updateHeight(String value) async {
     settings.height = double.parse(value);
+    settings.saveToFirebase();
   }
 
   _updateWeight(String value) async {
     settings.weight = double.parse(value);
-  }
-
-  _updateGender(String value) async {
-    settings.isMale = value == 'Male';
+    settings.saveToFirebase();
   }
 }
