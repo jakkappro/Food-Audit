@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'home.dart';
-import 'home_pages/bmi_page.dart';
+
 import 'login.dart';
 import 'models/settings_model.dart';
 import 'register.dart';
@@ -47,7 +47,6 @@ Future<void> main() async {
       '/security': (context) => SecurityPage(),
       '/foodPreferences': (context) => FoodPreferencesPage(),
       '/performance': (context) => PerformancePage(),
-      '/bmi': (context) => BmiPage(),
     },
   ));
 }

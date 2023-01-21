@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'home_pages/bmi_page.dart';
 import 'home_pages/camera_page.dart';
 import 'home_pages/home_page.dart';
 import 'home_pages/settings_page.dart';
@@ -15,9 +14,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentPage = 0;
   final List<Widget> _children = [
     HomePage(),
-    BmiPage(),
-    SettingsPage(),
     CameraPage(),
+    SettingsPage(),
   ];
 
   void _onPageChanged(int index) {
@@ -82,19 +80,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         label: 'Home',
                       ),
                       NavigationDestination(
-                          icon: Icon(Icons.local_hospital_outlined),
-                          selectedIcon: Icon(Icons.local_hospital),
-                          label: 'BMI'),
+                        icon: Icon(Icons.document_scanner_outlined),
+                        selectedIcon: Icon(Icons.document_scanner),
+                        label: 'Camera',
+                      ),
                       NavigationDestination(
                         icon: Icon(Icons.settings_outlined),
                         selectedIcon: Icon(Icons.settings),
                         label: 'Settings',
                       ),
-                      NavigationDestination(
-                        icon: Icon(Icons.document_scanner_outlined),
-                        selectedIcon: Icon(Icons.document_scanner),
-                        label: 'Camera',
-                      ),
+                      
                     ],
                   )),
             ],
