@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 
 import 'login.dart';
-import 'models/settings_model.dart';
 import 'register.dart';
 import 'settings_pages/performance.dart';
 import 'settings_pages/profile.dart';
@@ -23,16 +22,16 @@ Future<void> main() async {
   final user = FirebaseAuth.instance.currentUser;
   final userExists = user != null && user.emailVerified;
 
-  if (userExists) {
-    await SettingsModel.instance.loadFromFirebase();
-    SettingsModel.isAnonymous = false;
-  } else {
-    SettingsModel.instance.loadFromFirebaseAnonym();
-    SettingsModel.isAnonymous = true;
-  }
+  // if (userExists) {
+  //   await SettingsModel.instance.loadFromFirebase();
+  //   SettingsModel.isAnonymous = false;
+  // } else {
+  //   SettingsModel.instance.loadFromFirebaseAnonym();
+  //   SettingsModel.isAnonymous = true;
+  // }
 
   runApp(MaterialApp(
-    home: !userExists ? LoginPage() : HomeScreen(),
+    home: !userExists ? LoginPage() : VerifyEmailPage(),
     theme: AppTheme.light,
     darkTheme: AppTheme.dark,
     themeMode: ThemeMode.dark,
