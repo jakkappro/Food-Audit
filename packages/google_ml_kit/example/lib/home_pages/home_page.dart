@@ -643,6 +643,15 @@ class _HomePageState extends State<HomePage> {
     final DocumentReference challengeRef = challengesRef.doc(uid);
     final DocumentSnapshot challengeSnapshot = await challengeRef.get();
     final data = challengeSnapshot.data() as Map<String, dynamic>?;
+
+    if (data != null && data['lastLogin'] != null) {
+      final DateTime lastLogin = data['lastLogin'];
+      final int daysDiff = now.difference(lastLogin).inDays;
+      if (daysDiff > 7 || now.weekday == 1) {
+        resetPoints();
+      }
+    }
+
     if (data == null || data['login'] != today) {
       await challengeRef.set({
         'login': today,
@@ -656,13 +665,6 @@ class _HomePageState extends State<HomePage> {
     }
     if (data != null && data['scan'] == today) {
       isScanFinished = true;
-    }
-    if (data != null && data['lastLogin'] != null) {
-      final DateTime lastLogin = data['lastLogin'];
-      final int daysDiff = now.difference(lastLogin).inDays;
-      if (daysDiff > 7 || now.weekday == 7) {
-        resetPoints();
-      }
     }
 
     setState(() {
