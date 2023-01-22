@@ -3,9 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../models/webscraping_model.dart';
 import '../testGraph.dart';
-import '../webscraping/fitnes_scraper.dart';
-import '../webscraping/receipes_scraper.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,8 +15,8 @@ class _HomePageState extends State<HomePage> {
   final User user = FirebaseAuth.instance.currentUser!;
   final contorller = ScrollController();
   final scrollController = ScrollController();
-  final receipes = [];
-  final fitness = [];
+  final receipes = WebScrapingModel.receipesInstance;
+  final fitness = WebScrapingModel.fitnessInstance;
   late bool _isLoginFinished;
   late bool _isBlogFinished;
   late bool _isScanFinished;
@@ -29,17 +28,6 @@ class _HomePageState extends State<HomePage> {
     _isScanFinished = false;
     super.initState();
     Future.delayed(const Duration(milliseconds: 500), _getChallengesData);
-
-    RecipeScraper().getRecipes().then((value) {
-      setState(() {
-        receipes.addAll(value);
-      });
-    });
-    FitnessScraper().getFitness().then((value) {
-      setState(() {
-        fitness.addAll(value);
-      });
-    });
   }
 
   @override
@@ -366,7 +354,7 @@ class _HomePageState extends State<HomePage> {
                                             image: DecorationImage(
                                               fit: BoxFit.cover,
                                               image: NetworkImage(
-                                                  receipes[index]['image']),
+                                                  receipes.image[index]),
                                             ),
                                           ),
                                         ),
@@ -378,12 +366,9 @@ class _HomePageState extends State<HomePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              receipes[index]['title'].length >
-                                                      30
-                                                  ? receipes[index]['title']
-                                                          .substring(0, 30) +
-                                                      '...'
-                                                  : receipes[index]['title'],
+                                              receipes.title[index].length > 30
+                                                  ? '${receipes.title[index].substring(0, 30)}...'
+                                                  : receipes.title[index],
                                               style: const TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15,
@@ -394,7 +379,7 @@ class _HomePageState extends State<HomePage> {
                                               onTap: () async {
                                                 _updateBlogChallenge();
                                                 await launchUrlString(
-                                                    receipes[index]['url']);
+                                                    receipes.url[index]);
                                               },
                                               child: const Text(
                                                 'Čítaj ďalej',
@@ -436,7 +421,7 @@ class _HomePageState extends State<HomePage> {
                                             image: DecorationImage(
                                               fit: BoxFit.cover,
                                               image: NetworkImage(
-                                                  fitness[index]['image']),
+                                                  fitness.image[index]),
                                             ),
                                           ),
                                         ),
@@ -448,12 +433,9 @@ class _HomePageState extends State<HomePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              fitness[index]['title'].length >
-                                                      30
-                                                  ? fitness[index]['title']
-                                                          .substring(0, 30) +
-                                                      '...'
-                                                  : fitness[index]['title'],
+                                              fitness.title[index].length > 30
+                                                  ? '${fitness.title[index].substring(0, 30)}...'
+                                                  : fitness.title[index],
                                               style: const TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15,
@@ -464,7 +446,7 @@ class _HomePageState extends State<HomePage> {
                                               onTap: () async {
                                                 _updateBlogChallenge();
                                                 await launchUrlString(
-                                                    fitness[index]['url']);
+                                                    fitness.url[index]);
                                               },
                                               child: const Text(
                                                 'Čítaj ďalej',
@@ -506,7 +488,7 @@ class _HomePageState extends State<HomePage> {
                                             image: DecorationImage(
                                               fit: BoxFit.cover,
                                               image: NetworkImage(
-                                                  receipes[index]['image']),
+                                                  receipes.image[index]),
                                             ),
                                           ),
                                         ),
@@ -518,12 +500,9 @@ class _HomePageState extends State<HomePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              receipes[index]['title'].length >
-                                                      30
-                                                  ? receipes[index]['title']
-                                                          .substring(0, 30) +
-                                                      '...'
-                                                  : receipes[index]['title'],
+                                              receipes.title[index].length > 30
+                                                  ? '${receipes.title[index].substring(0, 30)}...'
+                                                  : receipes.title[index],
                                               style: const TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15,
@@ -534,7 +513,7 @@ class _HomePageState extends State<HomePage> {
                                               onTap: () async {
                                                 _updateBlogChallenge();
                                                 await launchUrlString(
-                                                    receipes[index]['url']);
+                                                    receipes.url[index]);
                                               },
                                               child: const Text(
                                                 'Čítaj ďalej',
@@ -562,9 +541,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 40,
               ),
             ],
           ),
@@ -597,11 +573,12 @@ class _HomePageState extends State<HomePage> {
         Text(
           text,
           style: TextStyle(
-              color: Colors.black,
-              fontSize: 12,
-              fontWeight: FontWeight.normal,
-              decoration:
-                  finished ? TextDecoration.lineThrough : TextDecoration.none),
+            color: Colors.black,
+            fontSize: 12,
+            fontWeight: FontWeight.normal,
+            decoration:
+                finished ? TextDecoration.lineThrough : TextDecoration.none,
+          ),
         ),
       ],
     );
@@ -632,48 +609,6 @@ class _HomePageState extends State<HomePage> {
         'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+';
   }
 
-  Future<void> _getChallengesData() async {
-    final CollectionReference challengesRef =
-        FirebaseFirestore.instance.collection('challenges');
-    bool isBlogFinished = false;
-    bool isScanFinished = false;
-    final String uid = FirebaseAuth.instance.currentUser!.uid;
-    final DateTime now = DateTime.now();
-    final String today = '${now.year}-${now.month}-${now.day}';
-    final DocumentReference challengeRef = challengesRef.doc(uid);
-    final DocumentSnapshot challengeSnapshot = await challengeRef.get();
-    final data = challengeSnapshot.data() as Map<String, dynamic>?;
-
-    if (data != null && data['lastLogin'] != null) {
-      final DateTime lastLogin = data['lastLogin'];
-      final int daysDiff = now.difference(lastLogin).inDays;
-      if (daysDiff > 7 || now.weekday == 1) {
-        resetPoints();
-      }
-    }
-
-    if (data == null || data['login'] != today) {
-      await challengeRef.set({
-        'login': today,
-        now.weekday.toString(): 10,
-        'lastLogin': now.toString()
-      }, SetOptions(merge: true));
-      // show success message
-    }
-    if (data != null && data['blog'] == today) {
-      isBlogFinished = true;
-    }
-    if (data != null && data['scan'] == today) {
-      isScanFinished = true;
-    }
-
-    setState(() {
-      _isBlogFinished = isBlogFinished;
-      _isScanFinished = isScanFinished;
-      _isLoginFinished = true;
-    });
-  }
-
   Future<void> _updateBlogChallenge() async {
     final CollectionReference challengesRef =
         FirebaseFirestore.instance.collection('challenges');
@@ -694,13 +629,29 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void resetPoints() {
+  Future<void> _getChallengesData() async {
     final CollectionReference challengesRef =
         FirebaseFirestore.instance.collection('challenges');
-    for (int i = 1; i <= 7; i++) {
-      challengesRef.doc(user.uid).update({
-        i.toString(): 0,
-      });
+    bool isBlogFinished = false;
+    bool isScanFinished = false;
+    final String uid = FirebaseAuth.instance.currentUser!.uid;
+    final DateTime now = DateTime.now();
+    final String today = '${now.year}-${now.month}-${now.day}';
+    final DocumentReference challengeRef = challengesRef.doc(uid);
+    final DocumentSnapshot challengeSnapshot = await challengeRef.get();
+    final data = challengeSnapshot.data() as Map<String, dynamic>?;
+
+    if (data != null && data['blog'] == today) {
+      isBlogFinished = true;
     }
+    if (data != null && data['scan'] == today) {
+      isScanFinished = true;
+    }
+
+    setState(() {
+      _isBlogFinished = isBlogFinished;
+      _isScanFinished = isScanFinished;
+      _isLoginFinished = true;
+    });
   }
 }

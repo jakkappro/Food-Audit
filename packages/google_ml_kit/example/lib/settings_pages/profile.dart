@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-                  SizedBox(width: 25),
+                  const SizedBox(width: 25),
                   Column(
                     children: [
                       Transform.rotate(
@@ -381,7 +381,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                           ),
-                          child: Text(
+                          child: const Text(
                             "Select date of birth",
                             style: TextStyle(color: Colors.black),
                           ),

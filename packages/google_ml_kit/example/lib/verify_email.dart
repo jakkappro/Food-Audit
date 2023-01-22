@@ -15,7 +15,6 @@ class VerifyEmailPage extends StatefulWidget {
 
 class _VerifyEmailPageState extends State<VerifyEmailPage> {
   late Timer _timer;
-  SettingsModel settingsModel = SettingsModel.instance;
 
   @override
   void initState() {
@@ -33,12 +32,10 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       await user.reload();
       if (user.emailVerified) {
         _timer.cancel();
-        settingsModel.loadFromFirebase();
         Navigator.of(context).pushReplacementNamed('/home');
       }
     } else if (user != null && user.emailVerified) {
       _timer.cancel();
-      settingsModel.loadFromFirebase();
       Navigator.of(context).pushReplacementNamed('/home');
     }
   }
@@ -59,12 +56,16 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text('Please verify your email', style: TextStyle(fontSize: 30)),
-      SizedBox(height: 25),
-      Icon(Icons.email_rounded, size: 100),
-    ])));
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text('Please verify your email', style: TextStyle(fontSize: 30)),
+            SizedBox(height: 25),
+            Icon(Icons.email_rounded, size: 100),
+          ],
+        ),
+      ),
+    );
   }
 }
