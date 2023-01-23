@@ -29,14 +29,7 @@ Future<void> main() async {
 
   //get user settings
   if (userExists) {
-    await SettingsModel.instance.loadFromFirebase();
-    SettingsModel.isAnonymous = false;
-    // get user challenges
-    _getChallengesData(FirebaseAuth.instance.currentUser!);
-
-  } else {
-    SettingsModel.instance.loadFromFirebaseAnonym();
-    SettingsModel.isAnonymous = true;
+    await loadData();
   }
 
   //get webscraping data
@@ -88,7 +81,6 @@ Future<void> _getChallengesData(User user) async {
       now.weekday.toString(): 10,
       'lastLogin': now.toString()
     }, SetOptions(merge: true));
-    // show success message
   }
 }
 
@@ -100,4 +92,15 @@ void resetPoints(User user) {
       i.toString(): 0,
     });
   }
+}
+
+Future<void> loadData() async {
+  await SettingsModel.instance.loadFromFirebase();
+  SettingsModel.isAnonymous = false;
+  await _getChallengesData(FirebaseAuth.instance.currentUser!);
+}
+
+Future<void> loadDataAnonymously() async {
+  SettingsModel.instance.loadFromFirebaseAnonym();
+  SettingsModel.isAnonymous = true;
 }

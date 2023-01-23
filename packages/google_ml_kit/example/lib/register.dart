@@ -61,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage>
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.shortestSide;
-    final height = MediaQuery.of(context).size.longestSide;
+    final height = MediaQuery.of(context).size.longestSide + 120;
 
     return Scaffold(
       body: SingleChildScrollView(

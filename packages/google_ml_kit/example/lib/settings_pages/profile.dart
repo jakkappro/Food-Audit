@@ -15,7 +15,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late User user;
+  late User? user;
   late String _firstName;
   late String _lastName;
   SettingsModel settings = SettingsModel.instance;
@@ -27,9 +27,14 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    if (SettingsModel.isAnonymous) {
+      _firstName = 'Anonymous';
+      _lastName = 'User';
+      return;
+    }
     user = FirebaseAuth.instance.currentUser!;
-    _firstName = user.displayName!.split(' ')[0];
-    _lastName = user.displayName!.split(' ')[1];
+    _firstName = user!.displayName!.split(' ')[0];
+    _lastName = user!.displayName!.split(' ')[1];
   }
 
   @override
@@ -73,6 +78,9 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             InkWell(
               onTap: () async {
+                if (SettingsModel.isAnonymous) {
+                  return;
+                }
                 final newImage = await ImagePicker().pickImage(
                     source: ImageSource.gallery,
                     imageQuality: 50,
@@ -84,11 +92,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 }
 
                 final ref =
-                    FirebaseStorage.instance.ref().child('avatar/${user.uid}');
+                    FirebaseStorage.instance.ref().child('avatar/${user!.uid}');
 
                 await ref.putFile(File(newImage.path));
 
-                await user.updatePhotoURL(await ref.getDownloadURL());
+                await user!.updatePhotoURL(await ref.getDownloadURL());
               },
               child: Container(
                 width: 120,
@@ -196,9 +204,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 20.0),
                       child: TextField(
-                        onSubmitted: (value) async => {
-                          await user.updateDisplayName('$value $_lastName'),
-                          setState(() {})
+                        onSubmitted: (value) async {
+                          if (SettingsModel.isAnonymous) {
+                            return;
+                          }
+                          await user!.updateDisplayName('$value $_lastName');
+                          setState(() {});
                         },
                         decoration: InputDecoration(
                           hintText: _firstName,
@@ -238,9 +249,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 20.0),
                       child: TextField(
-                        onSubmitted: (value) async => {
-                          await user.updateDisplayName('$_firstName $value'),
-                          setState(() {})
+                        onSubmitted: (value) async {
+                          if (SettingsModel.isAnonymous) {
+                            return;
+                          }
+                          await user!.updateDisplayName('$_firstName $value');
+                          setState(() {});
                         },
                         decoration: InputDecoration(
                           hintText: _lastName,
@@ -382,7 +396,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             backgroundColor: Colors.white,
                           ),
                           child: const Text(
-                            "Select date of birth",
+                            'Select date of birth',
                             style: TextStyle(color: Colors.black),
                           ),
                           onPressed: () async {
@@ -399,7 +413,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                         .difference(settings.birthDate)
                                         .inDays /
                                     365;
-                                settings.saveToFirebase();
+                                if (!SettingsModel.isAnonymous) {
+                                  settings.saveToFirebase();
+                                }
                               });
                             }
                           },
@@ -447,7 +463,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               _selectedGender = value ?? _selectedGender;
                               settings.isMale =
                                   _selectedGender!.toLowerCase() == 'male';
-                              settings.saveToFirebase();
+                              if (!SettingsModel.isAnonymous) {
+                                settings.saveToFirebase();
+                              }
                             },
                           );
                         },
@@ -464,17 +482,21 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   String _getImageUrl() {
-    return user.photoURL ??
-        'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+';
+    return SettingsModel.isAnonymous
+        ? 'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+'
+        : user!.photoURL ??
+            'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+';
   }
 
   _updateHeight(String value) async {
     settings.height = double.parse(value);
+    if (SettingsModel.isAnonymous) return;
     settings.saveToFirebase();
   }
 
   _updateWeight(String value) async {
     settings.weight = double.parse(value);
+    if (SettingsModel.isAnonymous) return;
     settings.saveToFirebase();
   }
 }

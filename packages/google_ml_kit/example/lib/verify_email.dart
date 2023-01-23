@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'models/settings_model.dart';
+import 'main.dart';
 
 final auth = FirebaseAuth.instance;
 
@@ -32,10 +31,12 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       await user.reload();
       if (user.emailVerified) {
         _timer.cancel();
+        await loadData();
         Navigator.of(context).pushReplacementNamed('/home');
       }
     } else if (user != null && user.emailVerified) {
       _timer.cancel();
+      await loadData();
       Navigator.of(context).pushReplacementNamed('/home');
     }
   }

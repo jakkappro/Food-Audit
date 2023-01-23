@@ -23,6 +23,10 @@ class SettingsModel {
     _currentInstance!._isAnonymous = value;
   }
 
+  static bool get isAnonymous {
+    return _currentInstance!._isAnonymous;
+  }
+
   SettingsModel._internal();
 
   Future<void> saveToFirebase() async {

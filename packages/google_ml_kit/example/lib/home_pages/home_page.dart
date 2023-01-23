@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../models/settings_model.dart';
 import '../models/webscraping_model.dart';
 import '../testGraph.dart';
 
@@ -12,11 +13,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final User user = FirebaseAuth.instance.currentUser!;
+  final User? user = FirebaseAuth.instance.currentUser;
   final contorller = ScrollController();
   final scrollController = ScrollController();
   final receipes = WebScrapingModel.receipesInstance;
   final fitness = WebScrapingModel.fitnessInstance;
+  final settings = SettingsModel.instance;
   late bool _isLoginFinished;
   late bool _isBlogFinished;
   late bool _isScanFinished;
@@ -27,7 +29,8 @@ class _HomePageState extends State<HomePage> {
     _isLoginFinished = false;
     _isScanFinished = false;
     super.initState();
-    Future.delayed(const Duration(milliseconds: 500), _getChallengesData);
+    if (!SettingsModel.isAnonymous)
+      Future.delayed(const Duration(milliseconds: 500), _getChallengesData);
   }
 
   @override
@@ -158,16 +161,17 @@ class _HomePageState extends State<HomePage> {
                           height: 280,
                           width: width * 0.82,
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 7,
-                                  offset: const Offset(5, 5),
-                                )
-                              ]),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 3,
+                                blurRadius: 7,
+                                offset: const Offset(5, 5),
+                              )
+                            ],
+                          ),
                           child: Column(
                             children: [
                               Padding(
@@ -176,7 +180,9 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      user.displayName!,
+                                      user != null
+                                          ? user!.displayName!
+                                          : 'Anonym',
                                       style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 21,
@@ -396,7 +402,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     const SizedBox(
                                       height: 10,
-                                    )
+                                    ),
                                   ],
                                 );
                               },
@@ -605,8 +611,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   String _getImageUrl() {
-    return user.photoURL ??
-        'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+';
+    return user != null
+        ? user!.photoURL ??
+            'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+'
+        : 'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+';
   }
 
   Future<void> _updateBlogChallenge() async {

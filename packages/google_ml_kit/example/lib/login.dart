@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import 'main.dart';
 import 'ui_utilities/input_fields_widgets.dart';
 
 class LoginPage extends StatefulWidget {
@@ -159,17 +160,19 @@ class _LoginPageState extends State<LoginPage>
                       height: 15,
                     ),
                     TextButton(
-                        onPressed: () async {
-                          await FirebaseAuth.instance.signInAnonymously();
-                          Navigator.pushReplacementNamed(context, '/home');
-                        },
-                        style: TextButton.styleFrom(
-                            padding: const EdgeInsets.only(top: 0, bottom: 0),
-                            fixedSize: const Size(320, 48)),
-                        child: Text(
-                          'Continue as guest',
-                          style: Theme.of(context).textTheme.bodyText2,
-                        )),
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signInAnonymously();
+                        await loadDataAnonymously();
+                        Navigator.pushReplacementNamed(context, '/home');
+                      },
+                      style: TextButton.styleFrom(
+                          padding: const EdgeInsets.only(top: 0, bottom: 0),
+                          fixedSize: const Size(320, 48)),
+                      child: Text(
+                        'Continue as guest',
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                    ),
                   ],
                 )
               ],
