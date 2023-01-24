@@ -26,7 +26,6 @@ Future<void> main() async {
   cameras = await availableCameras();
   final user = FirebaseAuth.instance.currentUser;
   final userExists = user != null && user.emailVerified;
-
   //get user settings
   if (userExists) {
     await loadData();

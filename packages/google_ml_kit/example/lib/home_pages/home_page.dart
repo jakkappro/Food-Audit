@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   late bool _isLoginFinished;
   late bool _isBlogFinished;
   late bool _isScanFinished;
+  List<int> values = [0, 0, 0, 0, 0, 0, 0];
 
   @override
   void initState() {
@@ -29,8 +30,9 @@ class _HomePageState extends State<HomePage> {
     _isLoginFinished = false;
     _isScanFinished = false;
     super.initState();
-    if (!SettingsModel.isAnonymous)
+    if (!SettingsModel.isAnonymous) {
       Future.delayed(const Duration(milliseconds: 500), _getChallengesData);
+    }
   }
 
   @override
@@ -194,10 +196,10 @@ class _HomePageState extends State<HomePage> {
                               ),
                               // graph
                               const SizedBox(height: 35),
-                              const SizedBox(
+                              SizedBox(
                                 height: 100,
                                 width: double.infinity,
-                                child: BarChartt(),
+                                child: BarChartt(values: values),
                               ),
                               const SizedBox(
                                 height: 15,
@@ -205,8 +207,8 @@ class _HomePageState extends State<HomePage> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 15),
                                 child: Row(
-                                  children: const [
-                                    Text(
+                                  children: [
+                                    const Text(
                                       'Tvoje skóre je ',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
@@ -216,9 +218,9 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Text(
-                                      '225 bodov.',
+                                      '${values.reduce((a, b) => a + b)} bodov.',
                                       textAlign: TextAlign.start,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color.fromRGBO(141, 171, 136, 1),
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
@@ -654,6 +656,12 @@ class _HomePageState extends State<HomePage> {
     }
     if (data != null && data['scan'] == today) {
       isScanFinished = true;
+    }
+
+    for (int i = 1; i < 8; i++) {
+      if (data != null && data[i.toString()] != null) {
+        values[i - 1] = data[i.toString()];
+      }
     }
 
     setState(() {

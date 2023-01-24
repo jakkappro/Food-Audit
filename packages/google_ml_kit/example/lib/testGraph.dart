@@ -2,8 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class BarChartt extends StatelessWidget {
-  const BarChartt();
-
+  const BarChartt({Key? key, required this.values}) : super(key: key);
+  final List<int> values;
   @override
   Widget build(BuildContext context) {
     return BarChart(
@@ -106,27 +106,19 @@ class BarChartt extends StatelessWidget {
         show: false,
       );
 
-  LinearGradient get _barsGradient => const LinearGradient(
-        colors: [
-          Colors.lightBlueAccent,
-          Colors.greenAccent,
-        ],
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-      );
-
   List<BarChartGroupData> get barGroups => [
-        _buildGroupData(0, 15, false),
-        _buildGroupData(1, 12, false),
-        _buildGroupData(2, 15, false),
-        _buildGroupData(3, 15, false),
-        _buildGroupData(4, 21, false),
-        _buildGroupData(5, 4, false),
-        _buildGroupData(6, 8, true),
+        _buildGroupData(0, values[0].toDouble()),
+        _buildGroupData(1, values[1].toDouble()),
+        _buildGroupData(2, values[2].toDouble()),
+        _buildGroupData(3, values[3].toDouble()),
+        _buildGroupData(4, values[4].toDouble()),
+        _buildGroupData(5, values[5].toDouble()),
+        _buildGroupData(6, values[6].toDouble()),
       ];
 }
 
-BarChartGroupData _buildGroupData(int x, double y, bool currentDay) {
+BarChartGroupData _buildGroupData(int x, double y) {
+  final currentDay = DateTime.now().weekday == x + 1;
   return BarChartGroupData(
     x: x,
     barRods: [
@@ -135,30 +127,10 @@ BarChartGroupData _buildGroupData(int x, double y, bool currentDay) {
         borderRadius: BorderRadius.zero,
         toY: y,
         color: currentDay
-            ? Color.fromRGBO(125, 160, 119, 1)
-            : Color.fromRGBO(242, 242, 242, 1),
+            ? const Color.fromRGBO(125, 160, 119, 1)
+            : const Color.fromRGBO(242, 242, 242, 1),
       )
     ],
     showingTooltipIndicators: [0],
   );
-}
-
-class BarChartSample3 extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => BarChartSample3State();
-}
-
-class BarChartSample3State extends State<BarChartSample3> {
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.7,
-      child: Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-        color: const Color(0xff2c4260),
-        child: const BarChartt(),
-      ),
-    );
-  }
 }
