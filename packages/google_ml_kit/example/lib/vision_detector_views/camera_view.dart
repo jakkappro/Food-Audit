@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 
 import '../main.dart';
+import '../models/settings_model.dart';
 
 enum ScreenMode { liveFeed, gallery }
 
@@ -35,6 +36,7 @@ class _CameraViewState extends State<CameraView> {
   CameraController? _controller;
   int _cameraIndex = -1;
   double zoomLevel = 0.0, minZoomLevel = 0.0, maxZoomLevel = 0.0;
+  final settings = SettingsModel.instance;
 
   @override
   void initState() {
@@ -132,11 +134,25 @@ class _CameraViewState extends State<CameraView> {
     );
   }
 
+  ResolutionPreset _getResolutionFromSettings() {
+    switch(settings.imageProcessingQuality) {
+      case 'low':
+        return ResolutionPreset.medium;
+      case 'medium':
+        return ResolutionPreset.high;
+      case 'high':
+        return ResolutionPreset.veryHigh;
+      default: 
+        return ResolutionPreset.medium;
+    }
+  }
+
   Future _startLiveFeed() async {
+
     final camera = cameras[_cameraIndex];
     _controller = CameraController(
       camera,
-      ResolutionPreset.high,
+      _getResolutionFromSettings(),
       enableAudio: false,
     );
     _controller?.initialize().then((_) {

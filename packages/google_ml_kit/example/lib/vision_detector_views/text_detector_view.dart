@@ -14,7 +14,7 @@ class TextRecognizerView extends StatefulWidget {
 }
 
 class _TextRecognizerViewState extends State<TextRecognizerView>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final TextRecognizer _textRecognizer =
       TextRecognizer(script: TextRecognitionScript.latin);
   bool _canProcess = true;
@@ -22,9 +22,9 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   CustomPaint? _customPaint;
   String? _text;
   SettingsModel settings = SettingsModel.instance;
-  final PanelController _panelController = PanelController();
   bool foundComposition = false;
   late AnimationController _animation;
+  late AnimationController _foundAnimation;
   int _retriesOfFindingComposition = 0;
   List<String> _alergicOn = [];
   Map<String, num> _nutritions = {};
@@ -41,143 +41,65 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
     super.initState();
     _animation = AnimationController(
         duration: const Duration(milliseconds: 750), vsync: this);
+    _foundAnimation = AnimationController(
+        duration: const Duration(milliseconds: 750), vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SlidingUpPanel(
-      controller: _panelController,
-      isDraggable: true,
-      minHeight: 0,
-      maxHeight: 350,
-      color: const Color.fromRGBO(66, 58, 76, 1),
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(40),
-        topRight: Radius.circular(40),
-      ),
-      panel: _buildPanel(),
-      body: GestureDetector(
-        onTap: () {
-          if (foundComposition) {
-            _panelController.open();
-            _animation.reverse();
-          }
-        },
-        child: Stack(
-          children: [
-            CameraView(
-              title: 'Text Detector',
-              customPaint: _customPaint,
-              text: _text,
-              onImage: (inputImage) {
-                processImage(inputImage);
-              },
-            ),
-            Positioned(
-              top: MediaQuery.of(context).size.height / 3 - 60,
-              left: MediaQuery.of(context).size.width / 2 - 100,
-              child: FadeTransition(
-                opacity: _animation,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
+    return Stack(
+      children: [
+        CameraView(
+          title: 'Text Detector',
+          customPaint: _customPaint,
+          text: _text,
+          onImage: (inputImage) {
+            processImage(inputImage);
+          },
+        ),
+        if (!foundComposition)
+          Positioned(
+            top: MediaQuery.of(context).size.height / 3 - 60,
+            left: MediaQuery.of(context).size.width / 2 - 100,
+            child: FadeTransition(
+              opacity: _animation,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                width: 200,
+                height: 60,
+                child: const Text(
+                  "Move you'r camera to the product",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
-                  width: 200,
-                  height: 60,
-                  child: const Text(
-                    "Move you'r camera to the product",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPanel() {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color.fromRGBO(66, 58, 76, 1),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(40),
-        ),
-      ),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding:
-              const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
-          child: Column(children: [
-            const Text(
-              'Are you alergic to this?',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            if (_alergicOn.isNotEmpty)
-              const Text(
-                'Yes',
+          ),
+        if (foundComposition)
+          Positioned(
+            top: MediaQuery.of(context).size.height / 3 - 60,
+            left: MediaQuery.of(context).size.width / 2 - 100,
+            child: FadeTransition(
+              opacity: _foundAnimation,
+              child: const Text(
+                'You are going to die from this product',
                 style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
               ),
-            const SizedBox(
-              height: 10,
             ),
-            ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: _alergicOn.length,
-              padding: EdgeInsets.only(top: 20.0),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.orange),
-                    child: ListTile(
-                      title: Text(
-                        _alergicOn[index],
-                        textAlign: TextAlign.center,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-            if (!_alergicOn.isNotEmpty)
-              const Text(
-                'No',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15),
-              ),
-            const SizedBox(
-              height: 5000,
-            ),
-          ]),
-        ),
-      ),
+          ),
+      ],
     );
   }
 
@@ -210,18 +132,31 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
             }
           }
 
-          final text = RecognizedText(text: 'Zloženie', blocks: [block]);
-          final painter = TextRecognizerPainter(
-              text,
-              inputImage.inputImageData!.size,
-              inputImage.inputImageData!.imageRotation);
-          _customPaint = CustomPaint(painter: painter);
+          // final text = RecognizedText(text: 'Zloženie', blocks: [block]);
+          // final painter = TextRecognizerPainter(
+          //     text,
+          //     inputImage.inputImageData!.size,
+          //     inputImage.inputImageData!.imageRotation);
+          // _customPaint = CustomPaint(painter: painter);
           found = true;
-          continue;
+          //continue;
         }
 
         // Nutritions
         if (block.text.toLowerCase().contains('výživové údaje')) {
+          var energia = block.text
+              .toLowerCase()[block.text.toLowerCase().indexOf('energia')];
+          var tuky = block.text
+              .toLowerCase()[block.text.toLowerCase().indexOf('tuky')];
+          var sol =
+              block.text.toLowerCase()[block.text.toLowerCase().indexOf('soľ')];
+          var blielkoviny = block.text
+              .toLowerCase()[block.text.toLowerCase().indexOf('blielkoviny')];
+          var nmk = block.text
+              .toLowerCase()[block.text.toLowerCase().indexOf('nasýtené')];
+          var sacharidy = block.text
+              .toLowerCase()[block.text.toLowerCase().indexOf('sacharidy')];
+
           foundNutritions = true;
         }
       }
@@ -247,12 +182,11 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
     if (mounted) {
       setState(() {
         if (foundComp) {
-          _animation.reverse();
-        } else if (!_panelController.isPanelOpen &&
-            _retriesOfFindingComposition > 5) {
+          _alergicOn = foundAlergens;
+        } else if (_retriesOfFindingComposition > 5) {
           _animation.forward();
+          _alergicOn = [];
         }
-        _alergicOn = foundAlergens;
         foundComposition = foundComp;
       });
     }
