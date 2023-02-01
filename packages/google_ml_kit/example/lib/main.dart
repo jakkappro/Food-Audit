@@ -66,7 +66,7 @@ Future<void> _getChallengesData(User user) async {
 
   if (data != null && data['lastLogin'] != null) {
     final int? lastReset = data['lastReset'];
-    if ((lastReset != null && lastReset + 7 < now.day) || now.weekday == 1) {
+    if (((lastReset != null && lastReset + 7 < now.day) || now.weekday == 1) && data['2'] != 0) {
       resetPoints(user);
       await challengeRef.set({
         'lastReset': now.day,

@@ -1,12 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../models/settings_model.dart';
 import 'camera_view.dart';
-import 'painters/text_detector_painter.dart';
 
 class TextRecognizerView extends StatefulWidget {
   @override
@@ -28,6 +24,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   int _retriesOfFindingComposition = 0;
   List<String> _alergicOn = [];
   Map<String, num> _nutritions = {};
+  bool foundLastComposition = false;
 
   @override
   void dispose() async {
@@ -88,14 +85,24 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
             left: MediaQuery.of(context).size.width / 2 - 100,
             child: FadeTransition(
               opacity: _foundAnimation,
-              child: const Text(
-                'You are going to die from this product',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                textAlign: TextAlign.center,
+                width: 200,
+                height: 60,
+                child: Text(
+                  _alergicOn.isNotEmpty
+                      ? 'You are going to die'
+                      : 'You are safe',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
@@ -111,65 +118,66 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
       _text = '';
     });
     final recognizedText = await _textRecognizer.processImage(inputImage);
-    bool found = false;
     bool foundComp = false;
     bool foundNutritions = false;
     final List<String> foundAlergens = [];
+    double tuky = -1.0;
+    double sacharidy = -1.0;
+    double cukry = -1.0;
+    double blielkoviny = -1.0;
+    double sol = -1.0;
+    double energia = -1.0;
+    double nasyteneTuky = -1.0;
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
       for (final block in recognizedText.blocks) {
-        // Composition
-        if (block.text.toLowerCase().contains('zloženie')) {
+        final formatedText = block.text.toLowerCase();
+        if (formatedText.contains('zloženie')) {
           _animation.reverse();
           foundComp = true;
           for (final alergenCategory in settings.allAlergens.entries) {
             if (settings.allergens.contains(alergenCategory.key)) {
               for (final alergen in alergenCategory.value) {
-                if (block.text.toLowerCase().contains(alergen.toLowerCase())) {
+                if (formatedText.contains(alergen.toLowerCase())) {
                   foundAlergens.add(alergen);
                 }
               }
             }
           }
-
-          // final text = RecognizedText(text: 'Zloženie', blocks: [block]);
-          // final painter = TextRecognizerPainter(
-          //     text,
-          //     inputImage.inputImageData!.size,
-          //     inputImage.inputImageData!.imageRotation);
-          // _customPaint = CustomPaint(painter: painter);
-          found = true;
-          //continue;
         }
+      }
 
-        // Nutritions
-        if (block.text.toLowerCase().contains('výživové údaje')) {
-          var energia = block.text
-              .toLowerCase()[block.text.toLowerCase().indexOf('energia')];
-          var tuky = block.text
-              .toLowerCase()[block.text.toLowerCase().indexOf('tuky')];
-          var sol =
-              block.text.toLowerCase()[block.text.toLowerCase().indexOf('soľ')];
-          var blielkoviny = block.text
-              .toLowerCase()[block.text.toLowerCase().indexOf('blielkoviny')];
-          var nmk = block.text
-              .toLowerCase()[block.text.toLowerCase().indexOf('nasýtené')];
-          var sacharidy = block.text
-              .toLowerCase()[block.text.toLowerCase().indexOf('sacharidy')];
-
+      // nutritions
+        if (recognizedText.text.toLowerCase().contains('energia')) {
+          foundNutritions = true;
+          final regExp = RegExp(r'\d+');
+          final matches = regExp.allMatches(recognizedText.text.toLowerCase());
+          for (final match in matches) {
+            final number = recognizedText.text.toLowerCase().substring(match.start, match.end);
+            if (energia == -1.0) {
+              energia = double.parse(number);
+            } else if (tuky == -1.0) {
+              tuky = double.parse(number);
+            } else if (nasyteneTuky == -1.0) {
+              nasyteneTuky = double.parse(number);
+            } else if (cukry == -1.0) {
+              cukry = double.parse(number);
+            } else if (sacharidy == -1.0) {
+              sacharidy = double.parse(number);
+            } else if (blielkoviny == -1.0) {
+              blielkoviny = double.parse(number);
+            } else if (sol == -1.0) {
+              sol = double.parse(number);
+            }
+          }
           foundNutritions = true;
         }
-      }
-      if (!found) {
-        _text = 'Recognized text:\n\n${recognizedText.text}';
-        _customPaint = null;
-      }
     } else {
       _text = 'Recognized text:\n\n${recognizedText.text}';
       _customPaint = null;
     }
 
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 30));
 
     _isBusy = false;
 
@@ -181,13 +189,19 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
 
     if (mounted) {
       setState(() {
-        if (foundComp) {
+        if (foundComp && !foundLastComposition) {
           _alergicOn = foundAlergens;
-        } else if (_retriesOfFindingComposition > 5) {
+          _animation.reverse();
+          _foundAnimation.forward();
+          foundLastComposition = true;
+          foundComposition = foundComp;
+        } else if (_retriesOfFindingComposition > 7) {
           _animation.forward();
+          _foundAnimation.reverse();
           _alergicOn = [];
+          foundLastComposition = false;
+          foundComposition = foundComp;
         }
-        foundComposition = foundComp;
       });
     }
   }

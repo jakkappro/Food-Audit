@@ -29,10 +29,10 @@ class _HomePageState extends State<HomePage> {
     _isBlogFinished = false;
     _isLoginFinished = false;
     _isScanFinished = false;
-    super.initState();
     if (!SettingsModel.isAnonymous) {
       Future.delayed(const Duration(milliseconds: 500), _getChallengesData);
     }
+    super.initState();
   }
 
   @override
@@ -374,8 +374,8 @@ class _HomePageState extends State<HomePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              receipes.title[index].length > 30
-                                                  ? '${receipes.title[index].substring(0, 30)}...'
+                                              receipes.title[index].length > 20
+                                                  ? '${receipes.title[index].substring(0, 20)}...'
                                                   : receipes.title[index],
                                               style: const TextStyle(
                                                 color: Colors.black,
@@ -441,8 +441,8 @@ class _HomePageState extends State<HomePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              fitness.title[index].length > 30
-                                                  ? '${fitness.title[index].substring(0, 30)}...'
+                                              fitness.title[index].length > 20
+                                                  ? '${fitness.title[index].substring(0, 20)}...'
                                                   : fitness.title[index],
                                               style: const TextStyle(
                                                 color: Colors.black,
@@ -509,7 +509,7 @@ class _HomePageState extends State<HomePage> {
                                           children: [
                                             Text(
                                               receipes.title[index].length > 30
-                                                  ? '${receipes.title[index].substring(0, 30)}...'
+                                                  ? '${receipes.title[index].substring(0, 20)}...'
                                                   : receipes.title[index],
                                               style: const TextStyle(
                                                 color: Colors.black,

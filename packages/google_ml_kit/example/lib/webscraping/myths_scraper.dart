@@ -11,10 +11,11 @@ class RecipeScraper {
       final recipeList = document.getElementsByClassName('post-summary__title');
       final imageList = document.getElementsByClassName('post-summary__image');
       final recipes = <Map<String, String>>[];
+      final il = imageList[0].nodes[0];
       for (var i = 0; i < 3; i++) {
         recipes.add({
           'title': recipeList[i].firstChild!.text!,
-          'image': imageList[i].nodes[0].attributes['data-src']!,
+          'image': imageList[i].nodes[0].attributes['src'] ?? '',
           'url': recipeList[i].firstChild!.attributes['href']!,
         });
       }

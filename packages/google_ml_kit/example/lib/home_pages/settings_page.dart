@@ -16,16 +16,16 @@ class _SettingsPageState extends State<SettingsPage> {
   SettingsModel settings = SettingsModel.instance;
 
   final Map<String, IconData> _allergenIcons = {
-    'peanuts': Icons.local_cafe,
-    'mustard': Icons.local_dining,
-    'milk': Icons.local_drink,
-    'seafood': Icons.opacity,
-    'nuts': Icons.local_dining,
-    'wheat': Icons.wb_cloudy,
-    'fish': Icons.opacity,
-    'sesame': Icons.local_dining,
-    'soy': Icons.fastfood,
-    'eggs': Icons.local_dining
+    'Arašidy': Icons.local_cafe,
+    'Horčica': Icons.local_dining,
+    'Mlieko': Icons.local_drink,
+    'Morské plody': Icons.opacity,
+    'Orechy': Icons.local_dining,
+    'Pšenica': Icons.wb_cloudy,
+    'Ryby': Icons.opacity,
+    'Sezam': Icons.local_dining,
+    'Sója': Icons.fastfood,
+    'Vajcia': Icons.local_dining
   };
 
   final _passwordController = TextEditingController();
@@ -103,16 +103,16 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   Column(
                     children: [
-                      'peanuts',
-                      'mustard',
-                      'milk',
-                      'seafood',
-                      'nuts',
-                      'wheat',
-                      'fish',
-                      'sesame',
-                      'soy',
-                      'eggs'
+                      'Arašidy',
+                      'Horčica',
+                      'Mlieko',
+                      'Morské plody',
+                      'Orechy',
+                      'Pšenica',
+                      'Ryby',
+                      'Sezam',
+                      'Sója',
+                      'Vajcia'
                     ]
                         .map((allergen) => Container(
                               width: double.infinity,
@@ -121,7 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   const EdgeInsets.only(left: 25, right: 25),
                               child: FilterChip(
                                 avatar: Icon(_allergenIcons[allergen]),
-                                label: Container(
+                                label: SizedBox(
                                     width: double.infinity,
                                     height: 30,
                                     child: Center(child: Text(allergen))),
@@ -272,7 +272,7 @@ class _SettingsPageState extends State<SettingsPage> {
       {Color color = Colors.white}) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Container(
+      child: SizedBox(
         height: 60,
         child: ElevatedButtonTheme(
           data: ElevatedButtonThemeData(
