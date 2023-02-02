@@ -7,6 +7,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'home.dart';
 
+import 'introduction.dart';
 import 'login.dart';
 import 'models/settings_model.dart';
 import 'models/webscraping_model.dart';
@@ -26,6 +27,7 @@ Future<void> main() async {
   cameras = await availableCameras();
   final user = FirebaseAuth.instance.currentUser;
   final userExists = user != null && user.emailVerified;
+
   //get user settings
   if (userExists) {
     await loadData();
@@ -37,7 +39,7 @@ Future<void> main() async {
 
   FlutterNativeSplash.remove();
   runApp(MaterialApp(
-    home: !userExists ? LoginPage() : HomeScreen(),
+    home: !userExists ? LoginPage() : SettingsModel.instance.firstTime ? IntroPage() : HomeScreen(),
     theme: AppTheme.light,
     darkTheme: AppTheme.dark,
     themeMode: ThemeMode.dark,
@@ -50,6 +52,7 @@ Future<void> main() async {
       '/profile': (context) => const ProfilePage(),
       '/security': (context) => SecurityPage(),
       '/performance': (context) => PerformancePage(),
+      '/introduction': (context) => IntroPage(),
     },
   ));
 }

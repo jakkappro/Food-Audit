@@ -13,6 +13,7 @@ class SettingsModel {
   String imageProcessingQuality = '';
   bool _isAnonymous = false;
   bool isMale = true;
+  bool firstTime = true;
 
   static SettingsModel get instance {
     _currentInstance ??= SettingsModel._internal();
@@ -46,6 +47,7 @@ class SettingsModel {
       'BirthDate': birthDate,
       'Age': age,
       'IsMale': isMale,
+      'FirstTime': false,
     });
   }
 
@@ -63,6 +65,7 @@ class SettingsModel {
       isMale = doc['IsMale'];
       imageProcessingFramerate = doc['ImageProcessingFramerate'];
       imageProcessingQuality = doc['ImageQuality'];
+      firstTime = doc['FirstTime'];
     }
 
     _getAllAlergensFromFirebase();
