@@ -121,6 +121,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   const EdgeInsets.only(left: 25, right: 25),
                               child: FilterChip(
                                 avatar: Icon(_allergenIcons[allergen]),
+                                backgroundColor: Colors.green,
+                                selectedColor: Colors.red,
                                 label: SizedBox(
                                     width: double.infinity,
                                     height: 30,

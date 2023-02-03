@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../models/settings_model.dart';
 import '../models/webscraping_model.dart';
 import '../testGraph.dart';
-import '../widgets/challenges_widgets/challenges-widget.dart';
+import '../widgets/challenges_widgets/challenges_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override

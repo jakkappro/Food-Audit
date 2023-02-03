@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'challenges-card.dart';
+import 'challenges_card.dart';
 
 class ChallengesUI extends StatelessWidget {
   @override
