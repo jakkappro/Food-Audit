@@ -81,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         selectedIcon: Icon(Icons.settings),
                         label: 'Settings',
                       ),
-                      
                     ],
                   )),
             ],
