@@ -23,7 +23,14 @@ class ChallengeCard extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: completed ? Colors.grey[600] : Colors.grey[900],
+                  decoration: completed
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
               ),
               const SizedBox(height: 2),
               Text(
