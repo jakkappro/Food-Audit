@@ -65,46 +65,44 @@ class _LoginPageState extends State<LoginPage>
         body: SingleChildScrollView(
           child: Container(
             width: width,
-            height: height,
+            height: 900,
             padding: EdgeInsets.only(
                 left: 20, right: 20, bottom: height * 0.09, top: height * 0.1),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(40, 48, 70, 1),
+                  Color.fromRGBO(60, 78, 104, 1)
+                ],
+                begin: Alignment.bottomRight,
+                end: Alignment.topLeft,
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
-                Text('Hello, \nWelcome Back',
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
-                          fontSize: width * 0.1,
-                        )),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Center(
+                  child: Image(
+                    image: AssetImage('assets/icons/splashLog.png'),
+                    width: 250,
+                    height: 250,
+                  ),
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                            onPressed: () => {},
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.all(0.0),
-                            ),
-                            child: const Image(
-                                width: 30,
-                                image: AssetImage('assets/icons/google.png'))),
-                        const SizedBox(width: 25),
-                        TextButton(
-                          onPressed: () => {},
-                          child: const Image(
-                              width: 30,
-                              image: AssetImage('assets/icons/facebook.png')),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 55,
-                    ),
-                    createInputField('Email', false, _emailController,
-                        shouldShake, animationController, shakeTween),
+                    createInputField(
+                        'johndoe@gmail.com',
+                        false,
+                        _emailController,
+                        shouldShake,
+                        animationController,
+                        shakeTween),
                     const SizedBox(
                       height: 20,
                     ),
@@ -113,13 +111,19 @@ class _LoginPageState extends State<LoginPage>
                     const SizedBox(
                       height: 5,
                     ),
-                    TextButton(
-                      onPressed: _panelController.open,
-                      style: TextButton.styleFrom(
-                          padding: const EdgeInsets.all(0)),
-                      child: Text(
-                        'Forgot Password?',
-                        style: Theme.of(context).textTheme.bodyText1,
+                    Center(
+                      child: TextButton(
+                        onPressed: _panelController.open,
+                        style: TextButton.styleFrom(
+                            padding: const EdgeInsets.all(0)),
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            color: Color.fromRGBO(75, 89, 109, 1),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -143,21 +147,22 @@ class _LoginPageState extends State<LoginPage>
                       )),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 35,
                       width: width,
                     ),
                     TextButton(
-                        onPressed: () => {
-                              Navigator.pushReplacementNamed(
-                                  context, '/register'),
-                            },
-                        style: TextButton.styleFrom(
-                            padding: const EdgeInsets.only(top: 0, bottom: 0),
-                            fixedSize: const Size(320, 48)),
-                        child: Text('Create account',
-                            style: Theme.of(context).textTheme.bodyText1)),
-                    SizedBox(
-                      height: 15,
+                      onPressed: () => {
+                        Navigator.pushReplacementNamed(context, '/register'),
+                      },
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.only(top: 0, bottom: 0),
+                        fixedSize: const Size(320, 40),
+                      ),
+                      child: Text('Create account',
+                          style: Theme.of(context).textTheme.bodyText1),
+                    ),
+                    const SizedBox(
+                      height: 2,
                     ),
                     TextButton(
                       onPressed: () async {
@@ -166,8 +171,9 @@ class _LoginPageState extends State<LoginPage>
                         Navigator.pushReplacementNamed(context, '/home');
                       },
                       style: TextButton.styleFrom(
-                          padding: const EdgeInsets.only(top: 0, bottom: 0),
-                          fixedSize: const Size(320, 48)),
+                        padding: const EdgeInsets.only(top: 0, bottom: 0),
+                        fixedSize: const Size(320, 48),
+                      ),
                       child: Text(
                         'Continue as guest',
                         style: Theme.of(context).textTheme.bodyText2,

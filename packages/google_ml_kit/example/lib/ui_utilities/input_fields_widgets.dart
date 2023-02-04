@@ -16,27 +16,45 @@ AnimatedBuilder createInputField(
           transform: Matrix4.translationValues(
               shouldShake ? shakeTween.evaluate(animationController) : 0, 0, 0),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorLight,
-              borderRadius: BorderRadius.all(Radius.circular(20))),
           child: TextField(
             controller: controller,
             obscureText: isPassword,
             decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: shouldShake
-                      ? BorderSide(color: Colors.red)
-                      : BorderSide.none,
+                alignLabelWithHint: true,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                label: !isPassword
+                    ? const Text(
+                        'Email',
+                        style: TextStyle(
+                          color: Color.fromRGBO(103, 117, 142, 1),
+                          fontSize: 12,
+                        ),
+                      )
+                    : const Text(
+                        'Password',
+                        style: TextStyle(
+                          color: Color.fromRGBO(103, 117, 142, 1),
+                          fontSize: 12,
+                        ),
+                      ),
+                border: const UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    width: 25,
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: shouldShake
-                      ? controller.text != ''
-                          ? BorderSide.none
-                          : BorderSide(color: Colors.red)
-                      : BorderSide.none,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                  ),
                 ),
-                hintText: hitText),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
+                hintText: hitText,
+                hintStyle: TextStyle(color: Colors.white)),
           ),
         );
       });

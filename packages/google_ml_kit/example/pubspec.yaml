@@ -51,9 +51,9 @@ flutter:
     - assets/splash/
 
 flutter_native_splash:
-  color: "#4efc03"
-  image: assets/Icons/diet.png
+  color: "#698C11"
+  image: assets/Icons/splashLog.png
   android: true
   ios: true
   android_12:
-    image: assets/Icons/diet.png
+    background_image: assets/Icons/splashLog.png
