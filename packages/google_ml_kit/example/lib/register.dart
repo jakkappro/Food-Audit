@@ -67,44 +67,60 @@ class _RegisterPageState extends State<RegisterPage>
       body: SingleChildScrollView(
         child: Container(
           width: width,
-          height: height,
+          height: 1000,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(40, 48, 70, 1),
+                Color.fromRGBO(60, 78, 104, 1)
+              ],
+              begin: Alignment.bottomRight,
+              end: Alignment.topLeft,
+            ),
+          ),
           padding: EdgeInsets.only(
-              left: 20, right: 20, bottom: height * 0.1, top: height * 0.06),
+              left: 20, right: 20, bottom: height * 0.1, top: height * 0.02),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Text('Hello, \nWelcome to\nFood Audit',
-                  style: Theme.of(context).textTheme.headline1!.copyWith(
-                        fontSize: width * 0.1,
-                      )),
+              const SizedBox(
+                height: 20,
+              ),
+              const Center(
+                child: Image(
+                  image: AssetImage('assets/icons/logoColored.png'),
+                  width: 250,
+                  height: 250,
+                ),
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
                   createInputField('First Name', false, _firstNameController,
                       shouldShake, animationController, shakeTween),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   createInputField('Last Name', false, _lastNameController,
                       shouldShake, animationController, shakeTween),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   createInputField('Email', false, _emailController,
                       shouldShakeEmail, animationController, shakeTween),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   createInputField('Password', true, _passwordController,
                       shouldShakePassword, animationController, shakeTween),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               Column(
@@ -113,12 +129,12 @@ class _RegisterPageState extends State<RegisterPage>
                     onPressed: _register,
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
-                      padding: EdgeInsets.all(18),
+                      padding: const EdgeInsets.all(18),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       backgroundColor: Colors.white,
                     ),
-                    child: Center(
+                    child: const Center(
                         child: Text(
                       'Register',
                       style: TextStyle(
@@ -134,8 +150,8 @@ class _RegisterPageState extends State<RegisterPage>
                             Navigator.pushReplacementNamed(context, '/login'),
                           },
                       style: TextButton.styleFrom(
-                        padding: EdgeInsets.only(top: 0, bottom: 0),
-                        fixedSize: Size(320, 48),
+                        padding: const EdgeInsets.only(top: 0, bottom: 0),
+                        fixedSize: const Size(320, 48),
                       ),
                       child: Text('Already have an account? Login',
                           style: Theme.of(context).textTheme.bodyText1)),

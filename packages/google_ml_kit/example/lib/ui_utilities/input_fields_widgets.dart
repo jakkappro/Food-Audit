@@ -11,11 +11,11 @@ AnimatedBuilder createInputField(
       animation: animationController,
       builder: (context, child) {
         return AnimatedContainer(
-          duration: Duration(milliseconds: 150),
+          duration: const Duration(milliseconds: 150),
           curve: Curves.fastLinearToSlowEaseIn,
           transform: Matrix4.translationValues(
               shouldShake ? shakeTween.evaluate(animationController) : 0, 0, 0),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: TextField(
             controller: controller,
             obscureText: isPassword,
@@ -43,18 +43,18 @@ AnimatedBuilder createInputField(
                     width: 25,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.white,
                   ),
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.white,
                   ),
                 ),
                 hintText: hitText,
-                hintStyle: TextStyle(color: Colors.white)),
+                hintStyle: const TextStyle(color: Colors.white)),
           ),
         );
       });

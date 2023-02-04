@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage>
         isDraggable: false,
         minHeight: 0,
         maxHeight: 250,
-        color: const Color.fromRGBO(66, 58, 76, 1),
+        color: Colors.white,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(40),
           topRight: Radius.circular(40),
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage>
             height: 900,
             padding: EdgeInsets.only(
                 left: 20, right: 20, bottom: height * 0.09, top: height * 0.1),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Color.fromRGBO(40, 48, 70, 1),
@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 const Center(
                   child: Image(
-                    image: AssetImage('assets/icons/splashLog.png'),
+                    image: AssetImage('assets/icons/logoColored.png'),
                     width: 250,
                     height: 250,
                   ),
@@ -194,11 +194,14 @@ class _LoginPageState extends State<LoginPage>
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         const Center(
-          child: Text("You'r email",
-              style: TextStyle(
-                fontSize: 17,
-                color: Colors.white,
-              )),
+          child: Text(
+            "You'r email",
+            style: TextStyle(
+              fontSize: 17,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
         const SizedBox(height: 20),
         Padding(
@@ -207,7 +210,10 @@ class _LoginPageState extends State<LoginPage>
             width: double.infinity,
             height: 50,
             decoration: BoxDecoration(
-              color: const Color.fromRGBO(56, 45, 62, 1),
+              border: Border.all(
+                color: Colors.grey,
+                width: 1.5,
+              ),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Center(
@@ -232,11 +238,12 @@ class _LoginPageState extends State<LoginPage>
           child: ElevatedButton(
             onPressed: _forgotPassword,
             style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 40),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                )),
+              backgroundColor: const Color.fromRGBO(106, 140, 17, 1),
+              minimumSize: const Size(double.infinity, 40),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40),
+              ),
+            ),
             child: const Center(
               child: Text(
                 'Send',
@@ -254,16 +261,22 @@ class _LoginPageState extends State<LoginPage>
           child: ElevatedButton(
             onPressed: _panelController.close,
             style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromRGBO(56, 45, 62, 1),
-                minimumSize: const Size(double.infinity, 40),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                )),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              minimumSize: const Size(double.infinity, 40),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40),
+                side: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.5,
+                ),
+              ),
+            ),
             child: const Center(
               child: Text(
                 'Cancel',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 15),
               ),
