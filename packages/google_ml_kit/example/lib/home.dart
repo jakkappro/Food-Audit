@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: _children,
       ),
       bottomNavigationBar: Container(
-        color: Colors.white,
+        color: Color.fromRGBO(105, 140, 17, 1),
         child: Padding(
           padding: EdgeInsets.only(
             left: width * 0.05,
@@ -48,7 +48,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: width * 0.9,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(18)),
-                    color: Colors.black,
+                    gradient: LinearGradient(
+                      colors: [
+                        Color.fromRGBO(40, 48, 70, 1),
+                        Color.fromRGBO(60, 78, 104, 1)
+                      ],
+                      begin: Alignment.bottomRight,
+                      end: Alignment.topLeft,
+                    ),
                   ),
                   child: NavigationBar(
                     height: 55,

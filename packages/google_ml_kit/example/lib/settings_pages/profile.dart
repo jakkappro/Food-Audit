@@ -141,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -171,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -185,7 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Colors.black,
+                color: Colors.transparent,
               ),
               child: Row(
                 children: [
@@ -230,7 +230,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Colors.black,
+                color: Colors.transparent,
               ),
               child: Row(
                 children: [
@@ -275,7 +275,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Colors.black,
+                color: Colors.transparent,
               ),
               child: Row(
                 children: [
@@ -300,6 +300,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     child: Slider(
+                      activeColor: Colors.white,
                       label: settings.height.toString(),
                       value: settings.height.toDouble() < 50
                           ? 50
@@ -324,7 +325,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Colors.black,
+                color: Colors.transparent,
               ),
               child: Row(
                 children: [
@@ -349,6 +350,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     child: Slider(
+                      activeColor: Colors.white,
                       label: settings.weight.toString(),
                       value: settings.weight.toDouble() < 30
                           ? 30
@@ -373,7 +375,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Colors.black,
+                color: Colors.transparent,
               ),
               child: Row(
                 children: [
@@ -430,7 +432,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: Colors.black,
+                color: Colors.transparent,
               ),
               child: Row(
                 children: [

@@ -15,17 +15,87 @@ class _SettingsPageState extends State<SettingsPage> {
   final PanelController _panelController = PanelController();
   SettingsModel settings = SettingsModel.instance;
 
-  final Map<String, IconData> _allergenIcons = {
-    'Arašidy': Icons.local_cafe,
-    'Horčica': Icons.local_dining,
-    'Mlieko': Icons.local_drink,
-    'Morské plody': Icons.opacity,
-    'Orechy': Icons.local_dining,
-    'Pšenica': Icons.wb_cloudy,
-    'Ryby': Icons.opacity,
-    'Sezam': Icons.local_dining,
-    'Sója': Icons.fastfood,
-    'Vajcia': Icons.local_dining
+  final Map<String, List<Container>> _allergenIcons = {
+    'Arašidy': [
+      Container(
+        child: Image.asset('assets/allergens/peanut.png'),
+      ),
+      Container(
+        child: Image.asset('assets/allergens/peanut-free.png'),
+      ),
+    ],
+    'Horčica': [
+      Container(
+        child: Image.asset('assets/allergens/mustard.png'),
+      ),
+      Container(
+        child: Image.asset('assets/allergens/mustard.png'),
+      ),
+    ],
+    'Mlieko': [
+      Container(
+        child: Image.asset('assets/allergens/milk.png'),
+      ),
+      Container(
+        child: Image.asset('assets/allergens/dairy-free.png'),
+      ),
+    ],
+    'Morské plody': [
+      Container(
+        child: Image.asset('assets/allergens/shellfish.png'),
+      ),
+      Container(
+        child: Image.asset('assets/allergens/no-seafood.png'),
+      ),
+    ],
+    'Orechy': [
+      Container(
+        child: Image.asset('assets/allergens/walnut.png'),
+      ),
+      Container(
+        child: Image.asset('assets/allergens/nut-free.png'),
+      ),
+    ],
+    'Pšenica': [
+      Container(
+        child: Image.asset('assets/allergens/gluten.png'),
+      ),
+      Container(
+        child: Image.asset('assets/allergens/gluten-free.png'),
+      ),
+    ],
+    'Ryby': [
+      Container(
+        child: Image.asset('assets/allergens/fish.png'),
+      ),
+      Container(
+        child: Image.asset('assets/allergens/no-fish.png'),
+      ),
+    ],
+    'Sezam': [
+      Container(
+        child: Image.asset('assets/allergens/sesame.png'),
+      ),
+      Container(
+        child: Image.asset('assets/allergens/sesame.png'),
+      ),
+    ],
+    'Sója': [
+      Container(
+        child: Image.asset('assets/allergens/soybean.png'),
+      ),
+      Container(
+        child: Image.asset('assets/allergens/soy-free.png'),
+      ),
+    ],
+    'Vajcia': [
+      Container(
+        child: Image.asset('assets/allergens/egg.png'),
+      ),
+      Container(
+        child: Image.asset('assets/allergens/egg-free.png'),
+      ),
+    ]
   };
 
   final _passwordController = TextEditingController();
@@ -61,47 +131,61 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SlidingUpPanel(
-          body: SingleChildScrollView(
-            child: SizedBox(
-              height: 1700,
-              width: double.infinity,
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 10, left: 10),
-                    child: Center(
-                      child: Text(
-                        'Settings',
-                        style: TextStyle(
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        textAlign: TextAlign.center,
+      child: SlidingUpPanel(
+        body: SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(40, 48, 70, 1),
+                  Color.fromRGBO(60, 78, 104, 1)
+                ],
+                begin: Alignment.bottomRight,
+                end: Alignment.topLeft,
+              ),
+            ),
+            height: 1700,
+            width: double.infinity,
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 10, left: 10),
+                  child: Center(
+                    child: Text(
+                      'Settings',
+                      style: TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(
-                    height: 724,
-                    child: ProfilePage(),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
+                ),
+                const SizedBox(
+                  height: 724,
+                  child: ProfilePage(),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  color: Color.fromRGBO(105, 140, 17, 1),
+                  child: Row(
                     children: const [
                       SizedBox(width: 20),
                       Text(
                         'Allergens:',
                         style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
-                  Column(
+                ),
+                Container(
+                  color: Color.fromRGBO(105, 140, 17, 1),
+                  child: Column(
                     children: [
                       'Arašidy',
                       'Horčica',
@@ -116,17 +200,34 @@ class _SettingsPageState extends State<SettingsPage> {
                     ]
                         .map((allergen) => Container(
                               width: double.infinity,
-                              height: 50,
+                              height: 60,
                               margin:
                                   const EdgeInsets.only(left: 25, right: 25),
                               child: FilterChip(
-                                avatar: Icon(_allergenIcons[allergen]),
-                                backgroundColor: Colors.green,
-                                selectedColor: Colors.red,
+                                avatar: _allergenIcons[allergen]![
+                                    settings.allergens.contains(allergen)
+                                        ? 0
+                                        : 1],
+                                backgroundColor: Colors.white,
+                                selectedColor: Colors.white,
+                                showCheckmark: false,
                                 label: SizedBox(
-                                    width: double.infinity,
-                                    height: 30,
-                                    child: Center(child: Text(allergen))),
+                                  width: double.infinity,
+                                  height: 35,
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      allergen,
+                                      style: TextStyle(
+                                        color: settings.allergens
+                                                .contains(allergen)
+                                            ? Color.fromRGBO(128, 157, 54, 1)
+                                            : Color.fromRGBO(158, 166, 179, 1),
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 selected: settings.allergens.contains(allergen),
                                 onSelected: (selected) {
                                   setState(() {
@@ -142,29 +243,33 @@ class _SettingsPageState extends State<SettingsPage> {
                             ))
                         .toList(),
                   ),
-                  const SizedBox(height: 20),
-                  _buildButton('Performance', performance,
-                      const Icon(Icons.trending_up)),
-                  const SizedBox(height: 20),
-                  _buildButton('Security', _panelController.open,
-                      const Icon(Icons.lock)),
-                  const SizedBox(height: 20),
-                  _buildButton('Log Out', singOut, const Icon(Icons.logout),
-                      color: Colors.red),
-                ],
-              ),
+                ),
+                const SizedBox(height: 20),
+                _buildButton(
+                    'Performance', performance, const Icon(Icons.trending_up)),
+                const SizedBox(height: 20),
+                _buildButton(
+                    'Security', _panelController.open, const Icon(Icons.lock)),
+                const SizedBox(height: 20),
+                _buildButton(
+                  'Log Out',
+                  singOut,
+                  const Icon(Icons.logout),
+                  color: Colors.red,
+                ),
+              ],
             ),
           ),
-          isDraggable: false,
-          panel: _buildSlidingUp(),
-          minHeight: 0,
-          maxHeight: 290,
-          controller: _panelController,
-          color: Colors.black,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(40),
-            topRight: Radius.circular(40),
-          ),
+        ),
+        isDraggable: false,
+        panel: _buildSlidingUp(),
+        minHeight: 0,
+        maxHeight: 290,
+        controller: _panelController,
+        color: Colors.black,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
         ),
       ),
     );
@@ -279,7 +384,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ElevatedButtonTheme(
           data: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.transparent,
               elevation: 0,
               minimumSize: const Size(double.infinity, 60),
               shape: RoundedRectangleBorder(
