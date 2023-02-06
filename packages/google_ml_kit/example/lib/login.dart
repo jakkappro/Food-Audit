@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import 'helpers/data_helpers.dart';
 import 'main.dart';
 import 'ui_utilities/input_fields_widgets.dart';
 
@@ -67,7 +68,7 @@ class _LoginPageState extends State<LoginPage>
             width: width,
             height: 900,
             padding: EdgeInsets.only(
-                left: 20, right: 20, bottom: height * 0.09, top: height * 0.1),
+                left: 20, right: 20, bottom: height * 0.09, top: height * 0.01),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -130,22 +131,8 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: _logIn,
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        padding: const EdgeInsets.all(18),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        backgroundColor: Colors.white,
-                      ),
-                      child: const Center(
-                          child: Text(
-                        'Login',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black),
-                      )),
-                    ),
+                    buildButton('Login', Colors.white, Colors.black,
+                        double.infinity, 60, 15, FontWeight.bold, _logIn),
                     SizedBox(
                       height: 35,
                       width: width,
@@ -235,52 +222,30 @@ class _LoginPageState extends State<LoginPage>
         const SizedBox(height: 15),
         Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
-          child: ElevatedButton(
-            onPressed: _forgotPassword,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromRGBO(106, 140, 17, 1),
-              minimumSize: const Size(double.infinity, 40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-            ),
-            child: const Center(
-              child: Text(
-                'Send',
-                style: TextStyle(
-                    color: Color.fromRGBO(65, 55, 71, 1),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15),
-              ),
-            ),
+          child: buildButton(
+            'Send',
+            const Color.fromRGBO(106, 140, 17, 1),
+            const Color.fromRGBO(65, 55, 71, 1),
+            double.infinity,
+            55,
+            15,
+            FontWeight.bold,
+            _forgotPassword,
           ),
         ),
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
-          child: ElevatedButton(
-            onPressed: _panelController.close,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              minimumSize: const Size(double.infinity, 40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
-                side: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.5,
-                ),
-              ),
-            ),
-            child: const Center(
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15),
-              ),
-            ),
+          child: buildButton(
+            'Cancel',
+            Colors.transparent,
+            Colors.black,
+            double.infinity,
+            50,
+            15,
+            FontWeight.bold,
+            _panelController.close,
+            borderColor: Colors.grey,
           ),
         )
       ],
@@ -293,9 +258,8 @@ class _LoginPageState extends State<LoginPage>
     try {
       await _auth.sendPasswordResetEmail(email: email);
       _panelController.close();
-    } on FirebaseAuthException catch (error) {
-      print('Error sending password reset email: $error');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   Future<void> _logIn() async {

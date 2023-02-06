@@ -125,36 +125,23 @@ class _RegisterPageState extends State<RegisterPage>
               ),
               Column(
                 children: [
-                  ElevatedButton(
-                    onPressed: _register,
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      padding: const EdgeInsets.all(18),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      backgroundColor: Colors.white,
-                    ),
-                    child: const Center(
-                        child: Text(
-                      'Register',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    )),
-                  ),
+                  buildButton('Register', Colors.white, Colors.black,
+                      double.infinity, 55, 16, FontWeight.bold, _register),
                   SizedBox(
                     height: 15,
                     width: width,
                   ),
                   TextButton(
-                      onPressed: () => {
-                            Navigator.pushReplacementNamed(context, '/login'),
-                          },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.only(top: 0, bottom: 0),
-                        fixedSize: const Size(320, 48),
-                      ),
-                      child: Text('Already have an account? Login',
-                          style: Theme.of(context).textTheme.bodyText1)),
+                    onPressed: () => {
+                      Navigator.pushReplacementNamed(context, '/login'),
+                    },
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.only(top: 0, bottom: 0),
+                      fixedSize: const Size(320, 48),
+                    ),
+                    child: Text('Already have an account? Login',
+                        style: Theme.of(context).textTheme.bodyText1),
+                  ),
                 ],
               )
             ],

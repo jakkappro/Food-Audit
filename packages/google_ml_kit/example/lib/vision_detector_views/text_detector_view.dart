@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
+import '../models/aditives_model.dart';
 import '../models/settings_model.dart';
 import 'camera_view.dart';
 
@@ -24,7 +25,9 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   int _retriesOfFindingComposition = 0;
   List<String> _alergicOn = [];
   Map<String, num> _nutritions = {};
+  List<String> _aditives = [];
   bool foundLastComposition = false;
+  final AditivesModel _aditivesModel = AditivesModel.instance;
 
   @override
   void dispose() async {
@@ -121,6 +124,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
     bool foundComp = false;
     bool foundNutritions = false;
     final List<String> foundAlergens = [];
+    final List<String> foundAditives = [];
     double tuky = -1.0;
     double sacharidy = -1.0;
     double cukry = -1.0;
@@ -144,34 +148,48 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
               }
             }
           }
+
+          // aditives
+          _aditivesModel.aditivs.forEach(
+            (key, value) {
+              if (formatedText.contains(key.toLowerCase())) {
+                foundAditives.add(key);
+              }
+              for (final aditive in value) {
+                if (formatedText.contains(aditive.toLowerCase())) {
+                  foundAditives.add(key);
+                }
+              }
+            },
+          );
         }
       }
 
       // nutritions
-        if (recognizedText.text.toLowerCase().contains('energia')) {
-          foundNutritions = true;
-          final regExp = RegExp(r'\d+');
-          final matches = regExp.allMatches(recognizedText.text.toLowerCase());
-          for (final match in matches) {
-            final number = recognizedText.text.toLowerCase().substring(match.start, match.end);
-            if (energia == -1.0) {
-              energia = double.parse(number);
-            } else if (tuky == -1.0) {
-              tuky = double.parse(number);
-            } else if (nasyteneTuky == -1.0) {
-              nasyteneTuky = double.parse(number);
-            } else if (cukry == -1.0) {
-              cukry = double.parse(number);
-            } else if (sacharidy == -1.0) {
-              sacharidy = double.parse(number);
-            } else if (blielkoviny == -1.0) {
-              blielkoviny = double.parse(number);
-            } else if (sol == -1.0) {
-              sol = double.parse(number);
-            }
-          }
-          foundNutritions = true;
-        }
+      // if (recognizedText.text.toLowerCase().contains('energia')) {
+      //   foundNutritions = true;
+      //   final regExp = RegExp(r'\d+');
+      //   final matches = regExp.allMatches(recognizedText.text.toLowerCase());
+      //   for (final match in matches) {
+      //     final number = recognizedText.text.toLowerCase().substring(match.start, match.end);
+      //     if (energia == -1.0) {
+      //       energia = double.parse(number);
+      //     } else if (tuky == -1.0) {
+      //       tuky = double.parse(number);
+      //     } else if (nasyteneTuky == -1.0) {
+      //       nasyteneTuky = double.parse(number);
+      //     } else if (cukry == -1.0) {
+      //       cukry = double.parse(number);
+      //     } else if (sacharidy == -1.0) {
+      //       sacharidy = double.parse(number);
+      //     } else if (blielkoviny == -1.0) {
+      //       blielkoviny = double.parse(number);
+      //     } else if (sol == -1.0) {
+      //       sol = double.parse(number);
+      //     }
+      //   }
+      //   foundNutritions = true;
+      // }
     } else {
       _text = 'Recognized text:\n\n${recognizedText.text}';
       _customPaint = null;
@@ -195,12 +213,14 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
           _foundAnimation.forward();
           foundLastComposition = true;
           foundComposition = foundComp;
+          _aditives = foundAditives;
         } else if (_retriesOfFindingComposition > 7) {
           _animation.forward();
           _foundAnimation.reverse();
           _alergicOn = [];
           foundLastComposition = false;
           foundComposition = foundComp;
+          _aditives = foundAditives;
         }
       });
     }

@@ -39,9 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_selectedGender == null) {
-      _selectedGender = 'Male';
-    }
+    _selectedGender ??= 'Male';
     // calculate bmr
     if (settings.isMale) {
       _bmr = 66.47 +
@@ -85,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     source: ImageSource.gallery,
                     imageQuality: 50,
                     maxWidth: 521,
-                    maxHeight: 521);
+                    maxHeight: 521,);
 
                 if (newImage == null) {
                   return;

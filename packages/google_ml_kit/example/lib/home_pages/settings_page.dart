@@ -19,17 +19,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(40, 48, 70, 1),
-                Color.fromRGBO(60, 78, 104, 1)
-              ],
-              begin: Alignment.bottomRight,
-              end: Alignment.topLeft,
-            ),
-          ),
+        child: SizedBox(
           height: 850,
           width: double.infinity,
           child: Column(

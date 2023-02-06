@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'helpers/data_helpers.dart';
 import 'main.dart';
 
 final auth = FirebaseAuth.instance;
