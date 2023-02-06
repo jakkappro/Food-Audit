@@ -155,7 +155,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
               if (formatedText.contains(key.toLowerCase())) {
                 foundAditives.add(key);
               }
-              for (final aditive in value) {
+              for (final aditive in List<String>.from(value['names'])) {
                 if (formatedText.contains(aditive.toLowerCase())) {
                   foundAditives.add(key);
                 }

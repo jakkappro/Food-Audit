@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AditivesModel {
   static AditivesModel? _currentInstance;
   
-  Map<String, List<String>> aditivs = {};
+  Map<String, Map<String, dynamic>> aditivs = {};
 
   static AditivesModel get instance {
     _currentInstance ??= AditivesModel._internal();
@@ -24,7 +24,7 @@ class AditivesModel {
         .then((value) {
       aditivs = value
           .data()!
-          .map((key, value) => MapEntry(key, List<String>.from(value)));
+          .map((key, value) => MapEntry(key, value as Map<String, dynamic>));
     });
   }
 }
