@@ -7,6 +7,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'home.dart';
 
+import 'home_pages/setting_settings_page.dart';
 import 'introduction.dart';
 import 'login.dart';
 import 'models/settings_model.dart';
@@ -52,7 +53,8 @@ Future<void> main() async {
       '/profile': (context) => const ProfilePage(),
       '/security': (context) => SecurityPage(),
       '/performance': (context) => PerformancePage(),
-      '/introduction': (context) => IntroPage(),
+      '/introduction': (context) => const IntroPage(),
+      '/settings': (context) => const SettingsSettingsPage()
     },
   ));
 }

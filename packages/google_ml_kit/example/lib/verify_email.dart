@@ -37,7 +37,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     } else if (user != null && user.emailVerified) {
       _timer.cancel();
       await loadData();
-      Navigator.of(context).pushReplacementNamed('/home');
+      Navigator.of(context).pushNamed('/home');
     }
   }
 
