@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_audit/vision_detector_views/painters/text_detector_painter.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 import '../models/aditives_model.dart';
@@ -57,7 +58,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
             processImage(inputImage);
           },
         ),
-        if (!foundComposition)
+        if (!foundComposition && _aditives.isEmpty)
           Positioned(
             top: MediaQuery.of(context).size.height / 3 - 60,
             left: MediaQuery.of(context).size.width / 2 - 100,
@@ -109,6 +110,28 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
               ),
             ),
           ),
+        if (_aditives.isNotEmpty)
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              width: MediaQuery.of(context).size.width,
+              height: 60,
+              child: Text(
+                'Aditives: ${_aditives.join(', ')}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -132,18 +155,23 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
     double sol = -1.0;
     double energia = -1.0;
     double nasyteneTuky = -1.0;
+    final List<String> textToPaint = [];
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
+      TextBlock? recognizedBlock;
       for (final block in recognizedText.blocks) {
         final formatedText = block.text.toLowerCase();
         if (formatedText.contains('zloženie')) {
+          recognizedBlock = block;
           _animation.reverse();
           foundComp = true;
+
           for (final alergenCategory in settings.allAlergens.entries) {
             if (settings.allergens.contains(alergenCategory.key)) {
               for (final alergen in alergenCategory.value) {
                 if (formatedText.contains(alergen.toLowerCase())) {
                   foundAlergens.add(alergen);
+                  textToPaint.add(alergen);
                 }
               }
             }
@@ -154,10 +182,12 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
             (key, value) {
               if (formatedText.contains(key.toLowerCase())) {
                 foundAditives.add(key);
+                textToPaint.add(key);
               }
               for (final aditive in List<String>.from(value['names'])) {
                 if (formatedText.contains(aditive.toLowerCase())) {
                   foundAditives.add(key);
+                  textToPaint.add(aditive);
                 }
               }
             },
@@ -190,6 +220,13 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
       //   }
       //   foundNutritions = true;
       // }
+
+      final painter = TextRecognizerPainter(
+          recognizedText,
+          inputImage.inputImageData!.size,
+          inputImage.inputImageData!.imageRotation,
+          textToPaint);
+      _customPaint = CustomPaint(painter: painter);
     } else {
       _text = 'Recognized text:\n\n${recognizedText.text}';
       _customPaint = null;
