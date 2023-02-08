@@ -179,6 +179,7 @@ class _PerformancePageState extends State<PerformancePage> {
 
   Future<void> _changeImageQuality(String value) async {
     settings.imageProcessingQuality = value.split('.').last;
+    await settings.saveToFirebase();
   }
 
   String capitalize(String str) {

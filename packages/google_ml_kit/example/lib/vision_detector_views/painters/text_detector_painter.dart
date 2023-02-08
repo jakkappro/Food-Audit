@@ -27,40 +27,41 @@ class TextRecognizerPainter extends CustomPainter {
     for (final textBlock in recognizedText.blocks) {
       for (final textLine in textBlock.lines) {
         for (final textElement in textLine.elements) {
-          if (!textToPaint.contains(textElement.text.toLowerCase())) {
-            continue;
+          for (final text in textToPaint) {
+            if (textElement.text.toLowerCase().contains(text)) {
+              final ParagraphBuilder builder = ParagraphBuilder(
+                ParagraphStyle(
+                    textAlign: TextAlign.left,
+                    fontSize: 16,
+                    textDirection: TextDirection.ltr),
+              );
+              builder.pushStyle(ui.TextStyle(
+                  color: Colors.lightGreenAccent, background: background));
+              builder.pop();
+
+              final left = translateX(textElement.boundingBox.left, rotation,
+                  size, absoluteImageSize);
+              final top = translateY(textElement.boundingBox.top, rotation,
+                  size, absoluteImageSize);
+              final right = translateX(textElement.boundingBox.right, rotation,
+                  size, absoluteImageSize);
+              final bottom = translateY(textElement.boundingBox.bottom,
+                  rotation, size, absoluteImageSize);
+
+              canvas.drawRect(
+                Rect.fromLTRB(left, top, right, bottom),
+                paint,
+              );
+
+              canvas.drawParagraph(
+                builder.build()
+                  ..layout(ParagraphConstraints(
+                    width: right - left,
+                  )),
+                Offset(left, top),
+              );
+            }
           }
-          final ParagraphBuilder builder = ParagraphBuilder(
-            ParagraphStyle(
-                textAlign: TextAlign.left,
-                fontSize: 16,
-                textDirection: TextDirection.ltr),
-          );
-          builder.pushStyle(ui.TextStyle(
-              color: Colors.lightGreenAccent, background: background));
-          builder.pop();
-
-          final left = translateX(
-              textElement.boundingBox.left, rotation, size, absoluteImageSize);
-          final top = translateY(
-              textElement.boundingBox.top, rotation, size, absoluteImageSize);
-          final right = translateX(
-              textElement.boundingBox.right, rotation, size, absoluteImageSize);
-          final bottom = translateY(textElement.boundingBox.bottom, rotation,
-              size, absoluteImageSize);
-
-          canvas.drawRect(
-            Rect.fromLTRB(left, top, right, bottom),
-            paint,
-          );
-
-          canvas.drawParagraph(
-            builder.build()
-              ..layout(ParagraphConstraints(
-                width: right - left,
-              )),
-            Offset(left, top),
-          );
         }
       }
     }

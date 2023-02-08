@@ -14,6 +14,7 @@ class SettingsModel {
   bool _isAnonymous = false;
   bool isMale = true;
   bool firstTime = true;
+  List<String>? allergicOn = [];
 
   static SettingsModel get instance {
     _currentInstance ??= SettingsModel._internal();
@@ -52,6 +53,8 @@ class SettingsModel {
   }
 
   Future<void> loadFromFirebase() async {
+    _getAllAlergensFromFirebase();
+
     final doc = await FirebaseFirestore.instance
         .collection('userSettings')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -66,9 +69,18 @@ class SettingsModel {
       imageProcessingFramerate = doc['ImageProcessingFramerate'];
       imageProcessingQuality = doc['ImageQuality'];
       firstTime = doc['FirstTime'];
+      remapAllergicOn();
     }
+  }
 
-    _getAllAlergensFromFirebase();
+  void remapAllergicOn() {
+    final filteredMap = {
+      for (final key in allAlergens.keys)
+        if (allergens.contains(key)) key: allAlergens[key]
+    };
+    filteredMap.forEach((key, value) {
+      allergicOn!.addAll(value!);
+    });
   }
 
   void loadFromFirebaseAnonym() {

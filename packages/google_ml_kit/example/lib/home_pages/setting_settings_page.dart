@@ -225,8 +225,10 @@ class _SettingsSettingsPageState extends State<SettingsSettingsPage> {
                                     setState(() {
                                       if (selected) {
                                         settings.allergens.add(allergen);
+                                        settings.remapAllergicOn();
                                       } else {
                                         settings.allergens.remove(allergen);
+                                        settings.remapAllergicOn();
                                       }
                                       settings.saveToFirebase();
                                     });
