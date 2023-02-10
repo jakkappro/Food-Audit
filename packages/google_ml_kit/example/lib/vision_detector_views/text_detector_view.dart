@@ -29,6 +29,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   List<String> _aditives = [];
   bool foundLastComposition = false;
   final AditivesModel _aditivesModel = AditivesModel.instance;
+  bool _detailOpened = false;
 
   final _panelController = PanelController();
 
@@ -166,7 +167,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   }
 
   Future<void> processImage(InputImage inputImage) async {
-    if (!_canProcess) return;
+    if (!_canProcess && !_detailOpened) return;
     if (_isBusy) return;
     _isBusy = true;
     setState(() {
@@ -223,7 +224,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
       _customPaint = null;
     }
 
-    await Future.delayed(const Duration(milliseconds: 10));
+    await Future.delayed(const Duration(milliseconds: 20));
 
     _isBusy = false;
 
@@ -299,13 +300,18 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
           const SizedBox(height: 5),
           Center(
             child: ElevatedButton(
-              onPressed: _panelController.open,
+              onPressed: () {
+                _panelController.open();
+                setState(() {
+                  _detailOpened = true;
+                });
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 elevation: 0,
                 shape: const CircleBorder(),
               ),
-              child: Center(
+              child: const Center(
                 child: Icon(
                   Icons.keyboard_arrow_up,
                   size: 40,

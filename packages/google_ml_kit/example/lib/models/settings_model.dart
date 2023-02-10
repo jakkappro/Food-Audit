@@ -53,7 +53,7 @@ class SettingsModel {
   }
 
   Future<void> loadFromFirebase() async {
-    _getAllAlergensFromFirebase();
+    await _getAllAlergensFromFirebase();
 
     final doc = await FirebaseFirestore.instance
         .collection('userSettings')
@@ -79,7 +79,9 @@ class SettingsModel {
         if (allergens.contains(key)) key: allAlergens[key]
     };
     filteredMap.forEach((key, value) {
-      allergicOn!.addAll(value!);
+      allergicOn!.addAll(value!.map(
+        (e) => e.toLowerCase(),
+      ));
     });
   }
 
@@ -87,15 +89,14 @@ class SettingsModel {
     _getAllAlergensFromFirebase();
   }
 
-  void _getAllAlergensFromFirebase() {
-    FirebaseFirestore.instance
+  Future<void> _getAllAlergensFromFirebase() async {
+    final value = await FirebaseFirestore.instance
         .collection('alergens')
         .doc('8gMj50c1wiaDIU0zf1IB')
-        .get()
-        .then((value) {
-      allAlergens = value
-          .data()!
-          .map((key, value) => MapEntry(key, List<String>.from(value)));
-    });
+        .get();
+
+    allAlergens = value
+        .data()!
+        .map((key, value) => MapEntry(key, List<String>.from(value)));
   }
 }
