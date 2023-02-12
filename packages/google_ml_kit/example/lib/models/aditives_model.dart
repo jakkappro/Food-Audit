@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AditivesModel {
   static AditivesModel? _currentInstance;
-  
+
   Map<String, Map<String, dynamic>> aditivs = {};
+  Map<String, String> aditivsDescriptions = {};
 
   static AditivesModel get instance {
     _currentInstance ??= AditivesModel._internal();

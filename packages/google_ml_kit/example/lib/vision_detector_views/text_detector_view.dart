@@ -29,7 +29,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   List<String> _aditives = [];
   bool foundLastComposition = false;
   final AditivesModel _aditivesModel = AditivesModel.instance;
-  bool _detailOpened = false;
+  late bool _detailOpened;
 
   final _panelController = PanelController();
 
@@ -43,6 +43,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   @override
   void initState() {
     super.initState();
+    _detailOpened = false;
     _animation = AnimationController(
         duration: const Duration(milliseconds: 750), vsync: this);
     _foundAnimation = AnimationController(
@@ -66,6 +67,16 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
       backdropOpacity: 0.8,
       backdropTapClosesPanel: true,
       color: Colors.white,
+      onPanelClosed: () {
+        setState(() {
+          _detailOpened = false;
+        });
+      },
+      onPanelOpened: () {
+        setState(() {
+          _detailOpened = true;
+        });
+      },
       body: Stack(
         children: [
           CameraView(
@@ -167,7 +178,8 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   }
 
   Future<void> processImage(InputImage inputImage) async {
-    if (!_canProcess && !_detailOpened) return;
+    if (!_canProcess) return;
+    if (_detailOpened) return;
     if (_isBusy) return;
     _isBusy = true;
     setState(() {
@@ -257,6 +269,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   }
 
   Widget _buildPanel() {
+    final additives = _aditives.map((e) => Additive(e, _aditivesModel.aditivsDescriptions[e]!)).toList();
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -265,18 +278,48 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
           topRight: Radius.circular(24.0),
         ),
       ),
-      child: Column(
-        children: const [
-          SizedBox(height: 20),
-          Text(
-            'You are going to die',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+      child: SingleChildScrollView(
+        child: SizedBox(
+          width: double.infinity,
+          height: _aditives.length * 60 + 100,
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  _alergicOn.isNotEmpty
+                      ? 'Našli sme: "${_alergicOn.join(', ')}" v tomto produkte.'
+                      : 'Nie ste alergický na tento produkt.',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 20),
+              if (_aditives.isNotEmpty)
+                Text(
+                  'Našli sme: ${_aditives.join(', ')} aditíva v tomto produkte.',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ListView(
+                children: <Widget>[
+                  for (final additive in additives)
+                    AdditiveItem(
+                      additive: additive,
+                    ),
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -285,6 +328,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
     if (!foundComposition) {
       return Container();
     }
+
     return Container(
       width: 60,
       height: 60,
@@ -324,4 +368,60 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
       ),
     );
   }
+}
+
+class AdditiveItem extends StatefulWidget {
+  final Additive additive;
+
+  const AdditiveItem({Key? key, required this.additive}) : super(key: key);
+
+  @override
+  _AdditiveItemState createState() => _AdditiveItemState();
+}
+
+class _AdditiveItemState extends State<AdditiveItem> {
+  bool isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          isExpanded = !isExpanded;
+        });
+      },
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              widget.additive.name,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          if (isExpanded)
+            Container(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: Text(
+                widget.additive.description,
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          const Divider(),
+        ],
+      ),
+    );
+  }
+}
+
+class Additive {
+  final String name;
+  final String description;
+
+  Additive(this.name, this.description);
 }
