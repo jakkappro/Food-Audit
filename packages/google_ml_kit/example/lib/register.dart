@@ -1,8 +1,6 @@
-import 'dart:math';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'services/authentication_service.dart';
 import 'ui_utilities/input_fields_widgets.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -24,13 +22,6 @@ class _RegisterPageState extends State<RegisterPage>
   bool shouldShake = false;
   bool shouldShakeEmail = false;
   bool shouldShakePassword = false;
-
-  final _emailRegex = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-  );
-  final _passwordRegex = RegExp(
-    r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&])[A-Za-z\d@$!%*?&]{8,}$',
-  );
 
   @override
   void initState() {
@@ -160,15 +151,12 @@ class _RegisterPageState extends State<RegisterPage>
     bool shouldPasswordShake = false;
     bool shouldShake = false;
 
-    if (!_emailRegex.hasMatch(email)) {
+    final result = await register(firstName, lastName, email, password);
+    if (result == RegisterStatus.badEmail) {
       shouldEmailShake = true;
-    }
-
-    if (!_passwordRegex.hasMatch(password)) {
+    } else if (result == RegisterStatus.badPassword) {
       shouldPasswordShake = true;
-    }
-
-    if (firstName == '' || lastName == '') {
+    } else if (result == RegisterStatus.badName) {
       shouldShake = true;
     }
 
@@ -180,34 +168,8 @@ class _RegisterPageState extends State<RegisterPage>
       });
       return;
     }
-
-    try {
-      final result = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-      result.user!.updateDisplayName('$firstName $lastName');
-      Navigator.of(context).pushReplacementNamed('/verify-email');
-    } on FirebaseAuthException catch (e) {
-      // Get the error code
-      final code = e.code;
-
-      // Handle the error based on the code
-      switch (code) {
-        case 'weak-password':
-          // The password is too weak
-          break;
-        case 'email-already-in-use':
-          // The email is already in use by another user
-          break;
-        case 'invalid-email':
-          // The email is invalid
-          break;
-        default:
-          // An unknown error occurred
-          break;
-      }
-    } catch (e) {
-      // login failed
-      log(123);
+    if (result == RegisterStatus.success) {
+      Navigator.pushReplacementNamed(context, '/verify-email');
     }
   }
 }

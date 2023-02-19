@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'helpers/data_helpers.dart';
+import 'services/authentication_service.dart';
 import 'ui_utilities/input_fields_widgets.dart';
 
 class LoginPage extends StatefulWidget {
@@ -265,24 +266,18 @@ class _LoginPageState extends State<LoginPage>
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    try {
-      final result = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      if (result.user != null) {
-        // login successful
-        if (result.user!.emailVerified == false) {
-          Navigator.pushReplacementNamed(context, '/verify-email');
-        } else {
-          await loadData();
-          Navigator.pushReplacementNamed(context, '/home');
-        }
-      } else {
-        // login failed
+    final logged = await login(email, password);
+
+    switch (logged) {
+      case LoginStatus.success:
+        Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case LoginStatus.emailNotVerified:
+        Navigator.pushReplacementNamed(context, '/verify-email');
+        break;
+      case LoginStatus.failed:
         triggerAnimationOnLoginFail();
-      }
-    } catch (e) {
-      // login failed
-      triggerAnimationOnLoginFail();
+        break;
     }
   }
 
