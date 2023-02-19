@@ -471,7 +471,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: Text(
                                       gender[0].toUpperCase() +
                                           gender.substring(1).toLowerCase(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white,
                                       )),
                                 ))
