@@ -133,7 +133,8 @@ class _PerformancePageState extends State<PerformancePage> {
                     DropdownButton<ImageQuality>(
                       value: _imageQuality,
                       style: const TextStyle(color: Colors.black),
-                      dropdownColor: Colors.white,
+                      dropdownColor: Colors.transparent,
+                      elevation: 0,
                       onChanged: (ImageQuality? newValue) {
                         setState(() {
                           _changeImageQuality(
@@ -151,7 +152,7 @@ class _PerformancePageState extends State<PerformancePage> {
                               style: TextStyle(
                                   color: option.name == selected
                                       ? Colors.white
-                                      : Colors.black),
+                                      : Colors.white),
                             ),
                           );
                         },

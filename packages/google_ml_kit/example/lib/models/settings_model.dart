@@ -5,7 +5,7 @@ class SettingsModel {
   static SettingsModel? _currentInstance;
   Map<String, List<String>> allAlergens = {};
   List<String> allergens = [];
-  DateTime birthDate = DateTime.parse('1990-02-27');
+  DateTime birthDate = DateTime.parse('1800-02-27');
   num height = 0;
   num weight = 0;
   num age = 0;

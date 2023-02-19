@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import '../models/settings_model.dart';
 
@@ -39,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    _selectedGender ??= 'Male';
+    _selectedGender ??= 'Muž';
     // calculate bmr
     if (settings.isMale) {
       _bmr = 66.47 +
@@ -80,10 +81,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   return;
                 }
                 final newImage = await ImagePicker().pickImage(
-                    source: ImageSource.gallery,
-                    imageQuality: 50,
-                    maxWidth: 521,
-                    maxHeight: 521,);
+                  source: ImageSource.gallery,
+                  imageQuality: 50,
+                  maxWidth: 521,
+                  maxHeight: 521,
+                );
 
                 if (newImage == null) {
                   return;
@@ -380,7 +382,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   const Padding(
                     padding: EdgeInsets.only(left: 25.0),
                     child: Text(
-                      'Date of birdth: ',
+                      'Dátum narodenia: ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -390,36 +392,47 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(width: 20),
                   Expanded(
                     child: Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: Column(
+                        children: [
+                          TextField(
+                            enabled: true,
+                            decoration: InputDecoration(
+                              hintText: settings.birthDate !=
+                                      DateTime.parse('1800-02-27')
+                                  ? DateFormat('dd.MM.yyyy')
+                                      .format(settings.birthDate)
+                                  : 'Zvoľte si dátum narodenia',
+                              hintStyle: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            readOnly: true,
+                            onTap: () async {
+                              final dateOfBirth = await showDatePicker(
+                                context: context,
+                                initialDate: settings.birthDate,
+                                firstDate: DateTime(1950),
+                                lastDate: DateTime.now(),
+                              );
+                              if (dateOfBirth != null) {
+                                setState(() {
+                                  settings.birthDate = dateOfBirth;
+                                  settings.age = DateTime.now()
+                                          .difference(settings.birthDate)
+                                          .inDays /
+                                      365;
+                                  if (!SettingsModel.isAnonymous) {
+                                    settings.saveToFirebase();
+                                  }
+                                });
+                              }
+                            },
                           ),
-                          child: const Text(
-                            'Select date of birth',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          onPressed: () async {
-                            final dateOfBirth = await showDatePicker(
-                              context: context,
-                              initialDate: settings.birthDate,
-                              firstDate: DateTime(1950),
-                              lastDate: DateTime.now(),
-                            );
-                            if (dateOfBirth != null) {
-                              setState(() {
-                                settings.birthDate = dateOfBirth;
-                                settings.age = DateTime.now()
-                                        .difference(settings.birthDate)
-                                        .inDays /
-                                    365;
-                                if (!SettingsModel.isAnonymous) {
-                                  settings.saveToFirebase();
-                                }
-                              });
-                            }
-                          },
-                        )),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -437,7 +450,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   const Padding(
                     padding: EdgeInsets.only(left: 25.0),
                     child: Text(
-                      'Gender: ',
+                      'Pohlavie: ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -450,11 +463,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: const EdgeInsets.only(right: 20.0),
                       child: DropdownButton<String>(
                         value: _selectedGender,
-                        items: ['Male', 'Female']
+                        dropdownColor: Colors.transparent,
+                        elevation: 0,
+                        items: ['Muž', 'Žena']
                             .map((gender) => DropdownMenuItem<String>(
                                   value: gender,
-                                  child: Text(gender[0].toUpperCase() +
-                                      gender.substring(1).toLowerCase()),
+                                  child: Text(
+                                      gender[0].toUpperCase() +
+                                          gender.substring(1).toLowerCase(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      )),
                                 ))
                             .toList(),
                         onChanged: (value) {
@@ -462,7 +481,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             () {
                               _selectedGender = value ?? _selectedGender;
                               settings.isMale =
-                                  _selectedGender!.toLowerCase() == 'male';
+                                  _selectedGender!.toLowerCase() == 'muž';
                               if (!SettingsModel.isAnonymous) {
                                 settings.saveToFirebase();
                               }
