@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'helpers/data_helpers.dart';
-import 'main.dart';
 import 'ui_utilities/input_fields_widgets.dart';
 
 class LoginPage extends StatefulWidget {
@@ -271,7 +270,12 @@ class _LoginPageState extends State<LoginPage>
           .signInWithEmailAndPassword(email: email, password: password);
       if (result.user != null) {
         // login successful
-        Navigator.pushReplacementNamed(context, '/verify-email');
+        if (result.user!.emailVerified == false) {
+          Navigator.pushReplacementNamed(context, '/verify-email');
+        } else {
+          await loadData();
+          Navigator.pushReplacementNamed(context, '/home');
+        }
       } else {
         // login failed
         triggerAnimationOnLoginFail();
