@@ -304,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                         child: Text(
                           'Blog',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
                           ),
@@ -329,22 +329,28 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 22.0),
-                    child: SizedBox(
+                    child: Container(
+                      color: Colors.transparent,
                       width: double.infinity,
-                      height: 300,
+                      height: 290,
                       child: DefaultTabController(
                         length: 3,
                         child: Scaffold(
+                          backgroundColor: Colors.transparent,
                           appBar: AppBar(
                             toolbarHeight: 0,
                             elevation: 0,
-                            backgroundColor: Colors.white,
                             primary: false,
+                            backgroundColor: Colors.transparent,
                             bottom: TabBar(
                               indicatorSize: TabBarIndicatorSize.tab,
-                              indicatorColor: Colors.transparent,
+                              indicatorColor: Colors.black,
+                              indicatorWeight: 3,
                               isScrollable: false,
                               padding: const EdgeInsets.only(top: 0, bottom: 0),
                               tabs: [
@@ -357,207 +363,246 @@ class _HomePageState extends State<HomePage> {
                           body: TabBarView(
                             children: [
                               Container(
-                                color: Colors.white,
-                                child: ListView.builder(
-                                  itemCount: 3,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              width: 60,
-                                              height: 65,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(15)),
-                                                image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: NetworkImage(
-                                                      receipes.image[index]),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0, top: 10),
+                                  child: ListView.builder(
+                                    itemCount: 3,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                width: 60,
+                                                height: 65,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(15)),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        receipes.image[index]),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  receipes.title[index].length >
-                                                          20
-                                                      ? '${receipes.title[index].substring(0, 20)}...'
-                                                      : receipes.title[index],
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () async {
-                                                    _updateBlogChallenge();
-                                                    await launchUrlString(
-                                                        receipes.url[index]);
-                                                  },
-                                                  child: const Text(
-                                                    'Čítaj ďalej',
-                                                    style: TextStyle(
-                                                      color: Colors.grey,
-                                                      fontSize: 8,
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    receipes.title[index]
+                                                                .length >
+                                                            20
+                                                        ? '${receipes.title[index].substring(0, 20)}...'
+                                                        : receipes.title[index],
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                    textAlign: TextAlign.start,
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                      ],
-                                    );
-                                  },
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      _updateBlogChallenge();
+                                                      await launchUrlString(
+                                                          receipes.url[index]);
+                                                    },
+                                                    child: const Text(
+                                                      'Čítaj ďalej',
+                                                      style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 8,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                               Container(
-                                color: Colors.white,
-                                child: ListView.builder(
-                                  itemCount: 3,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              width: 60,
-                                              height: 65,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(15)),
-                                                image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: NetworkImage(
-                                                      fitness.image[index]),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0, top: 10),
+                                  child: ListView.builder(
+                                    itemCount: 3,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                width: 60,
+                                                height: 65,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(15)),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        fitness.image[index]),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  fitness.title[index].length >
-                                                          20
-                                                      ? '${fitness.title[index].substring(0, 20)}...'
-                                                      : fitness.title[index],
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () async {
-                                                    _updateBlogChallenge();
-                                                    await launchUrlString(
-                                                        fitness.url[index]);
-                                                  },
-                                                  child: const Text(
-                                                    'Čítaj ďalej',
-                                                    style: TextStyle(
-                                                      color: Colors.grey,
-                                                      fontSize: 8,
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    fitness.title[index]
+                                                                .length >
+                                                            20
+                                                        ? '${fitness.title[index].substring(0, 20)}...'
+                                                        : fitness.title[index],
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                    textAlign: TextAlign.start,
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        )
-                                      ],
-                                    );
-                                  },
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      _updateBlogChallenge();
+                                                      await launchUrlString(
+                                                          fitness.url[index]);
+                                                    },
+                                                    child: const Text(
+                                                      'Čítaj ďalej',
+                                                      style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 8,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                               Container(
-                                color: Colors.white,
-                                child: ListView.builder(
-                                  itemCount: 3,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              width: 60,
-                                              height: 65,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(15)),
-                                                image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: NetworkImage(
-                                                      receipes.image[index]),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0, top: 10),
+                                  child: ListView.builder(
+                                    itemCount: 3,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                width: 60,
+                                                height: 65,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(15)),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        receipes.image[index]),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  receipes.title[index].length >
-                                                          30
-                                                      ? '${receipes.title[index].substring(0, 20)}...'
-                                                      : receipes.title[index],
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () async {
-                                                    _updateBlogChallenge();
-                                                    await launchUrlString(
-                                                        receipes.url[index]);
-                                                  },
-                                                  child: const Text(
-                                                    'Čítaj ďalej',
-                                                    style: TextStyle(
-                                                      color: Colors.grey,
-                                                      fontSize: 8,
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    receipes.title[index]
+                                                                .length >
+                                                            30
+                                                        ? '${receipes.title[index].substring(0, 20)}...'
+                                                        : receipes.title[index],
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                    textAlign: TextAlign.start,
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        )
-                                      ],
-                                    );
-                                  },
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      _updateBlogChallenge();
+                                                      await launchUrlString(
+                                                          receipes.url[index]);
+                                                    },
+                                                    child: const Text(
+                                                      'Čítaj ďalej',
+                                                      style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 8,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
@@ -645,7 +690,7 @@ class _HomePageState extends State<HomePage> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Colors.black,
+          color: Colors.transparent,
         ),
         child: Center(
           child: Text(
