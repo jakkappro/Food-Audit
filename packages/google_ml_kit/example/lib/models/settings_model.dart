@@ -15,6 +15,11 @@ class SettingsModel {
   bool isMale = true;
   bool firstTime = true;
   List<String>? allergicOn = [];
+  Map<String, bool> challenges = {
+    'allergens': false,
+    'firstScan': false,
+    'shareApp': false,
+  };
 
   static SettingsModel get instance {
     _currentInstance ??= SettingsModel._internal();
@@ -49,6 +54,7 @@ class SettingsModel {
       'Age': age,
       'IsMale': isMale,
       'FirstTime': false,
+      'Challenges': challenges,
     });
   }
 
@@ -69,6 +75,7 @@ class SettingsModel {
       imageProcessingFramerate = doc['ImageProcessingFramerate'];
       imageProcessingQuality = doc['ImageQuality'];
       firstTime = doc['FirstTime'];
+      challenges = Map<String, bool>.from(doc['Challenges']);
       remapAllergicOn();
     }
   }

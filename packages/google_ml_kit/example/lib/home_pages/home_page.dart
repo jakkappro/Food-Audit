@@ -637,7 +637,11 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: ChallengesUI(),
+                    child: ChallengesUI(
+                      loginFinished: true,
+                      blogFinished: _isBlogFinished,
+                      scanFinished: _isScanFinished,
+                    ),
                   ),
                 ),
               ),

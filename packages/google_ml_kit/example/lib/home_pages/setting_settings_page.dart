@@ -131,9 +131,9 @@ class _SettingsSettingsPageState extends State<SettingsSettingsPage> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Color.fromRGBO(105, 140, 17, 1),
-          title: Center(
-            child: const Text(
+          backgroundColor: const Color.fromRGBO(105, 140, 17, 1),
+          title: const Center(
+            child: Text(
               'Settings',
               textAlign: TextAlign.center,
             ),
@@ -153,12 +153,12 @@ class _SettingsSettingsPageState extends State<SettingsSettingsPage> {
           body: SingleChildScrollView(
             child: Container(
               height: 1000,
-              color: Color.fromRGBO(105, 140, 17, 1),
+              color: const Color.fromRGBO(105, 140, 17, 1),
               child: Column(
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
-                    color: Color.fromRGBO(105, 140, 17, 1),
+                    color: const Color.fromRGBO(105, 140, 17, 1),
                     child: Row(
                       children: const [
                         SizedBox(width: 20),
@@ -174,7 +174,7 @@ class _SettingsSettingsPageState extends State<SettingsSettingsPage> {
                     ),
                   ),
                   Container(
-                    color: Color.fromRGBO(105, 140, 17, 1),
+                    color: const Color.fromRGBO(105, 140, 17, 1),
                     child: Column(
                       children: [
                         'Arašidy',
@@ -211,8 +211,9 @@ class _SettingsSettingsPageState extends State<SettingsSettingsPage> {
                                         style: TextStyle(
                                           color: settings.allergens
                                                   .contains(allergen)
-                                              ? Color.fromRGBO(128, 157, 54, 1)
-                                              : Color.fromRGBO(
+                                              ? const Color.fromRGBO(
+                                                  128, 157, 54, 1)
+                                              : const Color.fromRGBO(
                                                   158, 166, 179, 1),
                                           fontSize: 18,
                                         ),
@@ -225,10 +226,12 @@ class _SettingsSettingsPageState extends State<SettingsSettingsPage> {
                                     setState(() {
                                       if (selected) {
                                         settings.allergens.add(allergen);
-                                        settings.remapAllergicOn();
                                       } else {
                                         settings.allergens.remove(allergen);
-                                        settings.remapAllergicOn();
+                                      }
+                                      settings.remapAllergicOn();
+                                      if (!settings.challenges['allergens']!) {
+                                        settings.challenges['allergens'] = true;
                                       }
                                       settings.saveToFirebase();
                                     });
