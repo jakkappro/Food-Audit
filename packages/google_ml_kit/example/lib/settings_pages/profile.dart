@@ -412,9 +412,30 @@ class _ProfilePageState extends State<ProfilePage> {
                             onTap: () async {
                               final dateOfBirth = await showDatePicker(
                                 context: context,
-                                initialDate: settings.birthDate,
+                                initialDate: settings.birthDate !=
+                                        DateTime.parse('1800-02-27')
+                                    ? settings.birthDate
+                                    : DateTime.now(),
                                 firstDate: DateTime(1950),
                                 lastDate: DateTime.now(),
+                                builder: (context, child) => Theme(
+                                  data: ThemeData.light().copyWith(
+                                    colorScheme: const ColorScheme.light(
+                                      primary: Colors.white,
+                                      onPrimary: Colors.black,
+                                      surface: Colors.black,
+                                      onSurface: Colors.black,
+                                    ),
+                                    textButtonTheme: TextButtonThemeData(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor:
+                                            Colors.black, // button text color
+                                      ),
+                                    ),
+                                    dialogBackgroundColor: Colors.white,
+                                  ),
+                                  child: child!,
+                                ),
                               );
                               if (dateOfBirth != null) {
                                 setState(() {
