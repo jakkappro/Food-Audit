@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../models/aditives_model.dart';
 import '../models/settings_model.dart';
 
-Future<void> _getChallengesData(User user) async {
+Future<Map<String, bool>> getChallengesData(User user) async {
   final CollectionReference challengesRef =
       FirebaseFirestore.instance.collection('challenges');
   final String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -32,6 +32,18 @@ Future<void> _getChallengesData(User user) async {
       'lastLogin': now.toString()
     }, SetOptions(merge: true));
   }
+  if (data == null) {
+    return {
+      'allergens': false,
+      'firstScan': false,
+      'shareApp': false,
+    };
+  }
+  return {
+    'blog': data['blog'] != null && data['blog'] == today,
+    'login': data['login'] != null && data['login'] == today,
+    'scan': data['scan'] != null && data['scan'] == today,
+  };
 }
 
 void _resetPoints(User user) {
@@ -47,7 +59,7 @@ void _resetPoints(User user) {
 Future<void> loadData() async {
   await SettingsModel.instance.loadFromFirebase();
   SettingsModel.isAnonymous = false;
-  await _getChallengesData(FirebaseAuth.instance.currentUser!);
+  await getChallengesData(FirebaseAuth.instance.currentUser!);
   await AditivesModel.instance.loadFromFirebase();
 }
 

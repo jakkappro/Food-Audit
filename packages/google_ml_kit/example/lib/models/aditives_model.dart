@@ -15,6 +15,8 @@ class AditivesModel {
 
   Future<void> loadFromFirebase() async {
     _getAllAditivesFromFirebase();
+    // get all aditivs descriptions
+    
   }
 
   void _getAllAditivesFromFirebase() {

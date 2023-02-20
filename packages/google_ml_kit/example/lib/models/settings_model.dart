@@ -20,6 +20,7 @@ class SettingsModel {
     'firstScan': false,
     'shareApp': false,
   };
+  bool scannedProduct = false;
 
   static SettingsModel get instance {
     _currentInstance ??= SettingsModel._internal();

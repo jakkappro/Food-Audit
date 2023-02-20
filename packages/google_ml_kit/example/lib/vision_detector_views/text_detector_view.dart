@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:food_audit/vision_detector_views/painters/text_detector_painter.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../helpers/challenges_helpers.dart';
+import '../helpers/data_helpers.dart';
 import '../models/aditives_model.dart';
 import '../models/settings_model.dart';
 import 'camera_view.dart';
+import 'painters/text_detector_painter.dart';
 
 class TextRecognizerView extends StatefulWidget {
   @override
@@ -30,6 +33,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   bool foundLastComposition = false;
   final AditivesModel _aditivesModel = AditivesModel.instance;
   late bool _detailOpened;
+  bool? _scannedToday;
 
   final _panelController = PanelController();
 
@@ -48,6 +52,13 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
         duration: const Duration(milliseconds: 750), vsync: this);
     _foundAnimation = AnimationController(
         duration: const Duration(milliseconds: 750), vsync: this);
+    if (_scannedToday == null) {
+      getChallengesData(FirebaseAuth.instance.currentUser!).then((value) {
+        setState(() {
+          _scannedToday = value['scan'];
+        });
+      });
+    }
   }
 
   @override
@@ -164,7 +175,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
           if (foundComposition)
             Positioned(
               bottom: 100,
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 60,
                 child: Center(
@@ -195,6 +206,16 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
       for (final block in recognizedText.blocks) {
         final formatedText = block.text.toLowerCase();
         if (formatedText.contains('zloženie')) {
+          if (_scannedToday != null && _scannedToday == false) {
+            await updateScanChallenge();
+            setState(() {
+              _scannedToday = true;
+            });
+          }
+          if (settings.challenges['firstScan'] == false) {
+            settings.challenges['firstScan'] = true;
+            settings.saveToFirebase();
+          }
           _animation.reverse();
           foundComp = true;
 
@@ -269,7 +290,9 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   }
 
   Widget _buildPanel() {
-    final additives = _aditives.map((e) => Additive(e, _aditivesModel.aditivsDescriptions[e]!)).toList();
+    final additives = _aditives
+        .map((e) => Additive(e, _aditivesModel.aditivsDescriptions[e]!))
+        .toList();
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
