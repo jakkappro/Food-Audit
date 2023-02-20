@@ -51,6 +51,7 @@ flutter:
     - assets/icons/
     - assets/splash/
     - assets/allergens/
+    - assets/onboarding/
 
 flutter_native_splash:
   color: "#698C11"

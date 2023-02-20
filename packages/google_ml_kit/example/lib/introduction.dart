@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
+import 'models/settings_model.dart';
+
 class IntroPage extends StatefulWidget {
   const IntroPage({Key? key}) : super(key: key);
 
@@ -13,20 +15,15 @@ class _IntroductionPageState extends State<IntroPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
   void _onIntroEnd(context) {
+    SettingsModel.instance.firstTime = false;
+    SettingsModel.instance.saveToFirebase();
     Navigator.of(context).pushReplacementNamed('/home');
   }
 
   Widget _buildImage(String assetName, [double width = 350]) {
-    return Image.asset('assets/$assetName', width: width);
-  }
-
-  Widget _buildFullscreenImage() {
     return Image.asset(
-      'assets/fullscreen.jpg',
-      fit: BoxFit.cover,
-      height: double.infinity,
-      width: double.infinity,
-      alignment: Alignment.center,
+      'assets/$assetName',
+      width: width,
     );
   }
 
@@ -91,93 +88,70 @@ class _IntroductionPageState extends State<IntroPage> {
           ),
           pages: [
             PageViewModel(
-              title: "Fractional shares",
-              body:
-                  "Instead of having to buy an entire share, invest any amount you want.",
-              //image: _buildImage('img1.jpg'),
-              decoration: pageDecoration,
-            ),
-            PageViewModel(
-              title: "Learn as you go",
-              body:
-                  "Download the Stockpile app and master the market with our mini-lesson.",
-              //image: _buildImage('img2.jpg'),
-              decoration: pageDecoration,
-            ),
-            PageViewModel(
-              title: "Kids and teens",
-              body:
-                  "Kids and teens can track their stocks 24/7 and place trades that you approve.",
-              //image: _buildImage('img3.jpg'),
-              decoration: pageDecoration,
-            ),
-            PageViewModel(
-              title: "Full Screen Page",
-              body:
-                  "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
-              //image: _buildFullscreenImage(),
+              title: 'Stravuj sa zdravo',
+              body: 'Vylepši svoj jedálniček a zbav sa nebezpečných "Éčok"',
+              image: _buildImage('onboarding/healthy_eating.jpg'),
               decoration: pageDecoration.copyWith(
-                  contentMargin: const EdgeInsets.symmetric(horizontal: 16),
-                  fullScreen: true,
-                  bodyFlex: 2,
-                  imageFlex: 3,
-                  safeArea: 100),
-            ),
-            PageViewModel(
-              title: "Another title page",
-              body: "Another beautiful body text for this example onboarding",
-              //image: _buildImage('img2.jpg'),
-              footer: ElevatedButton(
-                onPressed: () {
-                  introKey.currentState?.animateScroll(0);
-                },
-                child: const Text(
-                  'FooButton',
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
+                fullScreen: false,
+                safeArea: 0,
+                imageAlignment: Alignment.center,
+                imagePadding: EdgeInsets.only(top: 155),
+                bodyAlignment: Alignment.bottomCenter,
+                descriptionPadding: EdgeInsets.only(bottom: 140),
               ),
-              decoration: pageDecoration.copyWith(
-                  bodyFlex: 6, imageFlex: 6, safeArea: 80),
             ),
             PageViewModel(
-              title: "Title of last page - reversed",
-              bodyWidget: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text("Click on ", style: bodyStyle),
-                  Icon(Icons.edit),
-                  Text(" to edit a post", style: bodyStyle),
-                ],
-              ),
+              title: 'Si alergický?',
+              body:
+                  'Nastav si na aké látky si alergický a už nikdy nebudeš musieť hľadať či môžeš zjesť niečo čo si si vybral',
+              image: _buildImage('onboarding/settings.jpg'),
               decoration: pageDecoration.copyWith(
+                  safeArea: 100,
+                  bodyFlex: 1,
+                  imageFlex: 2,
+                  fullScreen: false,
+                  imagePadding: EdgeInsets.only(top: 120)),
+            ),
+            PageViewModel(
+              title: 'Novinky vo fitness a zdraví',
+              body: 'Každý deň máme nachystané nové články o zdraví a fitness',
+              image: _buildImage('onboarding/news.jpg'),
+              decoration: pageDecoration.copyWith(
+                safeArea: 20,
+                imagePadding: EdgeInsets.only(top: 120),
+                fullScreen: false,
+              ),
+            ),
+            PageViewModel(
+              title: 'Zbieraj body a získať odmeny',
+              body:
+                  'Zbieraj body za používanie aplikácie, predbiehaj sa s ostatnými a získaj odmeny',
+              image: _buildImage('onboarding/challenges.jpg'),
+              decoration: pageDecoration.copyWith(
+                contentMargin: const EdgeInsets.symmetric(horizontal: 16),
+                fullScreen: false,
                 bodyFlex: 2,
                 imageFlex: 4,
-                bodyAlignment: Alignment.bottomCenter,
-                imageAlignment: Alignment.topCenter,
+                safeArea: 10,
               ),
-              //image: _buildImage('img1.jpg'),
-              reverse: true,
             ),
           ],
           onDone: () => _onIntroEnd(context),
-          //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
+          onSkip: () =>
+              _onIntroEnd(context), // You can override onSkip callback
           //showSkipButton: true,
           skipOrBackFlex: 0,
           nextFlex: 0,
-          //showBackButton: true,
+          showBackButton: true,
           //rtl: true, // Display as right-to-left
-          back: const Icon(Icons.arrow_back),
-          skip:
-              const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
-          next: const Icon(Icons.arrow_forward),
-          done:
-              const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+          back: const Icon(Icons.arrow_back, color: Colors.white),
+          skip: const Text('Skip',
+              style:
+                  TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+          next: const Icon(Icons.arrow_forward, color: Colors.white),
+          done: const Text('Done',
+              style:
+                  TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
           curve: Curves.fastLinearToSlowEaseIn,
           controlsMargin: const EdgeInsets.all(16),
           controlsPadding: kIsWeb
