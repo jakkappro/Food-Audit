@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:html/parser.dart' show parse;
+import 'package:http/http.dart' as http;
 
 class AditivesModel {
   static AditivesModel? _currentInstance;
 
   Map<String, Map<String, dynamic>> aditivs = {};
-  Map<String, String> aditivsDescriptions = {};
 
   static AditivesModel get instance {
     _currentInstance ??= AditivesModel._internal();
@@ -14,20 +15,17 @@ class AditivesModel {
   AditivesModel._internal();
 
   Future<void> loadFromFirebase() async {
-    _getAllAditivesFromFirebase();
-    // get all aditivs descriptions
-    
+    await _getAllAditivesFromFirebase();
   }
 
-  void _getAllAditivesFromFirebase() {
-    FirebaseFirestore.instance
+  Future<void> _getAllAditivesFromFirebase() async {
+    final data = await FirebaseFirestore.instance
         .collection('aditivs')
         .doc('zUmqnGq9nfX5T8M2uupy')
-        .get()
-        .then((value) {
-      aditivs = value
-          .data()!
-          .map((key, value) => MapEntry(key, value as Map<String, dynamic>));
-    });
+        .get();
+
+    aditivs = data
+        .data()!
+        .map((key, value) => MapEntry(key, value as Map<String, dynamic>));
   }
 }

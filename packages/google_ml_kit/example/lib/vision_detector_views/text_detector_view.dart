@@ -291,7 +291,9 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
 
   Widget _buildPanel() {
     final additives = _aditives
-        .map((e) => Additive(e, _aditivesModel.aditivsDescriptions[e]!))
+        .map(
+          (e) => Additive(e, AditivesModel.instance.aditivs[e]!['description']),
+        ) //_aditivesModel.aditivsDescriptions[e]!
         .toList();
     return Container(
       decoration: const BoxDecoration(
@@ -306,13 +308,13 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
       child: SingleChildScrollView(
         child: SizedBox(
           width: double.infinity,
-          height: (_aditives.length * 60) + 200,
+          height: (_aditives.length * 60) + 200 + (_alergicOn.length * 10),
           child: Column(
             children: [
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
-                height: 150,
+                height: 50 + _alergicOn.length * 10,
                 child: Text(
                   _alergicOn.isNotEmpty
                       ? 'Našli sme: "${_alergicOn.join(', ')}" v tomto produkte.'
@@ -325,7 +327,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               if (_aditives.isNotEmpty)
                 Text(
                   'Našli sme: ${_aditives.join(', ')} aditíva v tomto produkte.',
@@ -335,18 +337,23 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
                     color: Colors.black,
                   ),
                 ),
-              SizedBox(
-                width: double.infinity,
-                height: _aditives.length * 60,
-                child: ListView(
-                  children: <Widget>[
-                    for (final additive in additives)
-                      AdditiveItem(
-                        additive: additive,
-                      ),
-                  ],
+              if (_aditives.isNotEmpty)
+                SizedBox(
+                  width: double.infinity,
+                  height: _aditives.length * 90,
+                  child: ListView(
+                    children: <Widget>[
+                      for (final additive in additives)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 100,
+                          child: AdditiveItem(
+                            additive: additive,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),
@@ -420,30 +427,52 @@ class _AdditiveItemState extends State<AdditiveItem> {
           isExpanded = !isExpanded;
         });
       },
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              widget.additive.name,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          if (isExpanded)
-            Container(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: Text(
-                widget.additive.description,
-                style: const TextStyle(
-                  fontSize: 14,
+      child: SizedBox(
+        width: double.infinity,
+        height: 60 + (isExpanded ? 50 : 0),
+        child: Column(
+          children: [
+            if (isExpanded)
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    widget.additive.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          const Divider(),
-        ],
+            if (!isExpanded)
+              Container(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 16, bottom: 5),
+                child: Text(
+                  widget.additive.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            if (isExpanded)
+              Container(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                child: Text(
+                  widget.additive.description,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            const Divider(),
+          ],
+        ),
       ),
     );
   }

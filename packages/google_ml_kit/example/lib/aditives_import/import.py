@@ -9,7 +9,7 @@ print(os.getcwd())
 
 
 # Setup Firebase app
-cred = credentials.Certificate(".\\google_ml_kit\\example\\lib\\aditives_import\\food-audit-ab3b3-firebase-adminsdk-sqowh-a2633b8f3c.json")
+cred = credentials.Certificate(".\\lib\\aditives_import\\food-audit-ab3b3-firebase-adminsdk-sqowh-a2633b8f3c.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://food-audit-ab3b3.firebaseio.com/'
 })
@@ -25,17 +25,23 @@ scores = soup.find_all("td", class_="additives-table__score")
 doc_ref = firestore_client.collection("aditivs").document("zUmqnGq9nfX5T8M2uupy")
 for i in range(len(additives)):
     name = codes[i].text.strip()
+    key = additives[i].text.strip()
+    # get description here
+    descriptionUrl = "https://www.ferpotravina.cz/seznam-ecek/" + key
+    res = requests.get(descriptionUrl)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    description = soup.find("div", class_="additive-detail__content").contents[2].text.strip()
     if '(' in name:
         name, other_names = name.split(' (')
         other_names = other_names.strip().rstrip(')').split(', ')
         other_names.append(name)
     else:
         other_names = [name]
-    key = additives[i].text.strip().replace('(', '').replace(')', '')
 
     doc_ref.update({
-        key: {
+        key.replace('(', '').replace(')', ''): {
             'names': other_names,
-            'score': scores[i].text
+            'score': scores[i].text,
+            'description': description
         }
     })

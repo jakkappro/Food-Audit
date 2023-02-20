@@ -270,6 +270,7 @@ class _LoginPageState extends State<LoginPage>
 
     switch (logged) {
       case LoginStatus.success:
+        await loadData();
         Navigator.pushReplacementNamed(context, '/home');
         break;
       case LoginStatus.emailNotVerified:

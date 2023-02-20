@@ -24,7 +24,7 @@ class _PerformancePageState extends State<PerformancePage> {
   void initState() {
     super.initState();
     _imageQuality = ImageQuality.values.firstWhere(
-        (e) => e.toString() == settings.imageProcessingQuality,
+        (e) => e.toString().split('.').last == settings.imageProcessingQuality,
         orElse: () => ImageQuality.low);
   }
 
@@ -201,6 +201,7 @@ class _PerformancePageState extends State<PerformancePage> {
   }
 
   Future<void> _changeImageQuality(String value) async {
+    
     settings.imageProcessingQuality = value.split('.').last;
     await settings.saveToFirebase();
   }
