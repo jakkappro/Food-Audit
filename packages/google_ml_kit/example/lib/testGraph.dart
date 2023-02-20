@@ -125,7 +125,7 @@ BarChartGroupData _buildGroupData(int x, double y) {
       BarChartRodData(
         width: 25,
         borderRadius: BorderRadius.zero,
-        toY: y,
+        toY: y / 3,
         color: currentDay
             ? const Color.fromRGBO(125, 160, 119, 1)
             : const Color.fromRGBO(242, 242, 242, 1),

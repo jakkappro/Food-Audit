@@ -301,15 +301,18 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
           topRight: Radius.circular(24.0),
         ),
       ),
+      width: 300,
+      height: 300,
       child: SingleChildScrollView(
         child: SizedBox(
           width: double.infinity,
-          height: _aditives.length * 60 + 100,
+          height: (_aditives.length * 60) + 200,
           child: Column(
             children: [
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
+                height: 150,
                 child: Text(
                   _alergicOn.isNotEmpty
                       ? 'Našli sme: "${_alergicOn.join(', ')}" v tomto produkte.'
@@ -332,13 +335,17 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
                     color: Colors.black,
                   ),
                 ),
-              ListView(
-                children: <Widget>[
-                  for (final additive in additives)
-                    AdditiveItem(
-                      additive: additive,
-                    ),
-                ],
+              SizedBox(
+                width: double.infinity,
+                height: _aditives.length * 60,
+                child: ListView(
+                  children: <Widget>[
+                    for (final additive in additives)
+                      AdditiveItem(
+                        additive: additive,
+                      ),
+                  ],
+                ),
               ),
             ],
           ),
