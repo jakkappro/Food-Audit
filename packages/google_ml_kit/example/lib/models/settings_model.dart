@@ -15,6 +15,7 @@ class SettingsModel {
   bool isMale = true;
   bool firstTime = true;
   List<String>? allergicOn = [];
+  String selectedList = 'default';
   Map<String, bool> challenges = {
     'allergens': false,
     'firstScan': false,
@@ -56,6 +57,7 @@ class SettingsModel {
       'IsMale': isMale,
       'FirstTime': false,
       'Challenges': challenges,
+      'SelectedList': selectedList,
     });
   }
 
@@ -77,6 +79,7 @@ class SettingsModel {
       imageProcessingQuality = doc['ImageQuality'];
       firstTime = doc['FirstTime'];
       challenges = Map<String, bool>.from(doc['Challenges']);
+      selectedList = doc['SelectedList'];
       remapAllergicOn();
     }
   }

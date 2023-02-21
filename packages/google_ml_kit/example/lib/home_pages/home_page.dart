@@ -9,6 +9,7 @@ import '../models/settings_model.dart';
 import '../models/webscraping_model.dart';
 import '../testGraph.dart';
 import '../widgets/challenges_widgets/challenges_widget.dart';
+import 'jedalnicekCustomization.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -337,7 +338,7 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       color: Colors.transparent,
                       width: double.infinity,
-                      height: 290,
+                      height: 300,
                       child: DefaultTabController(
                         length: 3,
                         child: Scaffold(
@@ -369,7 +370,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 15.0, top: 10),
+                                      left: 15.0, top: 10, bottom: 5),
                                   child: ListView.builder(
                                     itemCount: 3,
                                     itemBuilder: (context, index) {
@@ -610,6 +611,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  const Jedalnicek(),
+                  SizedBox(
+                    height: 20,
                   ),
                 ],
               ),
