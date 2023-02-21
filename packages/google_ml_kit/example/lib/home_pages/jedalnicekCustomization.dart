@@ -88,7 +88,7 @@ class Jedalnicek extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           // search bar for new list
@@ -149,10 +149,10 @@ class Jedalnicek extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Zoznam 1',
                       textAlign: TextAlign.start,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -178,10 +178,10 @@ class Jedalnicek extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Zoznam 2',
                       textAlign: TextAlign.start,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -207,10 +207,10 @@ class Jedalnicek extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Zoznam 3',
                       textAlign: TextAlign.start,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -237,10 +237,10 @@ class Jedalnicek extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Vytvoriť nový zoznam',
                       textAlign: TextAlign.start,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -267,4 +267,6 @@ class Jedalnicek extends StatelessWidget {
       ),
     );
   }
+
+   
 }
