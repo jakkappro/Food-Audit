@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../home_pages/jedalnicek-creation.dart';
 import '../models/aditives_model.dart';
+import '../models/jedalnicek_model.dart';
 import '../models/settings_model.dart';
 
 Future<Map<String, bool>> getChallengesData(User user) async {
@@ -61,6 +63,7 @@ Future<void> loadData() async {
   SettingsModel.isAnonymous = false;
   await getChallengesData(FirebaseAuth.instance.currentUser!);
   await AditivesModel.instance.loadFromFirebase();
+  await JedalnicekModel.instance.loadFromFirebase();
 }
 
 Future<void> loadDataAnonymously() async {

@@ -5,11 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../models/jedalnicek_model.dart';
 import '../models/settings_model.dart';
 import '../models/webscraping_model.dart';
 import '../testGraph.dart';
 import '../widgets/challenges_widgets/challenges_widget.dart';
-import 'jedalnicekCustomization.dart';
+import 'jedalnicek-creation.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -27,13 +28,16 @@ class _HomePageState extends State<HomePage> {
   late bool _isBlogFinished;
   late bool _isScanFinished;
   bool challengesVisible = false;
+  bool challengesVisibleJedlo = false;
   List<int> values = [0, 0, 0, 0, 0, 0, 0];
+  List<String> filteredJedalnicky = [];
 
   @override
   void initState() {
     _isBlogFinished = false;
     _isLoginFinished = false;
     _isScanFinished = false;
+    filteredJedalnicky.addAll(JedalnicekModel.instance.all);
     if (!SettingsModel.isAnonymous) {
       Future.delayed(const Duration(milliseconds: 500), _getChallengesData);
     }
@@ -612,11 +616,324 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  const Jedalnicek(),
-                  SizedBox(
+                  Container(
+                    height: 400,
+                    width: width * 0.82,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 3,
+                          blurRadius: 7,
+                          offset: const Offset(5, 5),
+                        )
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text(
+                                    'Povolené a zakázané éčka',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 21,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            // buttons for customizing or deleting current list
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15, right: 15),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Aktuálny zoznam: ${SettingsModel.instance.selectedList == 'default' ? 'Predvolený' : SettingsModel.instance.selectedList.length > 10 ? '${SettingsModel.instance.selectedList.substring(0, 10)}...' : SettingsModel.instance.selectedList}',
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        if (SettingsModel
+                                                .instance.selectedList !=
+                                            'default') {
+                                          settings.selectedList = 'defaul';
+                                          settings.saveToFirebase();
+                                          setState(() {});
+                                        }
+                                      },
+                                      icon: const Icon(Icons.delete),
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            // search bar for new list
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15, right: 15),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: TextField(
+                                        onChanged: (value) {
+                                          setState(() {
+                                            updateFilteredAditives(value);
+                                          });
+                                        },
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                        ),
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Zadajte názov zoznamu',
+                                          hintStyle: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12,
+                                          ),
+                                          contentPadding: EdgeInsets.only(
+                                              left: 15, top: 15),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Icon(
+                                      Icons.search,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            // show 3 lists names in column and button for assigning them
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15, right: 15),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        filteredJedalnicky.isNotEmpty
+                                            ? filteredJedalnicky[0]
+                                            : 'Predvolený',
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            settings.selectedList =
+                                                filteredJedalnicky[0];
+                                            settings.saveToFirebase();
+                                            setState(() {});
+                                          },
+                                          icon: Icon(Icons.add),
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        filteredJedalnicky.length >= 2
+                                            ? filteredJedalnicky[1]
+                                            : 'Predvolený',
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            settings.selectedList =
+                                                filteredJedalnicky[1];
+                                            settings.saveToFirebase();
+                                            setState(() {});
+                                          },
+                                          icon: Icon(Icons.add),
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        filteredJedalnicky.length >= 3
+                                            ? filteredJedalnicky[2]
+                                            : 'Predvolený',
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            settings.selectedList =
+                                                filteredJedalnicky[2];
+                                            settings.saveToFirebase();
+                                            setState(() {});
+                                          },
+                                          icon: Icon(Icons.add),
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  // button for creating new list with some text
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        'Vytvoriť nový zoznam',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () => setState(() =>
+                                              challengesVisibleJedlo = true),
+                                          icon: const Icon(Icons.add),
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
                     height: 20,
                   ),
                 ],
@@ -650,6 +967,34 @@ class _HomePageState extends State<HomePage> {
                       blogFinished: _isBlogFinished,
                       scanFinished: _isScanFinished,
                     ),
+                  ),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: challengesVisibleJedlo,
+              child: GestureDetector(
+                onTap: () => setState(() => challengesVisibleJedlo = false),
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
+            Visibility(
+              visible: challengesVisibleJedlo,
+              child: Center(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    width: 300,
+                    height: 500,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Center(child: JedalnicekCreation()),
                   ),
                 ),
               ),
@@ -772,5 +1117,14 @@ class _HomePageState extends State<HomePage> {
       _isScanFinished = isScanFinished;
       _isLoginFinished = true;
     });
+  }
+
+  void updateFilteredAditives(String hasToContain) {
+    filteredJedalnicky.clear();
+    for (var i = 0; i < JedalnicekModel.instance.all.length; i++) {
+      if (JedalnicekModel.instance.all[i].contains(hasToContain)) {
+        filteredJedalnicky.add(JedalnicekModel.instance.all[i]);
+      }
+    }
   }
 }

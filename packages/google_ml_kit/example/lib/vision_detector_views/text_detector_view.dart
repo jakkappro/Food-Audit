@@ -11,6 +11,8 @@ import 'camera_view.dart';
 import 'painters/text_detector_painter.dart';
 
 class TextRecognizerView extends StatefulWidget {
+  const TextRecognizerView({Key? key}) : super(key: key);
+
   @override
   State<TextRecognizerView> createState() => _TextRecognizerViewState();
 }
@@ -112,7 +114,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
                   width: 200,
                   height: 60,
                   child: const Text(
-                    "Move you'r camera to the product",
+                    'Namier kameru na zloženie',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -138,8 +140,8 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
                   height: 60,
                   child: Text(
                     _alergicOn.isNotEmpty
-                        ? 'You are going to die'
-                        : 'You are safe',
+                        ? 'Ste alergický na: ${_alergicOn.join(', ')}'
+                        : 'Nie ste alergický na žiadne zložky',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -152,17 +154,17 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
             ),
           if (_aditives.isNotEmpty)
             Positioned(
-              top: 0,
-              left: 0,
+              top: 10,
+              left: 15,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery.of(context).size.width * 0.9,
                 height: 60,
                 child: Text(
-                  'Aditives: ${_aditives.join(', ')}',
+                  'Aditíva: ${_aditives.join(', ')}',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -257,7 +259,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
       _customPaint = null;
     }
 
-    await Future.delayed(const Duration(milliseconds: 20));
+    await Future.delayed(const Duration(milliseconds: 30));
 
     _isBusy = false;
 
@@ -340,13 +342,13 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
               if (_aditives.isNotEmpty)
                 SizedBox(
                   width: double.infinity,
-                  height: _aditives.length * 90,
+                  height: _aditives.length * 80,
                   child: ListView(
                     children: <Widget>[
                       for (final additive in additives)
                         SizedBox(
                           width: double.infinity,
-                          height: 100,
+                          height: 140,
                           child: AdditiveItem(
                             additive: additive,
                           ),
@@ -429,7 +431,7 @@ class _AdditiveItemState extends State<AdditiveItem> {
       },
       child: SizedBox(
         width: double.infinity,
-        height: 60 + (isExpanded ? 50 : 0),
+        height: 60 + (isExpanded ? 80 : 0),
         child: Column(
           children: [
             if (isExpanded)
@@ -463,7 +465,9 @@ class _AdditiveItemState extends State<AdditiveItem> {
               Container(
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
                 child: Text(
-                  widget.additive.description,
+                  widget.additive.description.length > 120
+                      ? '${widget.additive.description.substring(0, 120)}...'
+                      : widget.additive.description,
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.black,
