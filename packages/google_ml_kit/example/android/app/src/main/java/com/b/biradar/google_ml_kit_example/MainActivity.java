@@ -1,4 +1,4 @@
-package com.google_mlkit_example;
+package com.kubinodev;
 
 import io.flutter.embedding.android.FlutterActivity;
 

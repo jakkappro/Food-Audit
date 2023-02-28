@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google_mlkit_example">
+    package="com.kubinodev">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -7,7 +7,7 @@
 
     <application
         android:name="${applicationName}"
-        android:label="ML Kit in Flutter">
+        android:label="Food audit">
         <activity
             android:name=".MainActivity"
             android:exported="true"

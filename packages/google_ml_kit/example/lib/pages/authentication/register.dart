@@ -1,42 +1,23 @@
 import 'package:flutter/material.dart';
 
-import 'services/authentication_service.dart';
-import 'ui_utilities/input_fields_widgets.dart';
+import '../../services/authentication_service.dart';
+import '../../widgets/authentication/input_field.dart';
+import '../../widgets/shared/button.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage>
-    with SingleTickerProviderStateMixin {
+class _RegisterPageState extends State<RegisterPage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  late AnimationController animationController;
-  late Tween<double> shakeTween;
-
-  bool allConditionsMet = false;
-  bool shouldShake = false;
-  bool shouldShakeEmail = false;
-  bool shouldShakePassword = false;
-
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 150),
-    );
-    animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        animationController.reset();
-      }
-    });
-
-    shakeTween = Tween<double>(begin: 0, end: 25);
   }
 
   @override
@@ -45,7 +26,6 @@ class _RegisterPageState extends State<RegisterPage>
     _lastNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    animationController.dispose();
     super.dispose();
   }
 
@@ -92,23 +72,35 @@ class _RegisterPageState extends State<RegisterPage>
                   const SizedBox(
                     height: 40,
                   ),
-                  createInputField('First Name', false, _firstNameController,
-                      shouldShake, animationController, shakeTween),
+                  InputField(
+                    hintText: 'First Name',
+                    isPassword: false,
+                    controller: _firstNameController,
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
-                  createInputField('Last Name', false, _lastNameController,
-                      shouldShake, animationController, shakeTween),
+                  InputField(
+                    hintText: 'Last Name',
+                    isPassword: false,
+                    controller: _lastNameController,
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
-                  createInputField('Email', false, _emailController,
-                      shouldShakeEmail, animationController, shakeTween),
+                  InputField(
+                    hintText: 'Email',
+                    isPassword: false,
+                    controller: _emailController,
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
-                  createInputField('Password', true, _passwordController,
-                      shouldShakePassword, animationController, shakeTween),
+                  InputField(
+                    hintText: 'Password',
+                    isPassword: true,
+                    controller: _passwordController,
+                  ),
                 ],
               ),
               const SizedBox(
@@ -116,8 +108,16 @@ class _RegisterPageState extends State<RegisterPage>
               ),
               Column(
                 children: [
-                  buildButton('Register', Colors.white, Colors.black,
-                      double.infinity, 55, 16, FontWeight.bold, _register),
+                  Button(
+                    'Register',
+                    Colors.white,
+                    Colors.black,
+                    double.infinity,
+                    55,
+                    16,
+                    FontWeight.bold,
+                    _register,
+                  ),
                   SizedBox(
                     height: 15,
                     width: width,
@@ -161,15 +161,11 @@ class _RegisterPageState extends State<RegisterPage>
     }
 
     if (shouldEmailShake || shouldPasswordShake || shouldShake) {
-      setState(() {
-        shouldShakeEmail = shouldEmailShake;
-        shouldShakePassword = shouldPasswordShake;
-        shouldShake = shouldShake;
-      });
+      setState(() {});
       return;
     }
     if (result == RegisterStatus.success) {
-      Navigator.pushReplacementNamed(context, '/verify-email');
+      await Navigator.pushReplacementNamed(context, '/verify-email');
     }
   }
 }

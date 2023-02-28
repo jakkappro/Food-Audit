@@ -2,47 +2,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'helpers/data_helpers.dart';
-import 'services/authentication_service.dart';
-import 'ui_utilities/input_fields_widgets.dart';
+import '../../helpers/data_helpers.dart';
+import '../../services/authentication_service.dart';
+import '../../widgets/authentication/forget_password_slidingup.dart';
+import '../../widgets/authentication/input_field.dart';
+import '../../widgets/shared/button.dart';
 
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>
-    with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  late AnimationController animationController;
-  late Tween<double> shakeTween;
   final _panelController = PanelController();
-  final _forgotPasswordController = TextEditingController();
-  final _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 150),
-    );
-    animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        animationController.reset();
-      }
-    });
-    shakeTween = Tween<double>(begin: 0, end: 25);
   }
-
-  bool shouldShake = false;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    animationController.dispose();
     super.dispose();
   }
 
@@ -62,18 +46,24 @@ class _LoginPageState extends State<LoginPage>
           topLeft: Radius.circular(40),
           topRight: Radius.circular(40),
         ),
-        panel: _buildPanel(),
+        panel: ForgetPasswordSlidingUp(
+          panelController: _panelController,
+        ),
         body: SingleChildScrollView(
           child: Container(
             width: width,
-            height: 900,
+            height: height > 900 ? height : 900,
             padding: EdgeInsets.only(
-                left: 20, right: 20, bottom: height * 0.09, top: height * 0.01),
+              left: 20,
+              right: 20,
+              bottom: height * 0.09,
+              top: height * 0.01,
+            ),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Color.fromRGBO(40, 48, 70, 1),
-                  Color.fromRGBO(60, 78, 104, 1)
+                  Color.fromRGBO(60, 78, 104, 1),
                 ],
                 begin: Alignment.bottomRight,
                 end: Alignment.topLeft,
@@ -97,18 +87,19 @@ class _LoginPageState extends State<LoginPage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    createInputField(
-                        'johndoe@gmail.com',
-                        false,
-                        _emailController,
-                        shouldShake,
-                        animationController,
-                        shakeTween),
+                    InputField(
+                      hintText: 'johndoe@gmail.com',
+                      isPassword: false,
+                      controller: _emailController,
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
-                    createInputField('Password', true, _passwordController,
-                        shouldShake, animationController, shakeTween),
+                    InputField(
+                      hintText: 'Password',
+                      isPassword: true,
+                      controller: _passwordController,
+                    ),
                     const SizedBox(
                       height: 5,
                     ),
@@ -131,8 +122,16 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 Column(
                   children: [
-                    buildButton('Login', Colors.white, Colors.black,
-                        double.infinity, 60, 15, FontWeight.bold, _logIn),
+                    Button(
+                      'Login',
+                      Colors.white,
+                      Colors.black,
+                      double.infinity,
+                      60,
+                      15,
+                      FontWeight.bold,
+                      _logIn,
+                    ),
                     SizedBox(
                       height: 35,
                       width: width,
@@ -176,92 +175,6 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 
-  Widget _buildPanel() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        const Center(
-          child: Text(
-            "You'r email",
-            style: TextStyle(
-              fontSize: 17,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-          child: Container(
-            width: double.infinity,
-            height: 50,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-                width: 1.5,
-              ),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: TextField(
-                  controller: _forgotPasswordController,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                  ),
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: buildButton(
-            'Send',
-            const Color.fromRGBO(106, 140, 17, 1),
-            const Color.fromRGBO(65, 55, 71, 1),
-            double.infinity,
-            55,
-            15,
-            FontWeight.bold,
-            _forgotPassword,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
-          child: buildButton(
-            'Cancel',
-            Colors.transparent,
-            Colors.black,
-            double.infinity,
-            50,
-            15,
-            FontWeight.bold,
-            _panelController.close,
-            borderColor: Colors.grey,
-          ),
-        )
-      ],
-    );
-  }
-
-  Future<void> _forgotPassword() async {
-    final email = _forgotPasswordController.text.trim();
-
-    try {
-      await _auth.sendPasswordResetEmail(email: email);
-      _panelController.close();
-      // ignore: empty_catches
-    } catch (e) {}
-  }
-
   Future<void> _logIn() async {
     final email = _emailController.text;
     final password = _passwordController.text;
@@ -271,22 +184,20 @@ class _LoginPageState extends State<LoginPage>
     switch (logged) {
       case LoginStatus.success:
         await loadData();
-        Navigator.pushReplacementNamed(context, '/home');
+        await Navigator.pushReplacementNamed(context, '/home');
         break;
       case LoginStatus.emailNotVerified:
-        Navigator.pushReplacementNamed(context, '/verify-email');
+        await Navigator.pushReplacementNamed(context, '/verify-email');
         break;
       case LoginStatus.failed:
-        triggerAnimationOnLoginFail();
+        _resetOnFail();
         break;
     }
   }
 
-  void triggerAnimationOnLoginFail() {
+  void _resetOnFail() {
     _emailController.clear();
     _passwordController.clear();
-    shouldShake = true;
     setState(() {});
-    animationController.forward();
   }
 }

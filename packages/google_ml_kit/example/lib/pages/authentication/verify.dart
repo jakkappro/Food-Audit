@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'helpers/data_helpers.dart';
-import 'main.dart';
+import '../../helpers/data_helpers.dart';
 
 final auth = FirebaseAuth.instance;
 
@@ -24,6 +23,12 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) async {
       await _checkVerificationEmail();
     });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   Future<void> _checkVerificationEmail() async {
@@ -47,12 +52,6 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     if (user != null && !user.emailVerified) {
       await user.sendEmailVerification();
     }
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
   }
 
   @override

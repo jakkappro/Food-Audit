@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../helpers/challenges_helpers.dart';
-import '../helpers/data_helpers.dart';
-import '../models/aditives_model.dart';
-import '../models/settings_model.dart';
+import '../../helpers/challenges_helpers.dart';
+import '../../helpers/data_helpers.dart';
+import '../../models/aditives_model.dart';
+import '../../models/settings_model.dart';
 import 'camera_view.dart';
 import 'painters/text_detector_painter.dart';
 
@@ -25,7 +25,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   bool _isBusy = false;
   CustomPaint? _customPaint;
   String? _text;
-  SettingsModel settings = SettingsModel.instance;
+  final settings = SettingsModel.instance;
   bool foundComposition = false;
   late AnimationController _animation;
   late AnimationController _foundAnimation;

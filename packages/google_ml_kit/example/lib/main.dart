@@ -1,31 +1,32 @@
 import 'package:camera/camera.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:food_audit/pages/authentication/verify.dart';
 
+import 'firebase_options.dart';
 import 'helpers/data_helpers.dart';
-import 'home.dart';
-
+import 'pages/home/home_navigation.dart';
 import 'home_pages/setting_settings_page.dart';
-import 'introduction.dart';
-import 'login.dart';
 import 'models/settings_model.dart';
 import 'models/webscraping_model.dart';
-import 'register.dart';
+import 'pages/authentication/login.dart';
+import 'pages/authentication/register.dart';
+import 'pages/introduction/introduction.dart';
 import 'settings_pages/performance.dart';
 import 'settings_pages/profile.dart';
 import 'settings_pages/secuirty.dart';
 import 'themes/app_theme.dart';
-import 'verify_email.dart';
 
 List<CameraDescription> cameras = [];
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   cameras = await availableCameras();
   final user = FirebaseAuth.instance.currentUser;
   final userExists = user != null && user.emailVerified;
@@ -45,8 +46,8 @@ Future<void> main() async {
       home: !userExists
           ? LoginPage()
           : SettingsModel.instance.firstTime
-              ? IntroPage()
-              : HomeScreen(),
+              ? const IntroPage()
+              : HomeNavigation(),
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.dark,
@@ -55,7 +56,7 @@ Future<void> main() async {
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/verify-email': (context) => VerifyEmailPage(),
-        '/home': (context) => HomeScreen(),
+        '/home': (context) => HomeNavigation(),
         '/profile': (context) => const ProfilePage(),
         '/security': (context) => SecurityPage(),
         '/performance': (context) => PerformancePage(),

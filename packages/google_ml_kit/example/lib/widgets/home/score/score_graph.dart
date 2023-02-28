@@ -1,8 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class BarChartt extends StatelessWidget {
-  const BarChartt({Key? key, required this.values}) : super(key: key);
+class ScoreGraph extends StatelessWidget {
+  const ScoreGraph({Key? key, required this.values}) : super(key: key);
   final List<int> values;
   @override
   Widget build(BuildContext context) {

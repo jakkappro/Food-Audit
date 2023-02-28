@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../vision_detector_views/text_detector_view.dart';
+import 'text_detector_view.dart';
 
 class CameraPage extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: TextRecognizerView(),
     );
   }

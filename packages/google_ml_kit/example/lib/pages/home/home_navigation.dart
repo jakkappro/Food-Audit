@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'home_pages/camera_page.dart';
-import 'home_pages/home_page.dart';
-import 'home_pages/settings_page.dart';
+import '../camera/camera_page.dart';
+import '../../home_pages/settings_page.dart';
+import 'pages/home.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeNavigation extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeNavigationState createState() => _HomeNavigationState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeNavigationState extends State<HomeNavigation> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   final List<Widget> _children = [
-    HomePage(),
+    Home(),
     CameraPage(),
     SettingsPage(),
   ];
@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
         gradient: LinearGradient(
           colors: [
             Color.fromRGBO(40, 48, 70, 1),
-            Color.fromRGBO(60, 78, 104, 1)
+            Color.fromRGBO(60, 78, 104, 1),
           ],
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
@@ -49,9 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: (index) {
             setState(() {
               _currentPage = index;
-              _pageController.animateToPage(index,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut);
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
             });
           },
           currentIndex: _currentPage,
@@ -59,13 +61,22 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 0,
           selectedItemColor: const Color.fromRGBO(105, 140, 17, 1),
           showSelectedLabels: false,
-          // showUnselectedLabels: false,
           items: <BottomNavigationBarItem>[
-            _buildDestination(Icons.home_outlined, 'Home', Icons.home),
-            _buildDestination(Icons.document_scanner_outlined, 'Camera',
-                Icons.document_scanner),
             _buildDestination(
-                Icons.settings_outlined, 'Settings', Icons.settings)
+              Icons.home_outlined,
+              'Home',
+              Icons.home,
+            ),
+            _buildDestination(
+              Icons.document_scanner_outlined,
+              'Camera',
+              Icons.document_scanner,
+            ),
+            _buildDestination(
+              Icons.settings_outlined,
+              'Settings',
+              Icons.settings,
+            )
           ],
         ),
       ),
