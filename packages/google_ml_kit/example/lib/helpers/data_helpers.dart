@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../home_pages/jedalnicek-creation.dart';
+import '../widgets/home/additives/jedalnicek_creation.dart';
 import '../models/aditives_model.dart';
 import '../models/jedalnicek_model.dart';
 import '../models/settings_model.dart';

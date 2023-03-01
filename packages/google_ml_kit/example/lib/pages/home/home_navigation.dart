@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_audit/pages/home/pages/settings/settings.dart';
 
 import '../camera/camera_page.dart';
-import '../../home_pages/settings_page.dart';
 import 'pages/home.dart';
 
 class HomeNavigation extends StatefulWidget {

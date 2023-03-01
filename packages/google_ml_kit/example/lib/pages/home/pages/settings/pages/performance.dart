@@ -1,25 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../models/settings_model.dart';
-
-enum ImageQuality {
-  low,
-  medium,
-  high,
-}
+import '../../../../../constants/image_quality.dart';
+import '../../../../../models/settings_model.dart';
 
 class PerformancePage extends StatefulWidget {
+  const PerformancePage({Key? key}) : super(key: key);
+
   @override
   _PerformancePageState createState() => _PerformancePageState();
 }
 
 class _PerformancePageState extends State<PerformancePage> {
-  final _auth = FirebaseAuth.instance;
   ImageQuality _imageQuality = ImageQuality.low;
   SettingsModel settings = SettingsModel.instance;
   String selected = 'ImageQuality.low';
+
   @override
   void initState() {
     super.initState();
@@ -136,12 +131,14 @@ class _PerformancePageState extends State<PerformancePage> {
                       dropdownColor: Colors.transparent,
                       elevation: 0,
                       onChanged: (ImageQuality? newValue) {
-                        setState(() {
-                          _changeImageQuality(
-                              newValue.toString().split('.').last);
-                          _imageQuality = newValue!;
-                          selected = newValue.name;
-                        });
+                        setState(
+                          () {
+                            _changeImageQuality(
+                                newValue.toString().split('.').last);
+                            _imageQuality = newValue!;
+                            selected = newValue.name;
+                          },
+                        );
                       },
                       items: ImageQuality.values.map(
                         (ImageQuality option) {
@@ -150,9 +147,10 @@ class _PerformancePageState extends State<PerformancePage> {
                             child: Text(
                               capitalize(option.toString().split('.').last),
                               style: TextStyle(
-                                  color: option.name == selected
-                                      ? Colors.white
-                                      : Colors.white),
+                                color: option.name == selected
+                                    ? Colors.white
+                                    : Colors.white,
+                              ),
                             ),
                           );
                         },
@@ -201,7 +199,6 @@ class _PerformancePageState extends State<PerformancePage> {
   }
 
   Future<void> _changeImageQuality(String value) async {
-    
     settings.imageProcessingQuality = value.split('.').last;
     await settings.saveToFirebase();
   }

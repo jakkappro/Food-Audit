@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../models/aditives_model.dart';
-import '../models/jedalnicek_model.dart';
-import '../models/settings_model.dart';
+import '../../../models/aditives_model.dart';
+import '../../../models/jedalnicek_model.dart';
+import '../../../models/settings_model.dart';
 
 class JedalnicekCreation extends StatefulWidget {
   @override
