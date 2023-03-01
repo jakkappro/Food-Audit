@@ -1,16 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event/event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+Event<Value<String>> challengeEvent = Event<Value<String>>();
 
 Future<void> updateBlogChallenge() async {
   await _updateChallenge('blog');
+  challengeEvent.broadcast(Value('blog'));
 }
 
 Future<void> updateFitnessChallenge() async {
   await _updateChallenge('login');
+  challengeEvent.broadcast(Value('login'));
 }
 
 Future<void> updateScanChallenge() async {
   await _updateChallenge('scan');
+  challengeEvent.broadcast(Value('scan'));
 }
 
 Future<void> _updateChallenge(String toUpdate) async {

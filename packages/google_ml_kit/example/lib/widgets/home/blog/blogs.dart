@@ -88,7 +88,7 @@ class _BlogsState extends State<Blogs> {
                     DecoratedContainer(
                       body: BlogContent(
                         model: WebScrapingModel.receipesInstance,
-                        onTap: updateBlogChallenge,
+                        onTap: () async => await updateBlogChallenge(),
                       ),
                       width: width,
                       height: 350,
@@ -98,7 +98,7 @@ class _BlogsState extends State<Blogs> {
                     DecoratedContainer(
                       body: BlogContent(
                         model: WebScrapingModel.fitnessInstance,
-                        onTap: updateBlogChallenge,
+                        onTap: () async => await updateBlogChallenge(),
                       ),
                       width: width,
                       height: 350,
