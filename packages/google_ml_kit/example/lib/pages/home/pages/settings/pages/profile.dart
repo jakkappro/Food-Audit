@@ -195,7 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _updateGender(String value) async {
-    _selectedGender = value ?? _selectedGender;
+    _selectedGender = value;
     settings.isMale = _selectedGender!.toLowerCase() == 'muž';
     if (!SettingsModel.isAnonymous) {
       settings.saveToFirebase();

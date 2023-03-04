@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../models/connection_model.dart';
 import '../widgets/home/additives/jedalnicek_creation.dart';
 import '../models/aditives_model.dart';
 import '../models/jedalnicek_model.dart';
 import '../models/settings_model.dart';
 
-Future<Map<String, bool>> getChallengesData(User user) async {
+Future<Map<String, bool>> getChallengesDataFromFirebase(User user) async {
   final CollectionReference challengesRef =
       FirebaseFirestore.instance.collection('challenges');
   final String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -59,9 +60,25 @@ void _resetPoints(User user) {
 }
 
 Future<void> loadData() async {
+  if (ConnectionModel.instance.isConnected) {
+    await _loadDataOnline();
+  } else {
+    await _loadDataOffline();
+  }
+}
+
+Future<void> _loadDataOffline() async {
   await SettingsModel.instance.loadFromFirebase();
   SettingsModel.isAnonymous = false;
-  await getChallengesData(FirebaseAuth.instance.currentUser!);
+  await getChallengesDataFromFirebase(FirebaseAuth.instance.currentUser!);
+  await AditivesModel.instance.loadFromFirebase();
+  await JedalnicekModel.instance.loadFromFirebase();
+}
+
+Future<void> _loadDataOnline() async {
+  await SettingsModel.instance.loadFromFirebase();
+  SettingsModel.isAnonymous = false;
+  await getChallengesDataFromFirebase(FirebaseAuth.instance.currentUser!);
   await AditivesModel.instance.loadFromFirebase();
   await JedalnicekModel.instance.loadFromFirebase();
 }

@@ -55,7 +55,8 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
     _foundAnimation = AnimationController(
         duration: const Duration(milliseconds: 750), vsync: this);
     if (_scannedToday == null) {
-      getChallengesData(FirebaseAuth.instance.currentUser!).then((value) {
+      getChallengesDataFromFirebase(FirebaseAuth.instance.currentUser!)
+          .then((value) {
         setState(() {
           _scannedToday = value['scan'];
         });

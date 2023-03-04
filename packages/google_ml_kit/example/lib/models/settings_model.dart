@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../extensions/firestore_extensions.dart';
+
 class SettingsModel {
   static SettingsModel? _currentInstance;
   Map<String, List<String>> allAlergens = {};
@@ -64,10 +66,12 @@ class SettingsModel {
   Future<void> loadFromFirebase() async {
     await _getAllAlergensFromFirebase();
 
-    final doc = await FirebaseFirestore.instance
+    final snap = FirebaseFirestore.instance
         .collection('userSettings')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+        .doc(FirebaseAuth.instance.currentUser!.uid);
+
+    final doc = await snap.getSavy();
+
     if (doc.exists) {
       allergens = List<String>.from(doc['Alergens']);
       height = doc['Height'];
@@ -104,7 +108,7 @@ class SettingsModel {
     final value = await FirebaseFirestore.instance
         .collection('alergens')
         .doc('8gMj50c1wiaDIU0zf1IB')
-        .get();
+        .getSavy();
 
     allAlergens = value
         .data()!

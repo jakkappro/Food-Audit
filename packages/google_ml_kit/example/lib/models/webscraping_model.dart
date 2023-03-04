@@ -39,7 +39,7 @@ class WebScrapingModel {
     }
   }
 
-  late List<String> title;
-  late List<String> url;
-  late List<String> image;
+  List<String> title = [];
+  List<String> url = [];
+  List<String> image = [];
 }

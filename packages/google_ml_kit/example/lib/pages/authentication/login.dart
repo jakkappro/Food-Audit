@@ -7,6 +7,7 @@ import '../../services/authentication_service.dart';
 import '../../widgets/authentication/forget_password_slidingup.dart';
 import '../../widgets/authentication/input_field.dart';
 import '../../widgets/shared/button.dart';
+import 'register.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _panelController = PanelController();
@@ -37,11 +39,11 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: SlidingUpPanel(
+        color: Theme.of(context).colorScheme.surfaceVariant,
         controller: _panelController,
         isDraggable: false,
         minHeight: 0,
-        maxHeight: 250,
-        color: Colors.white,
+        maxHeight: 280,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(40),
           topRight: Radius.circular(40),
@@ -52,22 +54,12 @@ class _LoginPageState extends State<LoginPage> {
         body: SingleChildScrollView(
           child: Container(
             width: width,
-            height: height > 900 ? height : 900,
+            height: height,
             padding: EdgeInsets.only(
               left: 20,
               right: 20,
               bottom: height * 0.09,
               top: height * 0.01,
-            ),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(40, 48, 70, 1),
-                  Color.fromRGBO(60, 78, 104, 1),
-                ],
-                begin: Alignment.bottomRight,
-                end: Alignment.topLeft,
-              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,88 +76,135 @@ class _LoginPageState extends State<LoginPage> {
                     height: 250,
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                // add buttons for login with google
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    InputField(
-                      hintText: 'johndoe@gmail.com',
-                      isPassword: false,
-                      controller: _emailController,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                      ),
+                      onPressed: () => {},
+                      child: const Image(
+                        image: AssetImage('assets/icons/google.png'),
+                        width: 40,
+                        height: 40,
+                      ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      width: 20,
                     ),
-                    InputField(
-                      hintText: 'Password',
-                      isPassword: true,
-                      controller: _passwordController,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Center(
-                      child: TextButton(
-                        onPressed: _panelController.open,
-                        style: TextButton.styleFrom(
-                            padding: const EdgeInsets.all(0)),
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            color: Color.fromRGBO(75, 89, 109, 1),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                      ),
+                      onPressed: () => {},
+                      child: const Image(
+                        image: AssetImage('assets/icons/facebook.png'),
+                        width: 40,
+                        height: 40,
                       ),
                     ),
                   ],
                 ),
-                Column(
-                  children: [
-                    Button(
-                      'Login',
-                      Colors.white,
-                      Colors.black,
-                      double.infinity,
-                      60,
-                      15,
-                      FontWeight.bold,
-                      _logIn,
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter your email',
+                          ),
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter email';
+                            }
+
+                            // regex for email validation
+                            final RegExp emailRegex =
+                                RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
+                            if (!emailRegex.hasMatch(value)) {
+                              return 'Please enter valid email';
+                            }
+
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          obscureText: true,
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter your password',
+                          ),
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please some text';
+                            }
+
+                            final RegExp passwordRegex = RegExp(
+                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                            if (!passwordRegex.hasMatch(value)) {
+                              return 'Please enter valid password';
+                            }
+                            return null;
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 5),
+                          child: TextButton(
+                            onPressed: _panelController.open,
+                            child: Text(
+                              'Forgot Password?',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.tertiary,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          child: TextButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _logIn();
+                              }
+                            },
+                            child: Text(
+                              'Login',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: TextButton(
+                            child: Text(
+                              "Don't have an account?",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => RegisterPage(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 35,
-                      width: width,
-                    ),
-                    TextButton(
-                      onPressed: () => {
-                        Navigator.pushReplacementNamed(context, '/register'),
-                      },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.only(top: 0, bottom: 0),
-                        fixedSize: const Size(320, 40),
-                      ),
-                      child: Text('Create account',
-                          style: Theme.of(context).textTheme.bodyText1),
-                    ),
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        await FirebaseAuth.instance.signInAnonymously();
-                        await loadDataAnonymously();
-                        Navigator.pushReplacementNamed(context, '/home');
-                      },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.only(top: 0, bottom: 0),
-                        fixedSize: const Size(320, 48),
-                      ),
-                      child: Text(
-                        'Continue as guest',
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
-                    ),
-                  ],
+                  ),
                 )
               ],
             ),

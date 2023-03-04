@@ -4,7 +4,6 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../shared/button.dart';
 
-
 class ForgetPasswordSlidingUp extends StatelessWidget {
   ForgetPasswordSlidingUp({Key? key, required this.panelController})
       : super(key: key);
@@ -15,14 +14,14 @@ class ForgetPasswordSlidingUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        const SizedBox(height: 20),
         const Center(
           child: Text(
             "You'r email",
             style: TextStyle(
               fontSize: 17,
-              color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -48,8 +47,10 @@ class ForgetPasswordSlidingUp extends StatelessWidget {
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                   ),
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
@@ -78,7 +79,7 @@ class ForgetPasswordSlidingUp extends StatelessWidget {
             Colors.transparent,
             Colors.black,
             double.infinity,
-            50,
+            55,
             15,
             FontWeight.bold,
             panelController.close,

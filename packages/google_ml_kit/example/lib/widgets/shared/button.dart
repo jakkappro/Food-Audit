@@ -34,19 +34,13 @@ class Button extends StatelessWidget {
         fixedSize: Size(width, height),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(
-            color: borderColor ?? Colors.transparent,
-            width: 1.5,
-          ),
         ),
-        backgroundColor: color,
       ),
       child: Center(
         child: Text(
           label,
           style: TextStyle(
             fontWeight: fontWeight,
-            color: textColor,
             fontSize: fontSize,
           ),
         ),

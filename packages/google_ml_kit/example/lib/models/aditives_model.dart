@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
 
+import '../extensions/firestore_extensions.dart';
+
 class AditivesModel {
   static AditivesModel? _currentInstance;
 
@@ -19,10 +21,11 @@ class AditivesModel {
   }
 
   Future<void> _getAllAditivesFromFirebase() async {
-    final data = await FirebaseFirestore.instance
+    final snap = FirebaseFirestore.instance
         .collection('aditivs')
-        .doc('zUmqnGq9nfX5T8M2uupy')
-        .get();
+        .doc('zUmqnGq9nfX5T8M2uupy');
+
+    final data = await snap.getSavy();
 
     aditivs = data
         .data()!
