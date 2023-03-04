@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NamedDropDown extends StatefulWidget {
-  const NamedDropDown({
+  NamedDropDown({
     Key? key,
     required this.label,
     required this.value,
@@ -10,52 +10,32 @@ class NamedDropDown extends StatefulWidget {
   }) : super(key: key);
 
   final String label;
-  final String value;
-  final Future<void> Function(String value) onChanged;
-  final List<String> items;
-
-  @override
-  _NamedDropDownState createState() => _NamedDropDownState(
-        label,
-        value,
-        onChanged,
-        items,
-      );
-}
-
-class _NamedDropDownState extends State<NamedDropDown> {
-  _NamedDropDownState(
-    this.label,
-    this.value,
-    this.onChanged,
-    this.items,
-  );
-
-  final String label;
   String value;
   final Future<void> Function(String value) onChanged;
   final List<String> items;
 
   @override
+  _NamedDropDownState createState() => _NamedDropDownState();
+}
+
+class _NamedDropDownState extends State<NamedDropDown> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        SizedBox(
           height: 60,
           width: double.infinity,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: Colors.transparent,
-          ),
           child: Row(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 25.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 25.0),
                 child: Text(
                   'Pohlavie: ',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
               ),
@@ -64,25 +44,33 @@ class _NamedDropDownState extends State<NamedDropDown> {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 20.0),
                   child: DropdownButton<String>(
-                    value: value,
-                    dropdownColor: Colors.transparent,
+                    value: widget.value,
+                    isExpanded: true,
                     elevation: 0,
-                    items: items
+                    dropdownColor: Theme.of(context).colorScheme.surfaceVariant,
+                    alignment: Alignment.center,
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    items: widget.items
                         .map((gender) => DropdownMenuItem<String>(
                               value: gender,
                               child: Text(
-                                  gender[0].toUpperCase() +
-                                      gender.substring(1).toLowerCase(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  )),
+                                gender[0].toUpperCase() +
+                                    gender.substring(1).toLowerCase(),
+                              ),
                             ))
                         .toList(),
                     onChanged: (value) {
                       setState(() {
-                        this.value = value!;
+                        widget.value = value!;
                       });
-                      onChanged(value!);
+                      widget.onChanged(value!);
                     },
                   ),
                 ),

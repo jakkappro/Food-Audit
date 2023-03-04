@@ -71,38 +71,28 @@ class _NamedSliderState extends State<NamedSlider> {
                 padding: const EdgeInsets.only(left: 25.0),
                 child: Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               const SizedBox(width: 20),
-              SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  showValueIndicator: ShowValueIndicator.always,
-                  valueIndicatorColor: Colors.white,
-                  valueIndicatorTextStyle: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                child: Slider(
-                  activeColor: Colors.white,
-                  label: value.toString(),
-                  value: value,
-                  min: min,
-                  max: max,
-                  divisions: divisions,
-                  onChanged: ((value) async {
-                    await onChanged(value.ceil().toString());
+              Slider(
+                label: value.toString(),
+                value: value,
+                min: min,
+                max: max,
+                divisions: divisions,
+                onChanged: ((value) async {
+                  await onChanged(value.ceil().toString());
 
-                    setState(() {
-                      event.broadcast(Value(value));
-                      this.value = value;
-                    });
-                  }),
-                ),
+                  setState(() {
+                    event.broadcast(Value(value));
+                    this.value = value;
+                  });
+                }),
               ),
             ],
           ),

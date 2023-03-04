@@ -23,25 +23,10 @@ class BodyDimensions extends StatefulWidget {
 
   @override
   _BodyDimensionsState createState() => _BodyDimensionsState(
-        height,
-        weight,
-        onChangedHeight,
-        onChangedWeight,
-        heightEvent,
-        weightEvent,
       );
 }
 
 class _BodyDimensionsState extends State<BodyDimensions> {
-  _BodyDimensionsState(this.height, this.weight, this.onChangedHeight,
-      this.onChangedWeight, this.heightEvent, this.weightEvent);
-
-  final double height;
-  final double weight;
-  final Future<void> Function(String value) onChangedHeight;
-  final Future<void> Function(String value) onChangedWeight;
-  final Event<Value<double>> heightEvent;
-  final Event<Value<double>> weightEvent;
 
   @override
   Widget build(BuildContext context) {
@@ -49,22 +34,22 @@ class _BodyDimensionsState extends State<BodyDimensions> {
       children: [
         NamedSlider(
           label: 'Vyska',
-          value: height,
-          onChanged: onChangedHeight,
+          value: widget.height,
+          onChanged: widget.onChangedHeight,
           min: 50,
           max: 250,
           divisions: 200,
-          onSliderChanged: heightEvent,
+          onSliderChanged: widget.heightEvent,
         ),
         const SizedBox(height: 20),
         NamedSlider(
           label: 'Vaha',
-          value: weight,
-          onChanged: onChangedWeight,
+          value: widget.weight,
+          onChanged: widget.onChangedWeight,
           min: 30,
           max: 200,
           divisions: 170,
-          onSliderChanged: weightEvent,
+          onSliderChanged: widget.weightEvent,
         ),
       ],
     );

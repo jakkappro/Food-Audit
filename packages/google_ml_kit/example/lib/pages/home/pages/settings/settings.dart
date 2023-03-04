@@ -12,11 +12,11 @@ class SettingsPage extends StatelessWidget {
     return SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: 850,
+          height: 860,
           width: double.infinity,
           child: Column(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 10, left: 10),
                 child: Center(
                   child: Text(
@@ -24,7 +24,7 @@ class SettingsPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -37,10 +37,14 @@ class SettingsPage extends StatelessWidget {
               const SizedBox(height: 10),
               BorderlessButton(
                 label: 'Settings',
+                color: Theme.of(context).colorScheme.secondary,
                 onPressed: () async {
                   await Navigator.of(context).pushNamed('/settings');
                 },
-                icon: const Icon(Icons.settings),
+                icon: Icon(
+                  Icons.settings,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               )
             ],
           ),

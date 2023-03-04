@@ -29,10 +29,10 @@ class NamedTextField extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 25.0),
                 child: Text(
                   label,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.secondary),
                 ),
               ),
               const SizedBox(width: 20),
@@ -40,11 +40,11 @@ class NamedTextField extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 20.0),
                   child: TextField(
-                    onSubmitted: ((value) async =>  await onSubmited(value)),
+                    onSubmitted: ((value) async => await onSubmited(value)),
                     decoration: InputDecoration(
                       hintText: hintText,
-                      hintStyle: const TextStyle(
-                        color: Colors.white,
+                      hintStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

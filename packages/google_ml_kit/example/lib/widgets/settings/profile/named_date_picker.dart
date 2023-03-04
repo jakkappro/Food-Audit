@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NamedDatePicker extends StatefulWidget {
-  const NamedDatePicker({
+  NamedDatePicker({
     Key? key,
     required this.label,
     required this.value,
@@ -11,28 +11,15 @@ class NamedDatePicker extends StatefulWidget {
   }) : super(key: key);
 
   final String label;
-  final DateTime value;
+  DateTime value;
   final Future<void> Function(DateTime value) onChanged;
-  final String text;
+  String text;
 
   @override
-  _NamedDatePickerState createState() =>
-      _NamedDatePickerState(label, value, onChanged, text);
+  _NamedDatePickerState createState() => _NamedDatePickerState();
 }
 
 class _NamedDatePickerState extends State<NamedDatePicker> {
-  _NamedDatePickerState(
-    this.label,
-    this.value,
-    this.onChanged,
-    this.text,
-  );
-
-  String text;
-  final String label;
-  DateTime value;
-  final Future<void> Function(DateTime value) onChanged;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -49,8 +36,9 @@ class _NamedDatePickerState extends State<NamedDatePicker> {
               Padding(
                 padding: const EdgeInsets.only(left: 25.0),
                 child: Text(
-                  label,
-                  style: const TextStyle(
+                  widget.label,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -65,9 +53,8 @@ class _NamedDatePickerState extends State<NamedDatePicker> {
                       TextField(
                         enabled: true,
                         decoration: InputDecoration(
-                          hintText: text,
+                          hintText: widget.text,
                           hintStyle: const TextStyle(
-                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -75,34 +62,18 @@ class _NamedDatePickerState extends State<NamedDatePicker> {
                         onTap: () async {
                           final dateOfBirth = await showDatePicker(
                             context: context,
-                            initialDate: value,
+                            initialDate: widget.value,
                             firstDate: DateTime(1950),
                             lastDate: DateTime.now(),
-                            builder: (context, child) => Theme(
-                              data: ThemeData.light().copyWith(
-                                colorScheme: const ColorScheme.light(
-                                  primary: Colors.white,
-                                  onPrimary: Colors.black,
-                                  surface: Colors.black,
-                                  onSurface: Colors.black,
-                                ),
-                                textButtonTheme: TextButtonThemeData(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor:
-                                        Colors.black, // button text color
-                                  ),
-                                ),
-                                dialogBackgroundColor: Colors.white,
-                              ),
-                              child: child!,
-                            ),
+                            builder: (context, child) => child!,
                           );
                           if (dateOfBirth != null) {
                             setState(() {
-                              value = dateOfBirth;
-                              text = DateFormat('dd.MM.yyyy').format(value);
+                              widget.value = dateOfBirth;
+                              widget.text =
+                                  DateFormat('dd.MM.yyyy').format(widget.value);
                             });
-                            await onChanged(dateOfBirth);
+                            await widget.onChanged(dateOfBirth);
                           }
                         },
                       ),

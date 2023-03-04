@@ -19,7 +19,7 @@ class _BlogsState extends State<Blogs> {
     final width = MediaQuery.of(context).size.width;
     return SizedBox(
       width: width,
-      height: 435,
+      height: 445,
       child: Column(
         children: [
           Row(
@@ -59,7 +59,7 @@ class _BlogsState extends State<Blogs> {
           ),
           SizedBox(
             width: double.infinity,
-            height: 360,
+            height: 370,
             child: DefaultTabController(
               length: 2,
               child: Scaffold(
