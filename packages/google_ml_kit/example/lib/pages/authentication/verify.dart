@@ -61,7 +61,10 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Text('Please verify your email', style: TextStyle(fontSize: 30)),
+            Text(
+              'Please verify your email',
+              style: TextStyle(fontSize: 30),
+            ),
             SizedBox(height: 25),
             Icon(Icons.email_rounded, size: 100),
           ],

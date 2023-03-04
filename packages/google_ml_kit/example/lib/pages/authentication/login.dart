@@ -1,13 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../helpers/data_helpers.dart';
 import '../../services/authentication_service.dart';
 import '../../widgets/authentication/forget_password_slidingup.dart';
-import '../../widgets/authentication/input_field.dart';
-import '../../widgets/shared/button.dart';
+import '../home/home_navigation.dart';
 import 'register.dart';
+import 'verify.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -63,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.max,
               children: [
                 const SizedBox(
@@ -223,12 +222,21 @@ class _LoginPageState extends State<LoginPage> {
     switch (logged) {
       case LoginStatus.success:
         await loadData();
-        await Navigator.pushReplacementNamed(context, '/home');
+        await Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) {
+            return HomeNavigation();
+          },
+        ));
         break;
       case LoginStatus.emailNotVerified:
-        await Navigator.pushReplacementNamed(context, '/verify-email');
+        await Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) {
+            return VerifyEmailPage();
+          },
+        ));
         break;
       case LoginStatus.failed:
+        _formKey.currentState!.reset();
         _resetOnFail();
         break;
     }

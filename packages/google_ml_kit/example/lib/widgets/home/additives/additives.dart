@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import '../decorated_container.dart';
 import 'additives_searchbar.dart';
 
-class Additives extends StatelessWidget {
+class Additives extends StatefulWidget {
   const Additives({Key? key, required this.onTap, required this.width})
       : super(key: key);
 
   final VoidCallback onTap;
   final double width;
 
+  @override
+  State<Additives> createState() => _AdditivesState();
+}
+
+class _AdditivesState extends State<Additives> {
   @override
   Widget build(BuildContext context) {
     return DecoratedContainer(
@@ -21,11 +26,11 @@ class Additives extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       'Povolené a zakázané éčka',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.secondary,
                         fontSize: 21,
                         fontWeight: FontWeight.w800,
                       ),
@@ -49,11 +54,11 @@ class Additives extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'Vytvoriť nový zoznam',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
@@ -66,9 +71,9 @@ class Additives extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: IconButton(
-                            onPressed: onTap,
+                            onPressed: widget.onTap,
                             icon: const Icon(Icons.add),
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.inversePrimary,
                           ),
                         ),
                       ],
@@ -80,8 +85,8 @@ class Additives extends StatelessWidget {
           ),
         ],
       ),
-      width: width,
-      height: 490,
+      width: widget.width,
+      height: 400,
     );
   }
 }

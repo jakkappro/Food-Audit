@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../../widgets/home/additives/jedalnicek_creation.dart';
 import '../../../models/jedalnicek_model.dart';
 import '../../../models/settings_model.dart';
 import '../../../models/webscraping_model.dart';
 import '../../../widgets/challenges_widgets/challenges_widget.dart';
 import '../../../widgets/home/additives/additives.dart';
+import '../../../widgets/home/additives/jedalnicek_creation.dart';
 import '../../../widgets/home/blog/blogs.dart';
 import '../../../widgets/home/daily_challenges/daily_challenges.dart';
 import '../../../widgets/home/decorated_container.dart';
@@ -70,35 +70,22 @@ class _HomeState extends State<Home> {
                         isScanFinished: _isScanFinished,
                       ),
                       width: width,
-                      height: 210,
-                      leftDecoration: Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 3,
-                              blurRadius: 7,
-                            ),
-                          ],
+                      height: 220,
+                      leftDecoration: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                         ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: Colors.transparent,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              challengesVisible = true;
-                            });
-                          },
-                          child: const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.white,
-                            size: 20,
-                          ),
+                        onPressed: () {
+                          setState(() {
+                            challengesVisible = true;
+                          });
+                        },
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20,
                         ),
                       ),
                     ),
@@ -112,34 +99,21 @@ class _HomeState extends State<Home> {
                       ),
                       width: width,
                       height: 300,
-                      leftDecoration: Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(0, 0, 0, 1),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 3,
-                              blurRadius: 7,
-                            ),
-                          ],
+                      leftDecoration: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                         ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: Colors.transparent,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              challengesVisible = true;
-                            });
-                          },
-                          child: const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.white,
-                            size: 20,
-                          ),
+                        onPressed: () {
+                          setState(() {
+                            challengesVisible = true;
+                          });
+                        },
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20,
                         ),
                       ),
                       imageUrl: _getImageUrl(),

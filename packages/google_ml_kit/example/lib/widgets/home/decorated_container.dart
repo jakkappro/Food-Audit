@@ -20,35 +20,23 @@ class DecoratedContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-      child: SizedBox(
-        height: height,
-        width: width,
+    return SizedBox(
+      width: width,
+      height: height,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
         child: Stack(
           children: [
             Positioned(
               top: 15,
+              left: 10,
               child: SizedBox(
-                width: shouldCenter ? width * 0.85 : width * 0.8,
+                width: shouldCenter ? width * 0.80 : width * 0.75,
                 height: height * 0.8,
-                child: Center(
-                  child: Container(
-                    height: height * 0.8,
-                    width: width * 0.8,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 3,
-                            blurRadius: 7,
-                            offset: const Offset(5, 5),
-                          )
-                        ]),
-                    child: body,
-                  ),
+                child: Card(
+                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  elevation: 15,
+                  child: body,
                 ),
               ),
             ),
@@ -56,8 +44,8 @@ class DecoratedContainer extends StatelessWidget {
               Positioned(
                 top: 0,
                 right: 0,
-                height: 50,
-                width: 60,
+                height: 45,
+                width: 50,
                 child: leftDecoration!,
               ),
             if (imageUrl != null)

@@ -19,10 +19,11 @@ class Score extends StatelessWidget {
             children: [
               Text(
                 username ?? 'Anonym',
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 21,
-                    fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.w800,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -42,11 +43,11 @@ class Score extends StatelessWidget {
           padding: const EdgeInsets.only(left: 15),
           child: Row(
             children: [
-              const Text(
+              Text(
                 'Tvoje skóre je ',
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.tertiary,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -54,8 +55,8 @@ class Score extends StatelessWidget {
               Text(
                 '${values.reduce((a, b) => a + b)} bodov.',
                 textAlign: TextAlign.start,
-                style: const TextStyle(
-                  color: Color.fromRGBO(141, 171, 136, 1),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),

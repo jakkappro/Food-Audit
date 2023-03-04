@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:food_audit/pages/authentication/verify.dart';
 
 import '../../services/authentication_service.dart';
-import '../../widgets/authentication/input_field.dart';
-import '../../widgets/shared/button.dart';
+import 'login.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -14,6 +14,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -32,28 +33,21 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.shortestSide;
-    final height = MediaQuery.of(context).size.longestSide + 120;
-
+    final height = MediaQuery.of(context).size.longestSide;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
           width: width,
-          height: 1000,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(40, 48, 70, 1),
-                Color.fromRGBO(60, 78, 104, 1)
-              ],
-              begin: Alignment.bottomRight,
-              end: Alignment.topLeft,
-            ),
-          ),
+          height: height > 861 ? height : 861,
           padding: EdgeInsets.only(
-              left: 20, right: 20, bottom: height * 0.1, top: height * 0.02),
+            left: 20,
+            right: 20,
+            bottom: height * 0.09,
+            top: height * 0.01,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
             children: [
               const SizedBox(
@@ -66,75 +60,111 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 250,
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const SizedBox(
-                    height: 40,
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        controller: _firstNameController,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter your first name',
+                        ),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your first name';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: _lastNameController,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter your last name',
+                        ),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your first name';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter your email',
+                        ),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your first name';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter your password',
+                        ),
+                        obscureText: true,
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your first name';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: TextButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _register();
+                            }
+                          },
+                          child: Text(
+                            'Create Account',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: TextButton(
+                          child: Text(
+                            'Already have an account? Login',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          onPressed: () =>
+                              Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  InputField(
-                    hintText: 'First Name',
-                    isPassword: false,
-                    controller: _firstNameController,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  InputField(
-                    hintText: 'Last Name',
-                    isPassword: false,
-                    controller: _lastNameController,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  InputField(
-                    hintText: 'Email',
-                    isPassword: false,
-                    controller: _emailController,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  InputField(
-                    hintText: 'Password',
-                    isPassword: true,
-                    controller: _passwordController,
-                  ),
-                ],
+                ),
               ),
-              const SizedBox(
-                height: 25,
-              ),
-              Column(
-                children: [
-                  Button(
-                    'Register',
-                    Colors.white,
-                    Colors.black,
-                    double.infinity,
-                    55,
-                    16,
-                    FontWeight.bold,
-                    _register,
-                  ),
-                  SizedBox(
-                    height: 15,
-                    width: width,
-                  ),
-                  TextButton(
-                    onPressed: () => {
-                      Navigator.pushReplacementNamed(context, '/login'),
-                    },
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.only(top: 0, bottom: 0),
-                      fixedSize: const Size(320, 48),
-                    ),
-                    child: Text('Already have an account? Login',
-                        style: Theme.of(context).textTheme.bodyText1),
-                  ),
-                ],
-              )
             ],
           ),
         ),
@@ -165,7 +195,11 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
     if (result == RegisterStatus.success) {
-      await Navigator.pushReplacementNamed(context, '/verify-email');
+      await Navigator.pushReplacement(context, MaterialPageRoute(
+        builder: (context) {
+          return VerifyEmailPage();
+        },
+      ));
     }
   }
 }

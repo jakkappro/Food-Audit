@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../../models/jedalnicek_model.dart';
 import '../../../models/settings_model.dart';
@@ -12,11 +13,32 @@ class AdditivesSearchbar extends StatefulWidget {
 
 class _AdditivesSearchbarState extends State<AdditivesSearchbar> {
   final SettingsModel settings = SettingsModel.instance;
-  List<String> filteredJedalnicky = [];
+  final dropdownController = TextEditingController();
   final jedalnicky = JedalnicekModel.instance;
+  JedalnicekItem? selected;
+
+  @override
+  void initState() {
+    selected = JedalnicekItem(settings.selectedList);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    dropdownController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<DropdownMenuEntry<JedalnicekItem>> jedalnickyEntries =
+        jedalnicky.all
+            .map((e) => DropdownMenuEntry<JedalnicekItem>(
+                  value: JedalnicekItem(e),
+                  label: e,
+                  enabled: e != settings.selectedList,
+                ))
+            .toList();
     return Column(
       children: [
         Padding(
@@ -24,45 +46,69 @@ class _AdditivesSearchbarState extends State<AdditivesSearchbar> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Aktuálny zoznam: ${settings.selectedList == 'default' ? 'Predvolený' : settings.selectedList.length > 10 ? '${settings.selectedList.substring(0, 10)}...' : settings.selectedList}',
-                textAlign: TextAlign.start,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Text(
+                    'Aktuálny zoznam: ',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    settings.selectedList == 'default'
+                        ? 'Predvolený'
+                        : settings.selectedList.length > 10
+                            ? '${settings.selectedList.substring(0, 10)}...'
+                            : settings.selectedList,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(
-                  Icons.edit,
-                  color: Colors.black,
-                ),
-              ),
-              Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    if (SettingsModel.instance.selectedList != 'default') {
-                      settings.selectedList = 'default';
-                      settings.saveToFirebase();
-                      setState(() {});
-                    }
-                  },
-                  icon: const Icon(Icons.delete),
-                  color: Colors.black,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.edit,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        if (SettingsModel.instance.selectedList != 'default') {
+                          settings.selectedList = 'default';
+                          settings.saveToFirebase();
+                          setState(() {});
+                        }
+                      },
+                      icon: const Icon(Icons.delete),
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -73,88 +119,43 @@ class _AdditivesSearchbarState extends State<AdditivesSearchbar> {
         // search bar for new list
         Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
-          child: Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        updateFilteredAditives(value);
-                      });
-                    },
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                    ),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Zadajte názov zoznamu',
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                      contentPadding: EdgeInsets.only(left: 15, top: 15),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(
-                  Icons.search,
-                  color: Colors.black,
-                ),
-              ),
-            ],
+          child: DropdownMenu<JedalnicekItem>(
+            initialSelection: selected,
+            controller: dropdownController,
+            enableSearch: true,
+            enableFilter: true,
+            menuHeight: 150,
+            width: 250,
+            leadingIcon: Icon(
+              Icons.search,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            textStyle: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+            dropdownMenuEntries: jedalnickyEntries,
+            onSelected: (value) {
+              if (value == null) return;
+              settings.selectedList = value.label;
+              settings.saveToFirebase();
+              setState(() {
+                selected = value;
+              });
+            },
           ),
         ),
         const SizedBox(
           height: 20,
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: Column(
-            children: [
-              for (var i = 0; i < 3; i++)
-                Column(
-                  children: [
-                    SearchBarResult(
-                      name: filteredJedalnicky.length > (i + 1)
-                          ? filteredJedalnicky[i]
-                          : null,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    )
-                  ],
-                )
-            ],
-          ),
-        ),
       ],
     );
   }
+}
 
-  void updateFilteredAditives(String hasToContain) {
-    filteredJedalnicky.clear();
-    for (var i = 0; i < jedalnicky.all.length; i++) {
-      if (jedalnicky.all[i].contains(hasToContain)) {
-        filteredJedalnicky.add(jedalnicky.all[i]);
-      }
-    }
-  }
+class JedalnicekItem {
+  final String label;
+
+  JedalnicekItem(this.label);
 }

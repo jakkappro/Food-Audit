@@ -18,15 +18,18 @@ class DialyChallengesText extends StatelessWidget {
           height: 20,
           width: 20,
           decoration: BoxDecoration(
-            color: const Color.fromRGBO(255, 255, 255, 1),
             shape: BoxShape.circle,
-            border:
-                Border.all(color: const Color.fromRGBO(0, 0, 0, 1), width: 1),
+            border: Border.all(
+              color: finished
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.error,
+              width: 1,
+            ),
           ),
           child: Icon(
             Icons.done,
             color: finished
-                ? const Color.fromRGBO(0, 0, 0, 1)
+                ? Theme.of(context).colorScheme.primary
                 : Colors.transparent,
             size: 15,
           ),
@@ -35,7 +38,6 @@ class DialyChallengesText extends StatelessWidget {
         Text(
           text,
           style: TextStyle(
-            color: Colors.black,
             fontSize: 12,
             fontWeight: FontWeight.normal,
             decoration:

@@ -18,18 +18,18 @@ class _BlogsState extends State<Blogs> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: width * 0.89,
-      height: 430,
+      width: width,
+      height: 435,
       child: Column(
         children: [
           Row(
-            children: const [
+            children: [
               Padding(
                 padding: EdgeInsets.only(left: 22),
                 child: Text(
                   'Blog',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
                   ),
@@ -39,13 +39,13 @@ class _BlogsState extends State<Blogs> {
             ],
           ),
           Row(
-            children: const [
+            children: [
               Padding(
                 padding: EdgeInsets.only(left: 22),
                 child: Text(
                   'Aktuálne trendy v stravovaní',
                   style: TextStyle(
-                    color: Color.fromRGBO(218, 218, 218, 1),
+                    color: Theme.of(context).colorScheme.tertiary,
                     fontWeight: FontWeight.normal,
                     fontSize: 12,
                   ),
@@ -57,8 +57,7 @@ class _BlogsState extends State<Blogs> {
           const SizedBox(
             height: 15,
           ),
-          Container(
-            color: Colors.transparent,
+          SizedBox(
             width: double.infinity,
             height: 360,
             child: DefaultTabController(
@@ -72,8 +71,6 @@ class _BlogsState extends State<Blogs> {
                   backgroundColor: Colors.transparent,
                   bottom: const TabBar(
                     indicatorSize: TabBarIndicatorSize.tab,
-                    indicatorColor: Colors.black,
-                    indicatorWeight: 3,
                     isScrollable: false,
                     padding: EdgeInsets.only(top: 0, bottom: 0),
                     tabs: [
@@ -92,7 +89,7 @@ class _BlogsState extends State<Blogs> {
                       ),
                       width: width,
                       height: 350,
-                      shouldCenter: false,
+                      shouldCenter: true,
                     ),
                     // Exercise
                     DecoratedContainer(
@@ -102,7 +99,7 @@ class _BlogsState extends State<Blogs> {
                       ),
                       width: width,
                       height: 350,
-                      shouldCenter: false,
+                      shouldCenter: true,
                     ),
                   ],
                 ),

@@ -41,30 +41,31 @@ class _DailyChallengesState extends State<DailyChallenges> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 5),
         Padding(
           padding: const EdgeInsets.only(top: 15.0, left: 22.0),
           child: Column(
             children: [
               Row(
-                children: const [
+                children: [
                   Text(
                     'Denné výzvy',
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ],
               ),
               Row(
-                children: const [
+                children: [
                   Text(
-                    'Plňaj výzvy a získavaj body',
+                    'Dokonci výzvy a získavaj body',
                     style: TextStyle(
-                        color: Color.fromRGBO(213, 213, 213, 1),
-                        fontSize: 13,
-                        fontWeight: FontWeight.normal),
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                 ],
               ),

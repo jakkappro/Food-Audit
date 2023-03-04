@@ -24,7 +24,7 @@ class ScoreGraph extends StatelessWidget {
         touchTooltipData: BarTouchTooltipData(
           tooltipBgColor: Colors.transparent,
           tooltipPadding: EdgeInsets.zero,
-          tooltipMargin: 8,
+          tooltipMargin: 0,
           getTooltipItem: (
             BarChartGroupData group,
             int groupIndex,
@@ -32,10 +32,10 @@ class ScoreGraph extends StatelessWidget {
             int rodIndex,
           ) {
             return BarTooltipItem(
-              rod.toY.round().toString(),
+              '',
               const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+                color: Colors.transparent,
+                fontWeight: FontWeight.w100,
               ),
             );
           },
@@ -126,9 +126,8 @@ BarChartGroupData _buildGroupData(int x, double y) {
         width: 25,
         borderRadius: BorderRadius.zero,
         toY: y / 3,
-        color: currentDay
-            ? const Color.fromRGBO(125, 160, 119, 1)
-            : const Color.fromRGBO(242, 242, 242, 1),
+        color:
+            currentDay ? const Color.fromRGBO(125, 160, 119, 1) : Colors.white,
       )
     ],
     showingTooltipIndicators: [0],
