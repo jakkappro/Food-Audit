@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 enum LoginStatus { success, emailNotVerified, failed }
 
@@ -36,6 +37,62 @@ Future<LoginStatus> login(String email, String password) async {
   } catch (e) {
     // login failed
     return LoginStatus.failed;
+  }
+}
+
+Future<LoginStatus> loginGoogle() async {
+  try {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    final result = await FirebaseAuth.instance.signInWithCredential(credential);
+
+    if (result.user == null) {
+      return LoginStatus.failed;
+    }
+
+    //get given_name and family_name and picture and isNewUser
+    final newUser = result.additionalUserInfo!.isNewUser;
+
+    if (newUser) {
+      final firstName = result.additionalUserInfo!.profile!['given_name'];
+      final lastName = result.additionalUserInfo!.profile!['family_name'];
+      final photoUrl = result.additionalUserInfo!.profile!['picture'];
+
+      await FirebaseAuth.instance.currentUser
+          ?.updateDisplayName('${firstName ?? ''} ${lastName ?? ''}');
+      await FirebaseAuth.instance.currentUser?.updatePhotoURL(photoUrl);
+      await link(credential);
+    }
+
+    // login successful
+    if (result.user!.emailVerified == false) {
+      return LoginStatus.emailNotVerified;
+    } else {
+      return LoginStatus.success;
+    }
+  } catch (e) {
+    // login failed
+    return LoginStatus.failed;
+  }
+}
+
+Future<void> link(AuthCredential credential) async {
+  try {
+    final userCredential =
+        await FirebaseAuth.instance.currentUser?.linkWithCredential(credential);
+  } catch (e) {
+    // login failed
   }
 }
 

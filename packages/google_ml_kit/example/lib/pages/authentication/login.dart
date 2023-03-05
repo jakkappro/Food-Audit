@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                         elevation: 0,
                         backgroundColor: Colors.transparent,
                       ),
-                      onPressed: () => {},
+                      onPressed: () async => await _logInGoogle(),
                       child: const Image(
                         image: AssetImage('assets/icons/google.png'),
                         width: 40,
@@ -213,6 +213,32 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _logInGoogle() async {
+    final logged = await loginGoogle();
+
+    switch (logged) {
+      case LoginStatus.success:
+        await loadData();
+        await Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) {
+            return HomeNavigation();
+          },
+        ));
+        break;
+      case LoginStatus.emailNotVerified:
+        await Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) {
+            return VerifyEmailPage();
+          },
+        ));
+        break;
+      case LoginStatus.failed:
+        _formKey.currentState!.reset();
+        _resetOnFail();
+        break;
+    }
   }
 
   Future<void> _logIn() async {

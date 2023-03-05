@@ -71,12 +71,15 @@ class _AdditivesSearchbarState extends State<AdditivesSearchbar> {
                   ),
                 ],
               ),
+              const SizedBox(
+                width: 3,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                    height: 40,
-                    width: 40,
+                    height: 35,
+                    width: 35,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(10),
@@ -87,16 +90,17 @@ class _AdditivesSearchbarState extends State<AdditivesSearchbar> {
                     ),
                   ),
                   const SizedBox(
-                    width: 10,
+                    width: 3,
                   ),
                   Container(
-                    height: 40,
-                    width: 40,
+                    height: 35,
+                    width: 35,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: IconButton(
+                      padding: EdgeInsets.zero,
                       onPressed: () {
                         if (SettingsModel.instance.selectedList != 'default') {
                           settings.selectedList = 'default';
@@ -104,7 +108,9 @@ class _AdditivesSearchbarState extends State<AdditivesSearchbar> {
                           setState(() {});
                         }
                       },
-                      icon: const Icon(Icons.delete),
+                      icon: const Center(
+                        child: Icon(Icons.delete),
+                      ),
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),
