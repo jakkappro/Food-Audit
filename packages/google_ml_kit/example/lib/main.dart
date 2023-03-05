@@ -77,21 +77,21 @@ Future<void> main() async {
   runApp(
     MaterialApp(
       home: !userExists
-          ? LoginPage()
+          ? const LoginPage()
           : SettingsModel.instance.firstTime
               ? const IntroPage()
-              : HomeNavigation(),
+              : const HomeNavigation(),
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       routes: {
-        '/login': (context) => LoginPage(),
+        '/login': (context) => const LoginPage(),
         '/register': (context) => RegisterPage(),
         '/verify-email': (context) => VerifyEmailPage(),
-        '/home': (context) => HomeNavigation(),
+        '/home': (context) => const HomeNavigation(),
         '/profile': (context) => const ProfilePage(),
-        '/security': (context) => SecurityPage(),
+        '/security': (context) => const SecurityPage(),
         '/performance': (context) => const PerformancePage(),
         '/introduction': (context) => const IntroPage(),
         '/settings': (context) => const SubSettings()

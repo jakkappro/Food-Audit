@@ -51,32 +51,18 @@ class _AdditivesState extends State<Additives> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
+                    Center(
+                      child: TextButton(
+                        onPressed: widget.onTap,
+                        child: Text(
                           'Vytvoriť nový zoznam',
-                          textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: IconButton(
-                            onPressed: widget.onTap,
-                            icon: const Icon(Icons.add),
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),

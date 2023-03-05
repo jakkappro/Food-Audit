@@ -6,9 +6,11 @@ import '../../../../../models/settings_model.dart';
 import '../../../../../widgets/settings/allergens/allergens.dart';
 import '../../../../../widgets/settings/borderless_button.dart';
 import '../../../../../widgets/settings/confirm_password_slidingup.dart';
+import '../../../../authentication/login.dart';
+import 'performance.dart';
+import 'security.dart';
 
 class SubSettings extends StatefulWidget {
-
   const SubSettings({Key? key}) : super(key: key);
 
   @override
@@ -47,12 +49,9 @@ class _SubSettingsState extends State<SubSettings> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: const Color.fromRGBO(105, 140, 17, 1),
-          title: const Center(
-            child: Text(
-              'Settings',
-              textAlign: TextAlign.center,
-            ),
+          title: Text(
+            'Settings',
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
         ),
         body: SlidingUpPanel(
@@ -61,24 +60,24 @@ class _SubSettingsState extends State<SubSettings> {
             onConfirm: () async {
               if (await checkPassword()) {
                 _panelController.close();
-                await Navigator.of(context).pushNamed('/security');
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const SecurityPage()));
               }
             },
             panelController: _panelController,
             passwordController: _passwordController,
           ),
           minHeight: 0,
-          maxHeight: 290,
+          maxHeight: 300,
+          color: Theme.of(context).colorScheme.surfaceVariant,
           controller: _panelController,
-          color: Colors.black,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
           ),
           body: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               height: 1000,
-              color: const Color.fromRGBO(105, 140, 17, 1),
               child: Column(
                 children: [
                   const SizedBox(height: 20),
@@ -86,26 +85,30 @@ class _SubSettingsState extends State<SubSettings> {
                   const SizedBox(height: 20),
                   BorderlessButton(
                     label: 'Performance',
-                    onPressed: () async =>
-                        await Navigator.of(context).pushNamed('/performance'),
+                    onPressed: () async => await Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const PerformancePage())),
                     icon: const Icon(Icons.trending_up),
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   const SizedBox(height: 20),
                   BorderlessButton(
                     label: 'Security',
                     onPressed: _panelController.open,
                     icon: const Icon(Icons.lock),
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   const SizedBox(height: 20),
                   BorderlessButton(
                     label: 'Log Out',
                     onPressed: () async {
                       await _auth.signOut();
-                      await Navigator.of(context)
-                          .pushReplacementNamed('/login');
+                      await Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()));
                     },
                     icon: const Icon(Icons.logout),
-                    color: Colors.red,
+                    color: Theme.of(context).colorScheme.error,
                   ),
                 ],
               ),

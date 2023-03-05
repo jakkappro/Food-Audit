@@ -87,7 +87,6 @@ class _NamedSliderState extends State<NamedSlider> {
                 divisions: divisions,
                 onChanged: ((value) async {
                   await onChanged(value.ceil().toString());
-
                   setState(() {
                     event.broadcast(Value(value));
                     this.value = value;

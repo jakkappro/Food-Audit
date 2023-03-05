@@ -54,8 +54,9 @@ class _NamedDatePickerState extends State<NamedDatePicker> {
                         enabled: true,
                         decoration: InputDecoration(
                           hintText: widget.text,
-                          hintStyle: const TextStyle(
+                          hintStyle: TextStyle(
                             fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                         readOnly: true,

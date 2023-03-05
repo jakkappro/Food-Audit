@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import '../../models/settings_model.dart';
+import '../home/home_navigation.dart';
 
 class IntroPage extends StatefulWidget {
   const IntroPage({Key? key}) : super(key: key);
@@ -17,7 +18,8 @@ class _IntroductionPageState extends State<IntroPage> {
   void _onIntroEnd(context) {
     SettingsModel.instance.firstTime = false;
     SettingsModel.instance.saveToFirebase();
-    Navigator.of(context).pushReplacementNamed('/home');
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const HomeNavigation()),);
   }
 
   Widget _buildImage(String assetName, [double width = 350]) {

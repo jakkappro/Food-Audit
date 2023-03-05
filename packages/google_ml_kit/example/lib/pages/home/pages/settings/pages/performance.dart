@@ -26,62 +26,44 @@ class _PerformancePageState extends State<PerformancePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color.fromRGBO(40, 48, 70, 1),
-              Color.fromRGBO(60, 78, 104, 1)
-            ],
-            begin: Alignment.bottomRight,
-            end: Alignment.topLeft,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Performance',
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+            ),
+            iconSize: 25,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          elevation: 0,
         ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            title: const Text(
-              'Performance',
-              style: TextStyle(
-                fontSize: 30,
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor: Colors.transparent,
-            centerTitle: true,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              ),
-              iconSize: 25,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              color: Colors.white,
-            ),
-            elevation: 0,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
-            child: Column(children: [
+        body: Padding(
+          padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+          child: Column(
+            children: [
               Container(
                 height: 60,
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.transparent,
                 ),
                 child: Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 25.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25.0),
                       child: Text(
                         'Image processing rate: ',
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.secondary),
                       ),
                     ),
                     const SizedBox(width: 20),
@@ -91,10 +73,10 @@ class _PerformancePageState extends State<PerformancePage> {
                         child: TextField(
                           keyboardType: TextInputType.number,
                           onSubmitted: (value) async => await _changeFps(value),
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'FPS',
                             hintStyle: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -110,32 +92,38 @@ class _PerformancePageState extends State<PerformancePage> {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.transparent,
                 ),
                 child: Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 25.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25.0),
                       child: Text(
                         'Image quality: ',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                     ),
                     const SizedBox(width: 20),
                     DropdownButton<ImageQuality>(
                       value: _imageQuality,
-                      style: const TextStyle(color: Colors.black),
-                      dropdownColor: Colors.transparent,
-                      elevation: 0,
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                       onChanged: (ImageQuality? newValue) {
+                        if (newValue == null) return;
                         setState(
                           () {
                             _changeImageQuality(
                                 newValue.toString().split('.').last);
-                            _imageQuality = newValue!;
+                            _imageQuality = newValue;
                             selected = newValue.name;
                           },
                         );
@@ -146,11 +134,6 @@ class _PerformancePageState extends State<PerformancePage> {
                             value: option,
                             child: Text(
                               capitalize(option.toString().split('.').last),
-                              style: TextStyle(
-                                color: option.name == selected
-                                    ? Colors.white
-                                    : Colors.white,
-                              ),
                             ),
                           );
                         },
@@ -169,11 +152,11 @@ class _PerformancePageState extends State<PerformancePage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
                         minimumSize: const Size(double.infinity, 40),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
+                        elevation: 10,
                       ),
                       onPressed: () async {
                         await settings.saveToFirebase();
@@ -181,13 +164,15 @@ class _PerformancePageState extends State<PerformancePage> {
                       },
                       child: const Text(
                         'Save',
-                        style: TextStyle(fontSize: 20, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ]),
+            ],
           ),
         ),
       ),

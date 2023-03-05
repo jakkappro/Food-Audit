@@ -30,20 +30,22 @@ class Button extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        padding: const EdgeInsets.all(18),
-        fixedSize: Size(width, height),
+        minimumSize: Size(width, height),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
       ),
-      child: Center(
-        child: Text(
-          label,
-          style: TextStyle(
-            fontWeight: fontWeight,
-            fontSize: fontSize,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontWeight: fontWeight,
+              fontSize: fontSize,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

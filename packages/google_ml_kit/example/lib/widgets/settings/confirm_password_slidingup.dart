@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../shared/button.dart';
+
 class ConfirmPasswordSlidingUp extends StatelessWidget {
   const ConfirmPasswordSlidingUp({
     Key? key,
@@ -17,11 +19,13 @@ class ConfirmPasswordSlidingUp extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         const Center(
-          child: Text('Verify your password',
-              style: TextStyle(
-                fontSize: 17,
-                color: Colors.white,
-              )),
+          child: Text(
+            'Verify your password',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
         const SizedBox(height: 15),
         const Padding(
@@ -30,7 +34,6 @@ class ConfirmPasswordSlidingUp extends StatelessWidget {
             'Re-enter your password to access this settings page and to make changes',
             style: TextStyle(
               fontSize: 13,
-              color: Color.fromRGBO(188, 188, 193, 1),
             ),
             textAlign: TextAlign.center,
           ),
@@ -42,8 +45,11 @@ class ConfirmPasswordSlidingUp extends StatelessWidget {
             width: double.infinity,
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white,
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: Colors.grey,
+                width: 1.5,
+              ),
             ),
             child: Center(
               child: Padding(
@@ -68,48 +74,29 @@ class ConfirmPasswordSlidingUp extends StatelessWidget {
         const SizedBox(height: 15),
         Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
-          child: ElevatedButton(
-            onPressed: onConfirm,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              minimumSize: const Size(double.infinity, 40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-            ),
-            child: const Center(
-              child: Text(
-                'Continue',
-                style: TextStyle(
-                  color: Color.fromRGBO(65, 55, 71, 1),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
-            ),
+          child: Button(
+            'Confirm',
+            const Color.fromRGBO(106, 140, 17, 1),
+            const Color.fromRGBO(65, 55, 71, 1),
+            double.infinity,
+            55,
+            18,
+            FontWeight.bold,
+            onConfirm,
           ),
         ),
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
-          child: ElevatedButton(
-            onPressed: panelController.close,
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromRGBO(188, 188, 193, 1),
-                minimumSize: const Size(double.infinity, 40),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                )),
-            child: const Center(
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
-            ),
+          child: Button(
+            'Cancel',
+            const Color.fromRGBO(106, 140, 17, 1),
+            const Color.fromRGBO(65, 55, 71, 1),
+            double.infinity,
+            40,
+            14,
+            FontWeight.bold,
+            panelController.close,
           ),
         )
       ],

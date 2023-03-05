@@ -51,10 +51,10 @@ class _NamedDropDownState extends State<NamedDropDown> {
                     alignment: Alignment.center,
                     icon: Icon(
                       Icons.arrow_drop_down,
-                      color: Theme.of(context).colorScheme.tertiary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.tertiary,
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
                     ),
                     items: widget.items

@@ -73,7 +73,6 @@ class _TemperatureBarState extends State<TemperatureBar> {
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
         ),
       ],

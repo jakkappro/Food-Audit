@@ -5,6 +5,8 @@ import '../camera/camera_page.dart';
 import 'pages/home.dart';
 
 class HomeNavigation extends StatefulWidget {
+  const HomeNavigation({Key? key}) : super(key: key);
+
   @override
   _HomeNavigationState createState() => _HomeNavigationState();
 }
