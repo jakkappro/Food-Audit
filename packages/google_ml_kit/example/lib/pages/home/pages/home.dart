@@ -50,6 +50,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -153,8 +154,8 @@ class _HomeState extends State<Home> {
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                     child: Container(
-                      width: 300,
-                      height: 500,
+                      width: width * 0.85,
+                      height: height * 0.7,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
