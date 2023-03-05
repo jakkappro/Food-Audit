@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -19,6 +20,8 @@ class TextRecognizerView extends StatefulWidget {
 
 class _TextRecognizerViewState extends State<TextRecognizerView>
     with TickerProviderStateMixin {
+  final flutterTts = FlutterTts();
+
   final TextRecognizer _textRecognizer =
       TextRecognizer(script: TextRecognitionScript.latin);
   bool _canProcess = true;
@@ -36,8 +39,17 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   final AditivesModel _aditivesModel = AditivesModel.instance;
   late bool _detailOpened;
   bool? _scannedToday;
+  bool speaking = false;
 
   final _panelController = PanelController();
+
+  void _speak(String text) async {
+    if (!speaking) {
+      speaking = true;
+      await flutterTts.speak(text);
+      speaking = false;
+    }
+  }
 
   @override
   void dispose() async {
@@ -49,6 +61,8 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   @override
   void initState() {
     super.initState();
+    flutterTts.setLanguage('sk-SK');
+    flutterTts.setPitch(1);
     _detailOpened = false;
     _animation = AnimationController(
         duration: const Duration(milliseconds: 750), vsync: this);
@@ -279,6 +293,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
           foundLastComposition = true;
           foundComposition = foundComp;
           _aditives = foundAditives;
+          _speak('Alergický na ${_alergicOn.join(', ')}. A na aditíva: ${_aditives.join(', ')}.');
         } else if (_retriesOfFindingComposition > 7) {
           _animation.forward();
           _foundAnimation.reverse();
