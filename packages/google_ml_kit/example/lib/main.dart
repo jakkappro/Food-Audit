@@ -8,6 +8,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'firebase_options.dart';
 import 'helpers/data_helpers.dart';
+import 'models/allerts_model.dart';
 import 'models/connection_model.dart';
 import 'models/settings_model.dart';
 import 'models/webscraping_model.dart';
@@ -57,6 +58,9 @@ Future<void> main() async {
     persistenceEnabled: true,
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
+
+  // testing
+  AllertsModel.allertsInstance.loadFromWeb();
 
   cameras = await availableCameras();
   final user = FirebaseAuth.instance.currentUser;

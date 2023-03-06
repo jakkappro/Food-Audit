@@ -93,3 +93,4 @@ example/android/.project
 example/android/.settings/org.eclipse.buildship.core.prefs
 android/.classpath
 packages/google_ml_kit/example/lib/aditives_import/food-audit-ab3b3-firebase-adminsdk-sqowh-a2633b8f3c.json
+packages/google_ml_kit/example/android/app/my-key.jks
