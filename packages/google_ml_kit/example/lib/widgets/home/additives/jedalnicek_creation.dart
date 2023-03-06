@@ -37,7 +37,6 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
         body: Stack(
           children: [
             SizedBox(
@@ -46,10 +45,9 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                 child: Column(
                   children: [
                     // inputfield for name of the diet
-                    Container(
+                    SizedBox(
                       width: width,
                       height: 50,
-                      color: Colors.white,
                       child: Row(
                         children: [
                           SizedBox(
@@ -63,7 +61,6 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                             child: TextField(
                               controller: nameController,
                               style: const TextStyle(
-                                color: Colors.black,
                                 fontSize: 20,
                               ),
                               decoration: const InputDecoration(
@@ -76,10 +73,9 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                       ),
                     ),
                     // searchbar
-                    Container(
+                    SizedBox(
                       width: width,
                       height: 50,
-                      color: Colors.white,
                       child: Row(
                         children: [
                           const SizedBox(
@@ -95,7 +91,6 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                             height: 50,
                             child: TextField(
                               style: const TextStyle(
-                                color: Colors.black,
                                 fontSize: 20,
                               ),
                               decoration: const InputDecoration(
@@ -115,10 +110,9 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                     // list of added aditives in listview
                     Padding(
                       padding: const EdgeInsets.only(left: 15.0),
-                      child: Container(
+                      child: SizedBox(
                         width: width,
                         height: 200,
-                        color: Colors.white,
                         child: ListView(
                           scrollDirection: Axis.vertical,
                           children: [
@@ -134,10 +128,9 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                     // show banned aditives and minus icon in a list view
                     Padding(
                       padding: const EdgeInsets.only(left: 15.0),
-                      child: Container(
+                      child: SizedBox(
                         width: width,
                         height: 200,
-                        color: Colors.white,
                         child: ListView(
                           scrollDirection: Axis.vertical,
                           children: [
@@ -153,7 +146,6 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                                       child: IconButton(
                                         icon: const Icon(
                                           Icons.remove,
-                                          color: Colors.black,
                                         ),
                                         onPressed: () {
                                           setState(() {
@@ -168,9 +160,7 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                                       child: Center(
                                         child: Text(
                                           'aditiv ${bannedAditives[i]}',
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                          ),
+                                          style: const TextStyle(),
                                         ),
                                       ),
                                     ),
@@ -182,10 +172,9 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                       ),
                     ),
                     // confirm button
-                    Container(
+                    SizedBox(
                       width: width,
                       height: 50,
-                      color: Colors.white,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -193,9 +182,7 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                             width: width - 160,
                             height: 50,
                             child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
-                              ),
+                              style: ElevatedButton.styleFrom(),
                               onPressed: () async {
                                 // create new document in firebase with banned aditives and name and user id
                                 await FirebaseFirestore.instance
@@ -249,7 +236,6 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
             child: IconButton(
               icon: const Icon(
                 Icons.add,
-                color: Colors.black,
               ),
               onPressed: () {
                 setState(() {
@@ -268,9 +254,7 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
             child: Center(
               child: Text(
                 name,
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
+                style: const TextStyle(),
               ),
             ),
           ),

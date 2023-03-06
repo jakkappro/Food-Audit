@@ -35,18 +35,26 @@ class _ChallengesUIState extends State<ChallengesUI> {
       ),
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(left: 15.0, right: 15, top: 15),
+          padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'New User Challenges',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSecondary,
+              SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: Text(
+                  'New User Challenges',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
               ),
               ExpansionPanelList(
                 expansionCallback: (int index, bool isExpanded) {
@@ -56,6 +64,8 @@ class _ChallengesUIState extends State<ChallengesUI> {
                 },
                 children: [
                   ExpansionPanel(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceVariant,
                     canTapOnHeader: true,
                     headerBuilder: (BuildContext context, bool isExpanded) {
                       return ListTile(
@@ -65,9 +75,9 @@ class _ChallengesUIState extends State<ChallengesUI> {
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color:
-                                SettingsModel.instance.challenges['allergens']!
-                                    ? Colors.grey[600]
-                                    : Colors.grey[900],
+                                !SettingsModel.instance.challenges['allergens']!
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.secondary,
                             decoration:
                                 SettingsModel.instance.challenges['allergens']!
                                     ? TextDecoration.lineThrough
@@ -82,8 +92,8 @@ class _ChallengesUIState extends State<ChallengesUI> {
                         style: TextStyle(
                           fontSize: 16,
                           color: SettingsModel.instance.challenges['allergens']!
-                              ? Colors.grey[400]
-                              : Colors.grey[700],
+                              ? Colors.grey[500]
+                              : Colors.grey[300],
                           decoration:
                               SettingsModel.instance.challenges['allergens']!
                                   ? TextDecoration.lineThrough
@@ -94,6 +104,9 @@ class _ChallengesUIState extends State<ChallengesUI> {
                     isExpanded: panelOpen[0],
                   ),
                   ExpansionPanel(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceVariant,
+                    canTapOnHeader: true,
                     headerBuilder: (BuildContext context, bool isExpanded) {
                       return ListTile(
                         title: Text(
@@ -102,9 +115,9 @@ class _ChallengesUIState extends State<ChallengesUI> {
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color:
-                                SettingsModel.instance.challenges['firstScan']!
-                                    ? Colors.grey[600]
-                                    : Colors.grey[900],
+                                !SettingsModel.instance.challenges['firstScan']!
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.secondary,
                             decoration:
                                 SettingsModel.instance.challenges['firstScan']!
                                     ? TextDecoration.lineThrough
@@ -119,8 +132,8 @@ class _ChallengesUIState extends State<ChallengesUI> {
                         style: TextStyle(
                           fontSize: 16,
                           color: SettingsModel.instance.challenges['firstScan']!
-                              ? Colors.grey[400]
-                              : Colors.grey[700],
+                              ? Colors.grey[500]
+                              : Colors.grey[300],
                           decoration:
                               SettingsModel.instance.challenges['firstScan']!
                                   ? TextDecoration.lineThrough
@@ -130,48 +143,184 @@ class _ChallengesUIState extends State<ChallengesUI> {
                     ),
                     isExpanded: panelOpen[1],
                   ),
+                  ExpansionPanel(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceVariant,
+                    canTapOnHeader: true,
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text(
+                          'Zdielaj aplikaciu',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                !SettingsModel.instance.challenges['shareApp']!
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.secondary,
+                            decoration:
+                                SettingsModel.instance.challenges['shareApp']!
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
+                          ),
+                        ),
+                      );
+                    },
+                    body: ListTile(
+                      title: Text(
+                        'Zdielaj aplikaciu s priatelmi',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: SettingsModel.instance.challenges['shareApp']!
+                              ? Colors.grey[500]
+                              : Colors.grey[300],
+                          decoration:
+                              SettingsModel.instance.challenges['shareApp']!
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                    isExpanded: panelOpen[2],
+                  ),
                 ],
               ),
-              // TODO: finish this 
-              ChallengeCard(
-                title: 'Nastav si alergeny',
-                description: 'Chod do nastavení a nastav si alergeny',
-                completed: SettingsModel.instance.challenges['allergens']!,
-              ),
-              ChallengeCard(
-                title: 'Naskenuj prvy produkt',
-                description:
-                    'Naskenuj první produkt a zjisti, či je bez alergenů',
-                completed: SettingsModel.instance.challenges['firstScan']!,
-              ),
-              ChallengeCard(
-                title: 'Zdielaj aplikaciu',
-                description: 'Zdielaj aplikaciu s priatelmi',
-                completed: SettingsModel.instance.challenges['shareApp']!,
-              ),
               const SizedBox(height: 25),
-              Text(
-                'Daily Challenges',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSecondary,
+              Center(
+                child: Text(
+                  'Daily Challenges',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
                 ),
               ),
-              ChallengeCard(
-                title: 'Prihlás sa',
-                description: 'Prihlás sa do aplikácie',
-                completed: widget.loginFinished,
+              const SizedBox(
+                height: 20,
               ),
-              ChallengeCard(
-                title: 'Naskenuj produkt',
-                description: 'Naskenuj produkt a zisti, či je bez alergénov',
-                completed: widget.scanFinished,
+              ExpansionPanelList(
+                expansionCallback: (int index, bool isExpanded) {
+                  setState(() {
+                    panelOpen[index + 3] = !isExpanded;
+                  });
+                },
+                children: [
+                  ExpansionPanel(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceVariant,
+                    canTapOnHeader: true,
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text(
+                          'Naskenuj produkt',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: !widget.scanFinished
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.secondary,
+                            decoration: widget.scanFinished
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                          ),
+                        ),
+                      );
+                    },
+                    body: ListTile(
+                      title: Text(
+                        'Naskenuj produkt a zisti, či je bez alergénov',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: widget.scanFinished
+                              ? Colors.grey[500]
+                              : Colors.grey[300],
+                          decoration: widget.scanFinished
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                    isExpanded: panelOpen[3],
+                  ),
+                  ExpansionPanel(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceVariant,
+                    canTapOnHeader: true,
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text(
+                          'Prečítaj si článok',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: !widget.blogFinished
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.secondary,
+                            decoration: widget.blogFinished
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                          ),
+                        ),
+                      );
+                    },
+                    body: ListTile(
+                      title: Text(
+                        'Prečítaj si článok o alergénoch',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: widget.blogFinished
+                              ? Colors.grey[500]
+                              : Colors.grey[300],
+                          decoration: widget.blogFinished
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                    isExpanded: panelOpen[4],
+                  ),
+                  ExpansionPanel(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceVariant,
+                    canTapOnHeader: true,
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text(
+                          'Prihlás sa',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: !widget.loginFinished
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.secondary,
+                            decoration: widget.loginFinished
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                          ),
+                        ),
+                      );
+                    },
+                    body: ListTile(
+                      title: Text(
+                        'Prihlás sa do aplikácie',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: widget.loginFinished
+                              ? Colors.grey[500]
+                              : Colors.grey[300],
+                          decoration: widget.loginFinished
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                    isExpanded: panelOpen[5],
+                  ),
+                ],
               ),
-              ChallengeCard(
-                title: 'Prečítaj si článok',
-                description: 'Precitaj si článok o alergeniach',
-                completed: widget.blogFinished,
+              const SizedBox(
+                height: 25,
               ),
             ],
           ),
