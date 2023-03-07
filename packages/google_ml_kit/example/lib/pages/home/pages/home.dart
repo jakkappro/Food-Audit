@@ -4,18 +4,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/allerts_model.dart';
 import '../../../models/jedalnicek_model.dart';
 import '../../../models/settings_model.dart';
 import '../../../models/webscraping_model.dart';
 import '../../../widgets/challenges_widgets/challenges_widget.dart';
 import '../../../widgets/home/additives/additives.dart';
 import '../../../widgets/home/additives/jedalnicek_creation.dart';
+import '../../../widgets/home/allerts/allerts.dart';
 import '../../../widgets/home/blog/blogs.dart';
 import '../../../widgets/home/daily_challenges/daily_challenges.dart';
 import '../../../widgets/home/decorated_container.dart';
 import '../../../widgets/home/score/score.dart';
 
 class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -34,6 +38,7 @@ class _HomeState extends State<Home> {
   bool challengesVisibleJedlo = false;
   List<int> values = [0, 0, 0, 0, 0, 0, 0];
   List<String> filteredJedalnicky = [];
+  bool loadedAllerts = false;
 
   @override
   void initState() {
@@ -44,6 +49,11 @@ class _HomeState extends State<Home> {
     if (!SettingsModel.isAnonymous) {
       Future.delayed(const Duration(milliseconds: 500), _getChallengesData);
     }
+    AllertsModel.allertsInstance.loadFromWeb().then((value) => {
+          setState(() {
+            loadedAllerts = true;
+          })
+        });
     super.initState();
   }
 
@@ -53,7 +63,6 @@ class _HomeState extends State<Home> {
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
         body: Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: Stack(
@@ -63,6 +72,15 @@ class _HomeState extends State<Home> {
                   children: [
                     const SizedBox(
                       height: 20,
+                    ),
+                    DecoratedContainer(
+                      body: Allerts(
+                        allerts: loadedAllerts
+                            ? AllertsModel.allertsInstance.title
+                            : null,
+                      ),
+                      width: width,
+                      height: 430,
                     ),
                     DecoratedContainer(
                       body: DailyChallenges(

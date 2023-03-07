@@ -59,9 +59,6 @@ Future<void> main() async {
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
 
-  // testing
-  AllertsModel.allertsInstance.loadFromWeb();
-
   cameras = await availableCameras();
   final user = FirebaseAuth.instance.currentUser;
   final userExists = user != null && user.emailVerified;

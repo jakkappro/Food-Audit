@@ -3,10 +3,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:search_choices/search_choices.dart';
 
 import '../../../models/aditives_model.dart';
 import '../../../models/jedalnicek_model.dart';
 import '../../../models/settings_model.dart';
+import '../../settings/profile/named_text_field.dart';
 
 class JedalnicekCreation extends StatefulWidget {
   @override
@@ -21,6 +23,7 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
   final List<String> allAditives = [];
   final List<String> filteredAditives = [];
   final nameController = TextEditingController();
+  List<int> selectedItemsMultiCustomDisplayDialog = [];
 
   @override
   void initState() {
@@ -45,130 +48,182 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                 child: Column(
                   children: [
                     // inputfield for name of the diet
-                    SizedBox(
-                      width: width,
-                      height: 50,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Container(),
-                          ),
-                          SizedBox(
-                            width: width - 160,
-                            height: 50,
-                            child: TextField(
-                              controller: nameController,
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: 'Názov diéty',
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    const SizedBox(
+                      height: 20,
                     ),
+                    NamedTextField(
+                      label: 'Dieta',
+                      hintText: 'Nazov diety',
+                      onSubmited: (String value) async {},
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+
                     // searchbar
-                    SizedBox(
-                      width: width,
-                      height: 50,
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: IconButton(
-                              icon: Icon(Icons.arrow_back),
-                              onPressed: null,
-                            ),
-                          ),
-                          SizedBox(
-                            width: width - 160,
-                            height: 50,
-                            child: TextField(
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: 'Search',
-                                border: InputBorder.none,
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  updateFilteredAditives(value);
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // list of added aditives in listview
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: SizedBox(
-                        width: width,
-                        height: 200,
-                        child: ListView(
-                          scrollDirection: Axis.vertical,
-                          children: [
-                            for (var i = 0; i < filteredAditives.length; i++)
-                              aditivWidget('aditívum ${filteredAditives[i]}'),
-                          ],
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: SearchChoices.multiple(
+                        items: allAditives
+                            .map(
+                              (e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ),
+                            )
+                            .toList(),
+                        selectedItems:
+                            bannedAditives.map(allAditives.indexOf).toList(),
+                        hint: const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text('Select any'),
+                        ),
+                        searchHint: 'Select any',
+                        onChanged: (value) {
+                          setState(() {
+                            selectedItemsMultiCustomDisplayDialog = value;
+                          });
+                        },
+                        displayItem: (item, selected) {
+                          return Row(
+                            children: [
+                              selected
+                                  ? const Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                    )
+                                  : const Icon(
+                                      Icons.check_box_outline_blank,
+                                      color: Colors.grey,
+                                    ),
+                              const SizedBox(width: 7),
+                              Expanded(
+                                child: item,
+                              ),
+                            ],
+                          );
+                        },
+                        selectedValueWidgetFn: (item) {
+                          return Center();
+                        },
+                        doneButton: (selectedItemsDone, doneContext) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(doneContext);
+                              setState(() {
+                                bannedAditives.clear();
+                                selectedItemsDone.forEach((element) {
+                                  bannedAditives.add(allAditives[element]);
+                                });
+                              });
+                            },
+                            child: const Text('Ok'),
+                          );
+                        },
+                        closeButton: null,
+                        style: const TextStyle(fontStyle: FontStyle.italic),
+                        searchFn: (String keyword, items) {
+                          List<int> ret = [];
+                          if (items != null && keyword.isNotEmpty) {
+                            keyword.split(' ').forEach((k) {
+                              int i = 0;
+                              items.forEach((item) {
+                                if (!ret.contains(i) &&
+                                    k.isNotEmpty &&
+                                    (item.value
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(k.toLowerCase()))) {
+                                  ret.add(i);
+                                }
+                                i++;
+                              });
+                            });
+                          }
+                          if (keyword.isEmpty) {
+                            ret = Iterable<int>.generate(items.length).toList();
+                          }
+                          return (ret);
+                        },
+                        clearIcon: const Icon(Icons.clear_all),
+                        icon: const Icon(Icons.arrow_drop_down_circle),
+                        label: 'Search',
+                        underline: Container(
+                          height: 1.0,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom:
+                                  BorderSide(color: Colors.teal, width: 3.0),
+                            ),
+                          ),
+                        ),
+                        iconDisabledColor: Colors.brown,
+                        iconEnabledColor: Colors.indigo,
+                        dropDownDialogPadding: const EdgeInsets.symmetric(
+                          vertical: 0,
+                          horizontal: 0,
+                        ),
+                        isExpanded: true,
+                        clearSearchIcon: const Icon(
+                          Icons.backspace,
+                          color: Colors.teal,
                         ),
                       ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    // show banned aditives and minus icon in a list view
                     Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: SizedBox(
-                        width: width,
-                        height: 200,
-                        child: ListView(
-                          scrollDirection: Axis.vertical,
-                          children: [
-                            for (var i = 0; i < bannedAditives.length; i++)
-                              SizedBox(
-                                width: 160,
-                                height: 50,
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: IconButton(
-                                        icon: const Icon(
-                                          Icons.remove,
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Column(
+                        children: [
+                          Text('Zakazane aditiva'),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: width,
+                            height: 200,
+                            child: ListView(
+                              scrollDirection: Axis.vertical,
+                              children: [
+                                for (var i = 0; i < bannedAditives.length; i++)
+                                  SizedBox(
+                                    width: 160,
+                                    height: 50,
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: IconButton(
+                                            icon: const Icon(
+                                              Icons.remove,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                bannedAditives.removeAt(i);
+                                              });
+                                            },
+                                          ),
                                         ),
-                                        onPressed: () {
-                                          setState(() {
-                                            bannedAditives.removeAt(i);
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 160,
-                                      height: 50,
-                                      child: Center(
-                                        child: Text(
-                                          'aditiv ${bannedAditives[i]}',
-                                          style: const TextStyle(),
+                                        SizedBox(
+                                          width: 160,
+                                          height: 50,
+                                          child: Center(
+                                            child: Text(
+                                              'aditivum ${bannedAditives[i]}',
+                                              style: const TextStyle(),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                          ],
-                        ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     // confirm button
@@ -202,7 +257,7 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                   ],
                 ),
@@ -212,15 +267,6 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
         ),
       ),
     );
-  }
-
-  void updateFilteredAditives(String hasToContain) {
-    filteredAditives.clear();
-    for (var i = 0; i < allAditives.length; i++) {
-      if (allAditives[i].contains(hasToContain)) {
-        filteredAditives.add(allAditives[i]);
-      }
-    }
   }
 
   // method that will create aditiv Widget with name and plus icon

@@ -72,7 +72,7 @@ class _AdditivesState extends State<Additives> {
         ],
       ),
       width: widget.width,
-      height: 400,
+      height: 380,
     );
   }
 }
