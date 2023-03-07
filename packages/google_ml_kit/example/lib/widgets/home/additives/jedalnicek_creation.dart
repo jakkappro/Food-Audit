@@ -1,5 +1,3 @@
-// TODO: somehow rework this pls :(
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +54,7 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                       hintText: 'Nazov diety',
                       onSubmited: (String value) async {},
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
 
@@ -104,7 +102,7 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                           );
                         },
                         selectedValueWidgetFn: (item) {
-                          return Center();
+                          return const Center();
                         },
                         doneButton: (selectedItemsDone, doneContext) {
                           return ElevatedButton(
@@ -177,7 +175,7 @@ class _JedalniceCreationState extends State<JedalnicekCreation> {
                       padding: const EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Column(
                         children: [
-                          Text('Zakazane aditiva'),
+                          const Text('Zakazane aditiva'),
                           const SizedBox(
                             height: 20,
                           ),
