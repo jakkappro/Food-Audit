@@ -37,11 +37,13 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   int _retriesOfFindingComposition = 0;
   List<String> _alergicOn = [];
   List<String> _aditives = [];
+  List<Additive>? additives;
   bool foundLastComposition = false;
   final AditivesModel _aditivesModel = AditivesModel.instance;
   late bool _detailOpened;
   bool? _scannedToday;
   bool speaking = false;
+  List<bool> openedTiles = [false, false];
 
   final _panelController = PanelController();
 
@@ -82,6 +84,19 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
 
   @override
   Widget build(BuildContext context) {
+    final allergens = _alergicOn.isNotEmpty
+        ? 'Ste alergický na: ${_alergicOn.join(', ')}'
+        : 'Nie ste alergický na žiadne zložky';
+    final additives = _aditives.isNotEmpty
+        ? '\nAditíva: ${_aditives.join(', ')}'
+        : 'Neobsahuje žiadne aditíva';
+    final text = (allergens.length > 35
+            ? '${allergens.substring(0, 32)}...'
+            : allergens) +
+        (additives.length > 35
+            ? '${additives.substring(0, 35)}...'
+            : additives);
+
     return SlidingUpPanel(
       panel: _buildPanel(),
       controller: _panelController,
@@ -156,40 +171,18 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
                     borderRadius: BorderRadius.circular(10),
                   ),
                   width: 300,
-                  height: 40,
-                  child: Text(
-                    _alergicOn.isNotEmpty
-                        ? 'Ste alergický na: ${_alergicOn.join(', ')}'
-                        : 'Nie ste alergický na žiadne zložky',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
-              ),
-            ),
-          if (_aditives.isNotEmpty)
-            Positioned(
-              top: 10,
-              left: 15,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: 60,
-                child: Text(
-                  'Aditíva: ${_aditives.join(', ')}',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -293,15 +286,22 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
 
     if (mounted) {
       setState(() {
-        if (foundComp && !foundLastComposition) {
+        if ((foundComp && !foundLastComposition) &&
+            _aditives != foundAditives) {
           _alergicOn = foundAlergens;
           _animation.reverse();
           _foundAnimation.forward();
           foundLastComposition = true;
           foundComposition = foundComp;
           _aditives = foundAditives;
-          _speak(
-              'Alergický na ${_alergicOn.join(', ')}. A na aditíva: ${_aditives.join(', ')}.');
+          var speakText = '';
+          if (_alergicOn.isNotEmpty) {
+            speakText += 'Alergický na ${_alergicOn.join(', ')}. ';
+          }
+          if (_aditives.isNotEmpty) {
+            speakText += 'A na aditíva: ${_aditives.join(', ')}.';
+          }
+          _speak(speakText);
         } else if (_retriesOfFindingComposition > 7) {
           _animation.forward();
           _foundAnimation.reverse();
@@ -316,71 +316,177 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   }
 
   Widget _buildPanel() {
-    final additives = _aditives
+    additives ??= _aditives
         .map(
           (e) => Additive(e, AditivesModel.instance.aditivs[e]!['description']),
-        ) //_aditivesModel.aditivsDescriptions[e]!
+        )
         .toList();
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24.0),
           topRight: Radius.circular(24.0),
         ),
       ),
       width: 300,
       height: 300,
-      child: SingleChildScrollView(
-        child: SizedBox(
-          width: double.infinity,
-          height: (_aditives.length * 60) + 200 + (_alergicOn.length * 10),
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: 50 + _alergicOn.length * 10,
-                child: Text(
-                  _alergicOn.isNotEmpty
-                      ? 'Našli sme: "${_alergicOn.join(', ')}" v tomto produkte.'
-                      : 'Nie ste alergický na tento produkt.',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 10),
-              if (_aditives.isNotEmpty)
-                Text(
-                  'Našli sme: ${_aditives.join(', ')} aditíva v tomto produkte.',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              if (_aditives.isNotEmpty)
-                SizedBox(
-                  width: double.infinity,
-                  height: _aditives.length * 80,
-                  child: ListView(
-                    children: <Widget>[
-                      for (final additive in additives)
-                        SizedBox(
-                          width: double.infinity,
-                          height: 140,
-                          child: AdditiveItem(
-                            additive: additive,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+        child: Center(
+          child: SingleChildScrollView(
+            child: ExpansionPanelList(
+              expansionCallback: (int index, bool isExpanded) {
+                setState(() {
+                  openedTiles[index] = !isExpanded;
+                });
+              },
+              children: [
+                ExpansionPanel(
+                  canTapOnHeader: true,
+                  isExpanded: openedTiles[0],
+                  headerBuilder: (context, isExpanded) {
+                    return ListTile(
+                      title: Text(
+                        'Alergény',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    );
+                  },
+                  body: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      if (_alergicOn.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: Text(
+                            'Našli sme: "${_alergicOn.join(', ')}" v tomto produkte.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      const SizedBox(height: 10),
+                      if (_alergicOn.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: Text(
+                            'Nie ste alergický na tento produkt.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                     ],
                   ),
                 ),
-            ],
+                ExpansionPanel(
+                  canTapOnHeader: true,
+                  isExpanded: openedTiles[1],
+                  headerBuilder: (context, isExpanded) {
+                    return ListTile(
+                      title: Text(
+                        'Aditíva',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    );
+                  },
+                  body: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      if (_aditives.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: Text(
+                            'Našli sme: ${_aditives.join(', ')} aditíva v tomto produkte.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 10),
+                      if (additives!.isNotEmpty)
+                        ExpansionPanelList(
+                          expansionCallback: (int index, bool isExpanded) {
+                            setState(() {
+                              additives![index].opened = !isExpanded;
+                            });
+                          },
+                          children: additives!
+                              .map(
+                                (e) => ExpansionPanel(
+                                  canTapOnHeader: true,
+                                  isExpanded: e.opened,
+                                  headerBuilder: (context, isExpanded) {
+                                    return ListTile(
+                                      title: Text(
+                                        e.name,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  body: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, right: 8.0),
+                                        child: Text(
+                                          e.description,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      if (_aditives.isEmpty)
+                        Text(
+                          'Tento produkt neobsahuje žiadne aditíva.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -396,8 +502,8 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
       width: 60,
       height: 60,
       decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.only(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24.0),
           topRight: Radius.circular(24.0),
         ),
@@ -413,9 +519,8 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
                   _detailOpened = true;
                 });
               },
-              
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 shape: const CircleBorder(),
@@ -424,7 +529,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
                 child: Icon(
                   Icons.keyboard_arrow_up,
                   size: 40,
-                    color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
@@ -435,82 +540,10 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
   }
 }
 
-class AdditiveItem extends StatefulWidget {
-  final Additive additive;
-
-  const AdditiveItem({Key? key, required this.additive}) : super(key: key);
-
-  @override
-  _AdditiveItemState createState() => _AdditiveItemState();
-}
-
-class _AdditiveItemState extends State<AdditiveItem> {
-  bool isExpanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          isExpanded = !isExpanded;
-        });
-      },
-      child: SizedBox(
-        width: double.infinity,
-        height: 60 + (isExpanded ? 80 : 0),
-        child: Column(
-          children: [
-            if (isExpanded)
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    widget.additive.name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-            if (!isExpanded)
-              Container(
-                padding: const EdgeInsets.only(
-                    left: 16, right: 16, top: 16, bottom: 5),
-                child: Text(
-                  widget.additive.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            if (isExpanded)
-              Container(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                child: Text(
-                  widget.additive.description.length > 120
-                      ? '${widget.additive.description.substring(0, 120)}...'
-                      : widget.additive.description,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            const Divider(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class Additive {
   final String name;
   final String description;
+  bool opened = false;
 
   Additive(this.name, this.description);
 }

@@ -40,7 +40,7 @@ class _ChallengesUIState extends State<ChallengesUI> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Center(

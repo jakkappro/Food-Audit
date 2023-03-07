@@ -100,6 +100,9 @@ class _AllertsState extends State<Allerts> {
     }
     return Column(
       children: const [
+        SizedBox(
+          height: 25,
+        ),
         Center(
           child: Text(
             'Načítavam upozornenia ...',
