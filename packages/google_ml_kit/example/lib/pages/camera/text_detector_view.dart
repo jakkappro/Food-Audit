@@ -1,3 +1,5 @@
+// TODO: add flashlight support
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -94,7 +96,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
       backdropEnabled: true,
       backdropOpacity: 0.8,
       backdropTapClosesPanel: true,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surfaceVariant,
       onPanelClosed: () {
         setState(() {
           _detailOpened = false;
@@ -117,50 +119,52 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
           ),
           if (!foundComposition && _aditives.isEmpty)
             Positioned(
-              top: MediaQuery.of(context).size.height / 3 - 60,
-              left: MediaQuery.of(context).size.width / 2 - 100,
+              top: 10,
+              left: MediaQuery.of(context).size.width / 2 - 150,
               child: FadeTransition(
                 opacity: _animation,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  width: 200,
-                  height: 60,
-                  child: const Text(
-                    'Namier kameru na zloženie',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                  width: 300,
+                  height: 40,
+                  child: Center(
+                    child: Text(
+                      'Namier kameru na zloženie',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
             ),
           if (foundComposition)
             Positioned(
-              top: MediaQuery.of(context).size.height / 3 - 60,
-              left: MediaQuery.of(context).size.width / 2 - 100,
+              top: 10,
+              left: MediaQuery.of(context).size.width / 2 - 150,
               child: FadeTransition(
                 opacity: _foundAnimation,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  width: 200,
-                  height: 60,
+                  width: 300,
+                  height: 40,
                   child: Text(
                     _alergicOn.isNotEmpty
                         ? 'Ste alergický na: ${_alergicOn.join(', ')}'
                         : 'Nie ste alergický na žiadne zložky',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -173,17 +177,17 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
               left: 15,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: 60,
                 child: Text(
                   'Aditíva: ${_aditives.join(', ')}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -238,7 +242,8 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
 
           // alergens
           for (final alergen in settings.allergicOn!) {
-            if (formatedText.contains(alergen.toLowerCase())) {
+            if (formatedText.contains(alergen.toLowerCase()) &&
+                !foundAlergens.contains(alergen)) {
               foundAlergens.add(alergen);
               textToPaint.add(alergen.toLowerCase());
             }
@@ -247,12 +252,14 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
           // aditives
           _aditivesModel.aditivs.forEach(
             (key, value) {
-              if (formatedText.contains(key.toLowerCase())) {
+              if (formatedText.contains(key.toLowerCase()) &&
+                  !foundAditives.contains(key)) {
                 foundAditives.add(key);
                 textToPaint.add(key);
               }
               for (final aditive in List<String>.from(value['names'])) {
-                if (formatedText.contains(aditive.toLowerCase())) {
+                if (formatedText.contains(aditive.toLowerCase()) &&
+                    !foundAditives.contains(key)) {
                   foundAditives.add(key);
                   textToPaint.add(aditive.toLowerCase());
                 }
@@ -293,7 +300,8 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
           foundLastComposition = true;
           foundComposition = foundComp;
           _aditives = foundAditives;
-          _speak('Alergický na ${_alergicOn.join(', ')}. A na aditíva: ${_aditives.join(', ')}.');
+          _speak(
+              'Alergický na ${_alergicOn.join(', ')}. A na aditíva: ${_aditives.join(', ')}.');
         } else if (_retriesOfFindingComposition > 7) {
           _animation.forward();
           _foundAnimation.reverse();
@@ -314,8 +322,8 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
         ) //_aditivesModel.aditivsDescriptions[e]!
         .toList();
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceVariant,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.0),
           topRight: Radius.circular(24.0),
@@ -387,8 +395,8 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
     return Container(
       width: 60,
       height: 60,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.0),
           topRight: Radius.circular(24.0),
@@ -405,16 +413,18 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
                   _detailOpened = true;
                 });
               },
+              
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
+                padding: EdgeInsets.all(0),
+                backgroundColor: Colors.transparent,
                 elevation: 0,
                 shape: const CircleBorder(),
               ),
-              child: const Center(
+              child: Center(
                 child: Icon(
                   Icons.keyboard_arrow_up,
                   size: 40,
-                  color: Colors.black,
+                    color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
