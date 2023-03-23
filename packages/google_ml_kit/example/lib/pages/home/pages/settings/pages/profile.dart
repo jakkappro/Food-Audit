@@ -189,9 +189,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   String _getImageUrl() {
     return SettingsModel.isAnonymous
-        ? 'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+'
-        : user!.photoURL ??
-            'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+';
+        ? 'https://i.pravatar.cc/100'
+        : user!.photoURL ?? 'https://i.pravatar.cc/100';
   }
 
   Future<void> _updateGender(String value) async {

@@ -225,8 +225,8 @@ class _HomeState extends State<Home> {
   String _getImageUrl() {
     return user != null
         ? user!.photoURL ??
-            'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+'
-        : 'https://dummyimage.com/100x100/cf1bcf/ffffff.jpg&text=BRUH+';
+            'https://i.pravatar.cc/100'
+        : 'https://i.pravatar.cc/100';
   }
 
   Future<void> _getChallengesData() async {
