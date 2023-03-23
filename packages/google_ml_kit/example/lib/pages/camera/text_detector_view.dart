@@ -310,17 +310,21 @@ class _TextRecognizerViewState extends State<TextRecognizerView>
           foundComposition = foundComp;
           _aditives = foundAditives;
           _customPaint = null;
+          additives = null;
         }
       });
     }
   }
 
   Widget _buildPanel() {
-    additives ??= _aditives
-        .map(
-          (e) => Additive(e, AditivesModel.instance.aditivs[e]!['description']),
-        )
-        .toList();
+    if (additives == null || additives!.isEmpty) {
+      additives = _aditives
+          .map(
+            (e) =>
+                Additive(e, AditivesModel.instance.aditivs[e]!['description']),
+          )
+          .toList();
+    }
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceVariant,
