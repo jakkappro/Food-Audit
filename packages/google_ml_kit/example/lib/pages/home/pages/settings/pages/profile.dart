@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../constants/allergens.dart';
 import '../../../../../models/settings_model.dart';
 import '../../../../../widgets/home/decorated_container.dart';
 import '../../../../../widgets/settings/profile/body_dimensions.dart';
@@ -92,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
-                padding: const EdgeInsets.all(0),
+                padding: EdgeInsets.zero,
               ),
               onPressed: () async {
                 await Navigator.of(context).push(
@@ -107,82 +108,128 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-
-          
+          Padding(
+            padding: const EdgeInsets.only(left: 22.0),
+            child: Row(
+              children: [
+                Text(
+                  'Moje intolerancie',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 22.0),
+            child: Row(
+              children: [
+                Text(
+                  'Systém ťa bude automaticky upozorňovať ak bude pre\nteba produkt nevhodný',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 22.0, right: 22.0),
+            child: Wrap(
+              spacing: 7.0,
+              children: allergens
+                  .map((e) => FilterChip(
+                      label: Text(e),
+                      showCheckmark: false,
+                      avatar: const Icon(Icons.warning_amber_outlined),
+                      selected: settings.allergens.contains(e),
+                      selectedColor: const Color.fromRGBO(196, 33, 38, 1),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(22)),
+                      ),
+                      onSelected: (bool b) {}))
+                  .toList(),
+            ),
+          )
         ],
       ),
     );
   }
 
   Widget _buildBody() {
-    return SizedBox(
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              const SizedBox(width: 80),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${_firstName} ${_lastName}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            const SizedBox(width: 80),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$_firstName $_lastName',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  Text(
-                    'Toto je tvoj profil',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+                ),
+                Text(
+                  'Toto je tvoj profil',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          BodyDimensions(
-            height: settings.height.toDouble() < 50
-                ? 50
-                : settings.height.toDouble() > 250
-                    ? 250
-                    : settings.height.toDouble(),
-            weight: settings.weight.toDouble() < 30
-                ? 30
-                : settings.weight.toDouble() > 200
-                    ? 200
-                    : settings.weight.toDouble(),
-            onChangedHeight: _updateHeight,
-            onChangedWeight: _updateWeight,
-            heightEvent: heigthEvent,
-            weightEvent: weightEvent,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: NamedDropdown(
-                  label: 'Pohlavie',
-                  value: _selectedGender!,
-                  items: const ['Muž', 'Žena'],
-                  onChanged: _updateGender,
                 ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        BodyDimensions(
+          height: settings.height.toDouble() < 50
+              ? 50
+              : settings.height.toDouble() > 250
+                  ? 250
+                  : settings.height.toDouble(),
+          weight: settings.weight.toDouble() < 30
+              ? 30
+              : settings.weight.toDouble() > 200
+                  ? 200
+                  : settings.weight.toDouble(),
+          onChangedHeight: _updateHeight,
+          onChangedWeight: _updateWeight,
+          heightEvent: heigthEvent,
+          weightEvent: weightEvent,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: NamedDropdown(
+                label: 'Pohlavie',
+                value: _selectedGender!,
+                items: const ['Muž', 'Žena'],
+                onChanged: _updateGender,
               ),
-              Expanded(
-                child: NamedDatePicker(
-                  label: 'Dátum narodenia',
-                  value: settings.birthDate,
-                  onChanged: _updateDate,
-                  text: 'Zvoľte dátum',
-                ),
+            ),
+            Expanded(
+              child: NamedDatePicker(
+                label: 'Dátum narodenia',
+                value: settings.birthDate,
+                onChanged: _updateDate,
+                text: 'Zvoľte dátum',
               ),
-            ],
-          )
-        ],
-      ),
+            ),
+          ],
+        )
+      ],
     );
   }
 

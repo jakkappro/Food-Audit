@@ -81,8 +81,6 @@ class _SubSettingsState extends State<SubSettings> {
               child: Column(
                 children: [
                   const SizedBox(height: 20),
-                  Allergens(),
-                  const SizedBox(height: 20),
                   BorderlessButton(
                     label: 'Performance',
                     onPressed: () async => await Navigator.of(context).push(

@@ -13,7 +13,7 @@ class SettingsPage extends StatelessWidget {
     return SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: 860,
+          height: 750,
           width: double.infinity,
           child: Column(
             children: [
@@ -50,24 +50,12 @@ class SettingsPage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(
-                      height: 724,
+                      height: 680,
                       child: ProfilePage(),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
-              BorderlessButton(
-                label: 'Settings',
-                color: Theme.of(context).colorScheme.secondary,
-                onPressed: () async {
-                  await Navigator.of(context).pushNamed('/settings');
-                },
-                icon: Icon(
-                  Icons.settings,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              )
             ],
           ),
         ),
