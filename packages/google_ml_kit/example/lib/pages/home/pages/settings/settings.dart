@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_audit/pages/home/pages/settings/pages/profile.dart';
+import 'dart:math' as math;
 
 import '../../../../models/settings_model.dart';
 import '../../../../widgets/settings/borderless_button.dart';
@@ -17,21 +18,43 @@ class SettingsPage extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 10, left: 10),
-                child: Center(
-                  child: Text(
-                    'Profile',
-                    style: TextStyle(
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                padding: const EdgeInsets.only(
+                  top: 15,
+                  left: 20,
+                  right: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 724,
-                child: ProfilePage(),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // rotate the icon to the left
+                        Transform.rotate(
+                          angle: math.pi / 2, // 90 degrees
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.u_turn_left,
+                              size: 25,
+                            ),
+                          ),
+                        ),
+                        const Text(
+                          'Profil',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 724,
+                      child: ProfilePage(),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
               BorderlessButton(

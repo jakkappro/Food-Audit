@@ -24,59 +24,78 @@ class _NamedDatePickerState extends State<NamedDatePicker> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        SizedBox(
           height: 60,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: Colors.transparent,
-          ),
-          child: Row(
+          width: 140,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 25.0),
-                child: Text(
-                  widget.label,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+              Text(
+                'Dátum narodenia',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
-              const SizedBox(width: 20),
+              const SizedBox(height: 5),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: Column(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 1.5,
+                    ),
+                  ),
+                  width: 180,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextField(
-                        enabled: true,
-                        decoration: InputDecoration(
-                          hintText: widget.text,
-                          hintStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            final dateOfBirth = await showDatePicker(
+                              context: context,
+                              initialDate: widget.value,
+                              firstDate: DateTime(1950),
+                              lastDate: DateTime.now(),
+                              builder: (context, child) => child!,
+                            );
+                            if (dateOfBirth != null) {
+                              setState(() {
+                                widget.value = dateOfBirth;
+                                widget.text = DateFormat('dd.MM.yyyy')
+                                    .format(widget.value);
+                              });
+                              await widget.onChanged(dateOfBirth);
+                            }
+                          },
+                          child: Center(
+                            child: Text(
+                              DateFormat('dd.MM.yyyy').format(widget.value),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 11,
+                              ),
+                            ),
                           ),
                         ),
-                        readOnly: true,
-                        onTap: () async {
-                          final dateOfBirth = await showDatePicker(
-                            context: context,
-                            initialDate: widget.value,
-                            firstDate: DateTime(1950),
-                            lastDate: DateTime.now(),
-                            builder: (context, child) => child!,
-                          );
-                          if (dateOfBirth != null) {
-                            setState(() {
-                              widget.value = dateOfBirth;
-                              widget.text =
-                                  DateFormat('dd.MM.yyyy').format(widget.value);
-                            });
-                            await widget.onChanged(dateOfBirth);
-                          }
-                        },
+                      ),
+                      Container(
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(8),
+                              bottomRight: Radius.circular(8)),
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1.5,
+                          ),
+                        ),
                       ),
                     ],
                   ),

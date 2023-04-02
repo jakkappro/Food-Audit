@@ -22,12 +22,10 @@ class BodyDimensions extends StatefulWidget {
   final Event<Value<double>> weightEvent;
 
   @override
-  _BodyDimensionsState createState() => _BodyDimensionsState(
-      );
+  _BodyDimensionsState createState() => _BodyDimensionsState();
 }
 
 class _BodyDimensionsState extends State<BodyDimensions> {
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -39,9 +37,9 @@ class _BodyDimensionsState extends State<BodyDimensions> {
           min: 50,
           max: 250,
           divisions: 200,
-          onSliderChanged: widget.heightEvent,
+          event: widget.heightEvent,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         NamedSlider(
           label: 'Vaha',
           value: widget.weight,
@@ -49,7 +47,7 @@ class _BodyDimensionsState extends State<BodyDimensions> {
           min: 30,
           max: 200,
           divisions: 170,
-          onSliderChanged: widget.weightEvent,
+          event: widget.weightEvent,
         ),
       ],
     );

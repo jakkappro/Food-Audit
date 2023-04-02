@@ -4,7 +4,7 @@ import 'package:event/event.dart';
 import 'package:flutter/material.dart';
 
 class NamedSlider extends StatefulWidget {
-  const NamedSlider({
+  NamedSlider({
     Key? key,
     required this.label,
     required this.value,
@@ -12,39 +12,8 @@ class NamedSlider extends StatefulWidget {
     required this.min,
     required this.max,
     required this.divisions,
-    required this.onSliderChanged,
+    required this.event,
   }) : super(key: key);
-
-  final String label;
-  final double value;
-  final Future<void> Function(String value) onChanged;
-  final double min;
-  final double max;
-  final int divisions;
-  final Event<Value<double>> onSliderChanged;
-
-  @override
-  _NamedSliderState createState() => _NamedSliderState(
-        label,
-        value,
-        onChanged,
-        min,
-        max,
-        divisions,
-        onSliderChanged,
-      );
-}
-
-class _NamedSliderState extends State<NamedSlider> {
-  _NamedSliderState(
-    this.label,
-    this.value,
-    this.onChanged,
-    this.min,
-    this.max,
-    this.divisions,
-    this.event,
-  );
 
   final String label;
   double value;
@@ -55,43 +24,76 @@ class _NamedSliderState extends State<NamedSlider> {
   final Event<Value<double>> event;
 
   @override
+  _NamedSliderState createState() => _NamedSliderState();
+}
+
+class _NamedSliderState extends State<NamedSlider> {
+  _NamedSliderState();
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          height: 60,
+          height: 65,
           width: double.infinity,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             color: Colors.transparent,
           ),
-          child: Row(
+          child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 25.0),
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 20,
+                padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${widget.value.toString()} ${widget.label == 'Vaha' ? 'kg' : 'cm'}',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      widget.label,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SliderTheme(
+                data: SliderThemeData(
+                  trackHeight: 2,
+                  thumbShape:
+                      const RoundSliderThumbShape(enabledThumbRadius: 8),
+                  showValueIndicator: ShowValueIndicator.always,
+                  valueIndicatorColor: Theme.of(context).colorScheme.secondary,
+                  valueIndicatorTextStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              const SizedBox(width: 20),
-              Slider(
-                label: value.toString(),
-                value: value,
-                min: min,
-                max: max,
-                divisions: divisions,
-                onChanged: ((value) async {
-                  await onChanged(value.ceil().toString());
-                  setState(() {
-                    event.broadcast(Value(value));
-                    this.value = value;
-                  });
-                }),
+                child: Slider(
+                  label: widget.value.toString(),
+                  value: widget.value,
+                  min: widget.min,
+                  max: widget.max,
+                  divisions: widget.divisions,
+                  onChanged: ((value) async {
+                    await widget.onChanged(value.ceil().toString());
+                    setState(() {
+                      widget.event.broadcast(Value(value));
+                      widget.value = value;
+                    });
+                  }),
+                ),
               ),
             ],
           ),

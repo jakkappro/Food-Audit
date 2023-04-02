@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class NamedDropDown extends StatefulWidget {
-  NamedDropDown({
+class NamedDropdown extends StatefulWidget {
+  NamedDropdown({
     Key? key,
     required this.label,
     required this.value,
@@ -15,63 +15,93 @@ class NamedDropDown extends StatefulWidget {
   final List<String> items;
 
   @override
-  _NamedDropDownState createState() => _NamedDropDownState();
+  _NamedDropdownState createState() => _NamedDropdownState();
 }
 
-class _NamedDropDownState extends State<NamedDropDown> {
+class _NamedDropdownState extends State<NamedDropdown> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SizedBox(
           height: 60,
-          width: double.infinity,
-          child: Row(
+          width: 110,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 25.0),
-                child: Text(
-                  'Pohlavie: ',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+              Text(
+                'Pohlavie',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
-              const SizedBox(width: 20),
+              const SizedBox(height: 5),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: DropdownButton<String>(
-                    value: widget.value,
-                    isExpanded: true,
-                    elevation: 0,
-                    dropdownColor: Theme.of(context).colorScheme.surfaceVariant,
-                    alignment: Alignment.center,
-                    icon: Icon(
-                      Icons.arrow_drop_down,
-                      color: Theme.of(context).colorScheme.primary,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 1.5,
                     ),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    items: widget.items
-                        .map((gender) => DropdownMenuItem<String>(
-                              value: gender,
-                              child: Text(
-                                gender[0].toUpperCase() +
-                                    gender.substring(1).toLowerCase(),
-                              ),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        widget.value = value!;
-                      });
-                      widget.onChanged(value!);
-                    },
+                  ),
+                  width: 180,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: DropdownButton<String>(
+                          value: widget.value,
+                          isExpanded: false,
+                          elevation: 3,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15)),
+                          dropdownColor:
+                              Theme.of(context).colorScheme.surfaceVariant,
+                          alignment: Alignment.center,
+                          underline: Container(),
+                          icon: Container(),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                          ),
+                          items: widget.items
+                              .map(
+                                (gender) => DropdownMenuItem<String>(
+                                  value: gender,
+                                  child: Text(
+                                    gender[0].toUpperCase() +
+                                        gender.substring(1).toLowerCase(),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              widget.value = value!;
+                            });
+                            widget.onChanged(value!);
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(8),
+                              bottomRight: Radius.circular(8)),
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

@@ -8,11 +8,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../models/settings_model.dart';
+import '../../../../../widgets/home/decorated_container.dart';
 import '../../../../../widgets/settings/profile/body_dimensions.dart';
 import '../../../../../widgets/settings/profile/index_displays.dart';
 import '../../../../../widgets/settings/profile/name.dart';
 import '../../../../../widgets/settings/profile/named_date_picker.dart';
 import '../../../../../widgets/settings/profile/named_dropdown.dart';
+import 'subsettings.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -72,98 +74,114 @@ class _ProfilePageState extends State<ProfilePage> {
     // calculate bmi
     _calculateBmi();
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: SizedBox(
-        width: double.infinity,
-        height: 780,
-        child: Column(
-          children: [
-            InkWell(
-              onTap: () async {
-                if (SettingsModel.isAnonymous) {
-                  return;
-                }
-                final newImage = await ImagePicker().pickImage(
-                  source: ImageSource.gallery,
-                  imageQuality: 50,
-                  maxWidth: 521,
-                  maxHeight: 521,
-                );
+    final width = MediaQuery.of(context).size.width;
 
-                if (newImage == null) {
-                  return;
-                }
-
-                final ref =
-                    FirebaseStorage.instance.ref().child('avatar/${user!.uid}');
-
-                await ref.putFile(File(newImage.path));
-
-                await user!.updatePhotoURL(await ref.getDownloadURL());
-              },
-              child: Container(
-                width: 120,
-                height: 110,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(_getImageUrl()),
-                  ),
+    return SizedBox(
+      width: double.infinity,
+      height: 780,
+      child: Column(
+        children: [
+          DecoratedContainer(
+            body: _buildBody(),
+            width: width,
+            height: 420,
+            imageUrl: _getImageUrl(),
+            leftDecoration: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
                 ),
+                padding: const EdgeInsets.all(0),
+              ),
+              onPressed: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SubSettings(),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.settings_outlined,
+                size: 28,
               ),
             ),
-            const SizedBox(height: 30),
-            IndexDisplays(
-              _bmi,
-              _bmr,
-              bmiEvent,
-              bmrEvent,
-            ),
-            const SizedBox(height: 20),
-            Name(
-              firstName: _firstName,
-              lastName: _lastName,
-              onChangedFirstName: onChangedFirstName,
-              onChangedLastName: onChangedLastName,
-            ),
-            const SizedBox(height: 20),
-            BodyDimensions(
-              height: settings.height.toDouble() < 50
-                  ? 50
-                  : settings.height.toDouble() > 250
-                      ? 250
-                      : settings.height.toDouble(),
-              weight: settings.weight.toDouble() < 30
-                  ? 30
-                  : settings.weight.toDouble() > 200
-                      ? 200
-                      : settings.weight.toDouble(),
-              onChangedHeight: _updateHeight,
-              onChangedWeight: _updateWeight,
-              heightEvent: heigthEvent,
-              weightEvent: weightEvent,
-            ),
-            const SizedBox(height: 20),
-            NamedDatePicker(
-                label: 'Datum narodenia',
-                value: settings.birthDate != DateTime.parse('1800-02-27')
-                    ? settings.birthDate
-                    : DateTime.now(),
-                text: settings.birthDate != DateTime.parse('1800-02-27')
-                    ? DateFormat('dd.MM.yyyy').format(settings.birthDate)
-                    : 'Zvoľte si dátum narodenia',
-                onChanged: _updateDate),
-            const SizedBox(height: 20),
-            NamedDropDown(
-              label: 'Pohlavie',
-              value: _selectedGender!,
-              onChanged: _updateGender,
-              items: const ['Muž', 'Žena'],
-            ),
-          ],
-        ),
+          ),
+
+          
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    return SizedBox(
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              const SizedBox(width: 80),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${_firstName} ${_lastName}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  Text(
+                    'Toto je tvoj profil',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          BodyDimensions(
+            height: settings.height.toDouble() < 50
+                ? 50
+                : settings.height.toDouble() > 250
+                    ? 250
+                    : settings.height.toDouble(),
+            weight: settings.weight.toDouble() < 30
+                ? 30
+                : settings.weight.toDouble() > 200
+                    ? 200
+                    : settings.weight.toDouble(),
+            onChangedHeight: _updateHeight,
+            onChangedWeight: _updateWeight,
+            heightEvent: heigthEvent,
+            weightEvent: weightEvent,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: NamedDropdown(
+                  label: 'Pohlavie',
+                  value: _selectedGender!,
+                  items: const ['Muž', 'Žena'],
+                  onChanged: _updateGender,
+                ),
+              ),
+              Expanded(
+                child: NamedDatePicker(
+                  label: 'Dátum narodenia',
+                  value: settings.birthDate,
+                  onChanged: _updateDate,
+                  text: 'Zvoľte dátum',
+                ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
