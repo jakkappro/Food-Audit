@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../../../../models/settings_model.dart';
-import '../../../../../widgets/settings/allergens/allergens.dart';
 import '../../../../../widgets/settings/borderless_button.dart';
 import '../../../../../widgets/settings/confirm_password_slidingup.dart';
 import '../../../../authentication/login.dart';
+import 'appearence.dart';
 import 'performance.dart';
 import 'security.dart';
 
@@ -84,8 +84,9 @@ class _SubSettingsState extends State<SubSettings> {
                   BorderlessButton(
                     label: 'Performance',
                     onPressed: () async => await Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => const PerformancePage())),
+                      MaterialPageRoute(
+                          builder: (context) => const PerformancePage()),
+                    ),
                     icon: const Icon(Icons.trending_up),
                     color: Theme.of(context).colorScheme.secondary,
                   ),
@@ -98,12 +99,34 @@ class _SubSettingsState extends State<SubSettings> {
                   ),
                   const SizedBox(height: 20),
                   BorderlessButton(
+                    label: 'Language',
+                    onPressed: () async => await Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => const PerformancePage()),
+                    ),
+                    icon: const Icon(Icons.language),
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  const SizedBox(height: 20),
+                  BorderlessButton(
+                    label: 'Appearence',
+                    onPressed: () async => await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AppearancePage(),
+                      ),
+                    ),
+                    icon: const Icon(Icons.color_lens),
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  const SizedBox(height: 20),
+                  BorderlessButton(
                     label: 'Log Out',
                     onPressed: () async {
                       await _auth.signOut();
                       await Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()));
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
+                      );
                     },
                     icon: const Icon(Icons.logout),
                     color: Theme.of(context).colorScheme.error,

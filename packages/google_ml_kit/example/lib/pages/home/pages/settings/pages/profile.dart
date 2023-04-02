@@ -145,16 +145,19 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Wrap(
               spacing: 7.0,
               children: allergens
-                  .map((e) => FilterChip(
-                      label: Text(e),
-                      showCheckmark: false,
-                      avatar: const Icon(Icons.warning_amber_outlined),
-                      selected: settings.allergens.contains(e),
-                      selectedColor: const Color.fromRGBO(196, 33, 38, 1),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(22)),
-                      ),
-                      onSelected: (bool b) {}))
+                  .map(
+                    (e) => FilterChip(
+                        label: Text(e),
+                        showCheckmark: false,
+                        avatar: const Icon(Icons.warning_amber_outlined),
+                        selected: settings.allergens.contains(e),
+                        selectedColor:
+                            Theme.of(context).colorScheme.errorContainer,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(22)),
+                        ),
+                        onSelected: (bool b) {}),
+                  )
                   .toList(),
             ),
           )

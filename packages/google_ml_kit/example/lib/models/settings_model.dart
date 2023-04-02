@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -18,6 +20,8 @@ class SettingsModel {
   bool firstTime = true;
   List<String>? allergicOn = [];
   String selectedList = 'default';
+  Color seedColor = Color.fromRGBO(105, 140, 17, 1);
+
   Map<String, bool> challenges = {
     'allergens': false,
     'firstScan': false,
@@ -60,6 +64,7 @@ class SettingsModel {
       'FirstTime': false,
       'Challenges': challenges,
       'SelectedList': selectedList,
+      'Color': seedColor.value,
     });
   }
 
@@ -84,6 +89,9 @@ class SettingsModel {
       firstTime = doc['FirstTime'];
       challenges = Map<String, bool>.from(doc['Challenges']);
       selectedList = doc['SelectedList'];
+      if (doc.get('Color') != null) {
+        seedColor = Color(doc['Color']);
+      }
       remapAllergicOn();
     }
   }

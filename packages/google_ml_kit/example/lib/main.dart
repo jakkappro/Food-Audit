@@ -8,7 +8,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'firebase_options.dart';
 import 'helpers/data_helpers.dart';
-import 'models/allerts_model.dart';
 import 'models/connection_model.dart';
 import 'models/settings_model.dart';
 import 'models/webscraping_model.dart';
@@ -16,13 +15,15 @@ import 'pages/authentication/login.dart';
 import 'pages/authentication/register.dart';
 import 'pages/authentication/verify.dart';
 import 'pages/home/home_navigation.dart';
+import 'pages/home/pages/settings/pages/accesibility.dart';
+import 'pages/home/pages/settings/pages/appearence.dart';
+import 'pages/home/pages/settings/pages/language.dart';
 import 'pages/home/pages/settings/pages/performance.dart';
 import 'pages/home/pages/settings/pages/profile.dart';
 import 'pages/home/pages/settings/pages/security.dart';
 import 'pages/home/pages/settings/pages/subsettings.dart';
 import 'pages/introduction/introduction.dart';
 import 'services/network_connectivity.dart';
-import 'themes/app_theme.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -74,6 +75,19 @@ Future<void> main() async {
     await WebScrapingModel.fitnessInstance.loadFromWeb(false);
   }
 
+  // set color scheme seed
+  final darkTheme = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    colorSchemeSeed: SettingsModel.instance.seedColor,
+  );
+
+  final lightTheme = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.light,
+    colorSchemeSeed: SettingsModel.instance.seedColor,
+  );
+
   FlutterNativeSplash.remove();
   runApp(
     MaterialApp(
@@ -82,8 +96,8 @@ Future<void> main() async {
           : SettingsModel.instance.firstTime
               ? const IntroPage()
               : const HomeNavigation(),
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
+      theme: lightTheme,
+      darkTheme: darkTheme,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       routes: {
@@ -94,6 +108,9 @@ Future<void> main() async {
         '/profile': (context) => const ProfilePage(),
         '/security': (context) => const SecurityPage(),
         '/performance': (context) => const PerformancePage(),
+        '/appearence': (context) => const AppearancePage(),
+        '/accesibility': (context) => const AccesibilityPage(),
+        '/language': (context) => const LanguagePage(),
         '/introduction': (context) => const IntroPage(),
         '/settings': (context) => const SubSettings()
       },

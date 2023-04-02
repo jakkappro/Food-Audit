@@ -32,7 +32,7 @@ class DecoratedContainer extends StatelessWidget {
               left: 10,
               child: SizedBox(
                 width: shouldCenter ? width * 0.80 : width * 0.75,
-                height: height * 0.8,
+                height: height * 0.9,
                 child: Card(
                   color: Theme.of(context).colorScheme.surfaceVariant,
                   elevation: 15,

@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
                             : null,
                       ),
                       width: width,
-                      height: 430,
+                      height: 400,
                     ),
                     DecoratedContainer(
                       body: DailyChallenges(
@@ -224,8 +224,7 @@ class _HomeState extends State<Home> {
 
   String _getImageUrl() {
     return user != null
-        ? user!.photoURL ??
-            'https://i.pravatar.cc/100'
+        ? user!.photoURL ?? 'https://i.pravatar.cc/100'
         : 'https://i.pravatar.cc/100';
   }
 

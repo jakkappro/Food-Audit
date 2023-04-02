@@ -34,6 +34,7 @@ dependencies:
   flutter_tts: ^3.6.3
   webfeed_plus: ^1.0.0
   search_choices: ^2.2.5
+  flutter_colorpicker: ^1.0.3
 
   #  google_ml_kit:
   #    path: ../
