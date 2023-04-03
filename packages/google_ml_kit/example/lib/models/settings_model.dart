@@ -21,6 +21,8 @@ class SettingsModel {
   List<String>? allergicOn = [];
   String selectedList = 'default';
   Color seedColor = Color.fromRGBO(105, 140, 17, 1);
+  String username = '';
+  String photoUrl = '';
 
   Map<String, bool> challenges = {
     'allergens': false,
@@ -65,6 +67,8 @@ class SettingsModel {
       'Challenges': challenges,
       'SelectedList': selectedList,
       'Color': seedColor.value,
+      'Username': username,
+      'PhotoUrl': photoUrl,
     });
   }
 
@@ -89,9 +93,11 @@ class SettingsModel {
       firstTime = doc['FirstTime'];
       challenges = Map<String, bool>.from(doc['Challenges']);
       selectedList = doc['SelectedList'];
+      
       if (doc.get('Color') != null) {
         seedColor = Color(doc['Color']);
       }
+      
       remapAllergicOn();
     }
   }

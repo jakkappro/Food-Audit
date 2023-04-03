@@ -69,6 +69,10 @@ Future<void> loadData() async {
 
 Future<void> _loadDataOffline() async {
   await SettingsModel.instance.loadFromFirebase();
+  SettingsModel.instance.username =
+      FirebaseAuth.instance.currentUser!.displayName!;
+  SettingsModel.instance.photoUrl =
+      FirebaseAuth.instance.currentUser!.photoURL ?? '';
   SettingsModel.isAnonymous = false;
   await getChallengesDataFromFirebase(FirebaseAuth.instance.currentUser!);
   await AditivesModel.instance.loadFromFirebase();
@@ -77,6 +81,10 @@ Future<void> _loadDataOffline() async {
 
 Future<void> _loadDataOnline() async {
   await SettingsModel.instance.loadFromFirebase();
+  SettingsModel.instance.username =
+      FirebaseAuth.instance.currentUser!.displayName!;
+  SettingsModel.instance.photoUrl =
+      FirebaseAuth.instance.currentUser!.photoURL ?? '';
   SettingsModel.isAnonymous = false;
   await getChallengesDataFromFirebase(FirebaseAuth.instance.currentUser!);
   await AditivesModel.instance.loadFromFirebase();

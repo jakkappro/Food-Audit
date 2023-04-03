@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_audit/pages/home/pages/settings/settings.dart';
 
 import '../camera/camera_page.dart';
+import '../search/search_page.dart';
 import 'pages/home.dart';
 
 class HomeNavigation extends StatefulWidget {
@@ -15,8 +16,9 @@ class _HomeNavigationState extends State<HomeNavigation> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   final List<Widget> _children = [
-    Home(),
+    const Home(),
     CameraPage(),
+    const SearchPage(),
     SettingsPage(),
   ];
 
@@ -61,6 +63,11 @@ class _HomeNavigationState extends State<HomeNavigation> {
             Icons.document_scanner,
           ),
           _buildDestination(
+            Icons.search_outlined,
+            'Search',
+            Icons.search,
+          ),
+          _buildDestination(
             Icons.settings_outlined,
             'Settings',
             Icons.settings,
@@ -73,8 +80,14 @@ class _HomeNavigationState extends State<HomeNavigation> {
   BottomNavigationBarItem _buildDestination(
       IconData icon, String label, IconData selectedIcon) {
     return BottomNavigationBarItem(
-      icon: Icon(icon),
-      activeIcon: Icon(selectedIcon),
+      icon: Icon(
+        icon,
+        color: Theme.of(context).colorScheme.secondary,
+      ),
+      activeIcon: Icon(
+        selectedIcon,
+        color: Theme.of(context).colorScheme.primary,
+      ),
       label: label,
     );
   }
