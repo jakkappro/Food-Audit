@@ -4,10 +4,10 @@ class AccesibilityPage extends StatefulWidget {
   const AccesibilityPage({Key? key}) : super(key: key);
 
   @override
-  _AppearancePageState createState() => _AppearancePageState();
+  _AccesibilityPageState createState() => _AccesibilityPageState();
 }
 
-class _AppearancePageState extends State<AccesibilityPage> {
+class _AccesibilityPageState extends State<AccesibilityPage> {
   Color selectedColor = Colors.blue;
 
   @override

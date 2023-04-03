@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_audit/pages/home/pages/settings/pages/accesibility.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../../../../models/settings_model.dart';
@@ -117,6 +118,15 @@ class _SubSettingsState extends State<SubSettings> {
                     ),
                     icon: const Icon(Icons.color_lens),
                     color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  SizedBox(height: 20),
+                  BorderlessButton(
+                    onPressed: () async => await Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const AccesibilityPage())),
+                    icon: Icon(Icons.accessibility),
+                    color: Theme.of(context).colorScheme.secondary,
+                    label: 'Accesibility',
                   ),
                   const SizedBox(height: 20),
                   BorderlessButton(
