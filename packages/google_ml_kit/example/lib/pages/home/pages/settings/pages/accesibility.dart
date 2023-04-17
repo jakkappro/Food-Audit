@@ -8,44 +8,38 @@ class AccesibilityPage extends StatefulWidget {
 }
 
 class _AccesibilityPageState extends State<AccesibilityPage> {
-  Color selectedColor = Colors.blue;
+  bool value = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Appearance'),
+        title: const Text('Accesibility'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('Choose a new primary color for the app:'),
-            Wrap(
-              spacing: 8.0,
-              children: Colors.primaries.map((color) {
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      selectedColor = color;
-                    });
-                  },
-                  child: Container(
-                    width: 24.0,
-                    height: 24.0,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                      border: selectedColor == color
-                          ? Border.all(width: 2.0, color: Colors.black)
-                          : null,
-                    ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Čítanie alergénov',
+                  style: TextStyle(
+                    fontSize: 20,
                   ),
-                );
-              }).toList(),
+                ),
+                Switch(
+                  value: value,
+                  onChanged: (value) => setState(() {
+                    this.value = value;
+                  }),
+                ),
+              ],
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

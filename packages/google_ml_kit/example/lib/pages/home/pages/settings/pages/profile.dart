@@ -156,7 +156,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(22)),
                         ),
-                        onSelected: (bool b) {}),
+                        onSelected: (bool b) {
+                          if (b) {
+                            settings.allergens.add(e);
+                          } else {
+                            settings.allergens.remove(e);
+                          }
+                          setState(() {});
+                        }),
                   )
                   .toList(),
             ),

@@ -23,6 +23,7 @@ class SettingsModel {
   Color seedColor = Color.fromRGBO(105, 140, 17, 1);
   String username = '';
   String photoUrl = '';
+  bool shouldReadAlergens = false;
 
   Map<String, bool> challenges = {
     'allergens': false,
@@ -69,6 +70,7 @@ class SettingsModel {
       'Color': seedColor.value,
       'Username': username,
       'PhotoUrl': photoUrl,
+      'ShouldReadAllergens': shouldReadAlergens,
     });
   }
 
@@ -93,11 +95,12 @@ class SettingsModel {
       firstTime = doc['FirstTime'];
       challenges = Map<String, bool>.from(doc['Challenges']);
       selectedList = doc['SelectedList'];
-      
-      if (doc.get('Color') != null) {
+
+      try {
         seedColor = Color(doc['Color']);
-      }
-      
+        shouldReadAlergens = doc['ShouldReadAllergens'];
+      } catch (e) {}
+
       remapAllergicOn();
     }
   }

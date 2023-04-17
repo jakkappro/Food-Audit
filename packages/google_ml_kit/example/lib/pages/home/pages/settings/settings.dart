@@ -33,7 +33,7 @@ class SettingsPage extends StatelessWidget {
                           angle: math.pi / 2, // 90 degrees
                           child: IconButton(
                             onPressed: () {},
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.u_turn_left,
                               size: 25,
                             ),
